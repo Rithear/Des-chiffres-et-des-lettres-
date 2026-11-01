@@ -69,11 +69,20 @@ input{width:100%;padding:14px;font-size:22px;text-align:center;text-transform:up
 .fr{display:flex;align-items:center;gap:6px;background:var(--card);border-radius:8px;padding:6px 8px 6px 12px;margin:4px 0}.fr span{flex:1;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fr small{color:var(--mut);font-weight:400}.fr .btn{padding:6px 12px;background:#0e1a30;flex:0 0 auto}
 .res.sep{justify-content:center;color:var(--mut);background:none;padding:0}
 #frAdd{flex:0 0 auto}#mb .fi{margin-top:6px}
+.room{background:var(--card);border-radius:12px;padding:12px;margin:0 0 14px;text-align:center}.room small{display:block;color:var(--mut);font-size:13px}.room .rc{display:block;font-size:38px;letter-spacing:4px;color:var(--ac);margin:2px 0 10px;font-variant-numeric:tabular-nums}.room .row{margin:0}.room .btn{background:#0e1a30;display:flex;align-items:center;justify-content:center;gap:6px;font-size:15px;padding:10px 8px}.room .btn svg{flex:0 0 auto}
+.mpw{background:#0e1a30;border:1px dashed var(--ac);border-radius:10px;padding:10px;text-align:center;color:var(--ac);font-weight:700;margin:0 0 12px;line-height:1.4}
+.mir .btn:disabled{opacity:.55}.ct{text-align:center}.win{text-align:center;font-size:22px;font-weight:800;color:var(--ac);margin:6px 0 12px}
+#mjCode{font-size:30px;letter-spacing:6px;text-align:center;padding:12px}#mwS{font-size:34px;font-weight:800;text-align:center;color:var(--ac);margin:16px 0;word-break:break-word}
+.qr{display:block;width:100%;max-width:280px;margin:0 auto;border-radius:8px}.qrc{text-align:center;font-size:30px;font-weight:800;letter-spacing:4px;color:var(--ac);margin:10px 0 0}
+.fr.off span{opacity:.5}.fr>small{color:var(--mut);flex:0 0 auto}.res .rn small{color:var(--mut);font-weight:400}
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);background:var(--ac);color:#14233f;font-weight:700;padding:10px 16px;border-radius:10px;z-index:70;max-width:90%;text-align:center}
+#mpWarn{position:fixed;top:0;left:0;right:0;background:var(--ko);color:#fff;text-align:center;font-weight:700;padding:calc(env(safe-area-inset-top,0px) + 6px) 8px 6px;z-index:65}
 </style></head><body>
 <section id="vidP" class="pg hide"><video id="vid" src="assets/generique.mp4" playsinline preload="auto"></video><button class="btn" id="vskip" data-t="skip"></button></section>
+<div id="toast" class="hide"></div><div id="mpWarn" class="hide" data-t="mpWarn"></div>
 <div id="modal" class="hide"><div id="mcard"><h2 id="mt"></h2><div id="mb"></div><div id="mbtn"></div></div></div>
 <main>
-<section id="intro" class="pg"><h1>Des chiffres et des lettres</h1>
+<section id="intro" class="pg"><h1>Des chiffres et des lettres</h1><p id="invN" class="mpw hide"></p>
 <div style="margin-top:48px"><div id="accIn" class="hide"><button class="btn p mb" id="goMe"><span id="meName"></span><small class="sub" data-t="playAs"></small></button><button class="btn mb" id="goOther" data-t="other"></button></div>
 <button class="btn p mb" id="goLogin" data-t="login"></button>
 <button class="btn p mb" id="goSignup" data-t="signup"></button>
@@ -99,6 +108,7 @@ input{width:100%;padding:14px;font-size:22px;text-align:center;text-transform:up
 <button class="btn p mb" id="daily"><span data-t="pD"></span><small class="sub" data-t="dD"></small></button>
 <button class="btn p mb" id="orig"><span data-t="pO"></span><small class="sub" data-t="dO"></small></button>
 <button class="btn p mb" id="free"><span data-t="pF"></span><small class="sub" data-t="dF"></small></button>
+<button class="btn p mb" id="multi"><span data-t="pM"></span><small class="sub" data-t="dM"></small></button>
 <button class="btn p mb" id="train" data-t="pT"></button>
 <div class="row"><button class="btn" id="rules" data-t="rules"></button><button class="btn" id="records" data-t="records"></button></div>
 <button class="btn mb" id="prof" style="margin-top:12px;font-size:16px;padding:12px"></button><button class="btn mb lang" style="font-size:16px;padding:12px"></button></section>
@@ -121,9 +131,9 @@ input{width:100%;padding:14px;font-size:22px;text-align:center;text-transform:up
 <button class="btn p mb" data-m="c"><span data-t="mC"></span><small class="sub" data-t="s45"></small></button>
 <div class="mrow"><button class="btn p mb" data-m="w"><span data-t="mW"></span><small class="sub" data-t="s120"></small></button><button class="info" data-info="W">?</button></div>
 <button class="btn mb" data-back data-t="back"></button></section>
-<section id="rulesP" class="pg hide"><h2 data-t="rules"></h2><button class="btn mb" data-r="L" data-t="mL"></button><button class="btn mb" data-r="C" data-t="mC"></button><button class="btn mb" data-r="W" data-t="mW"></button><button class="btn mb" data-r="D" data-t="pD"></button><button class="btn mb" data-back data-t="back"></button></section>
+<section id="rulesP" class="pg hide"><h2 data-t="rules"></h2><button class="btn mb" data-r="L" data-t="mL"></button><button class="btn mb" data-r="C" data-t="mC"></button><button class="btn mb" data-r="W" data-t="mW"></button><button class="btn mb" data-r="D" data-t="pD"></button><button class="btn mb" data-r="M" data-t="pM"></button><button class="btn mb" data-back data-t="back"></button></section>
 <section id="ruleT" class="pg hide"><h2 id="rt"></h2><div id="rtext" class="rt"></div><button class="btn mb" id="rback" data-t="back"></button></section>
-<section id="recordsP" class="pg hide"><h2 data-t="records"></h2><div id="rlist"></div><button class="btn mb" data-back data-t="back" style="margin-top:12px"></button></section>
+<section id="recordsP" class="pg hide"><h2 data-t="records"></h2><div id="rlist"></div><div id="rMulti"></div><button class="btn mb" data-back data-t="back" style="margin-top:12px"></button></section>
 <section id="dictP" class="pg hide"><h2 data-t="chooseDict"></h2><button class="btn p mb" data-d="fr" data-t="dFr"></button><button class="btn p mb" data-d="en" data-t="dEn"></button><div id="dst" style="min-height:24px;text-align:center;color:var(--mut);margin-bottom:12px"></div><button class="btn mb" id="dback" data-t="back"></button></section>
 <section id="drawP" class="pg hide"><div class="stg hide"></div><div class="top"><div class="tl"><button class="btn sm" data-quit data-t="quit"></button></div><div></div><div></div></div><h2 id="drawH" data-t="drawT"></h2><div class="tiles" id="slots"></div><div class="row" id="vcRow"><button class="btn p" id="vow" data-t="pickV"></button><button class="btn p" id="con" data-t="pickC"></button></div><p id="dmsg" style="color:var(--mut)" data-t="drawH"></p></section>
 <section id="gm" class="pg hide"><div class="stg hide"></div>
@@ -145,6 +155,16 @@ input{width:100%;padding:14px;font-size:22px;text-align:center;text-transform:up
 <button class="btn p mb" id="pFr"></button><button class="btn mb" id="pPs" data-t="chPs"></button><button class="btn mb" id="pPw" data-t="chPw"></button><button class="btn mb" id="pMl" data-t="chMl"></button><button class="btn mb" id="pOut" data-t="logout"></button><button class="btn mb dng" id="pDel" data-t="delAcc"></button></div>
 <div id="pGst"><p class="dnote" data-t="gInfo"></p><button class="btn p mb hide" id="pUse"></button><button class="btn p mb" id="pLi" data-t="login"></button><button class="btn p mb" id="pSu" data-t="signup"></button></div>
 <button class="btn mb" id="pBack" data-t="back"></button></section>
+<section id="mpMenu" class="pg hide"><h2 data-t="pM"></h2><p class="dnote" data-t="mpLive"></p>
+<button class="btn p mb" id="mpNew"><span data-t="mpNew"></span><small class="sub" data-t="mpNewS"></small></button>
+<div class="mrow"><button class="btn p mb" id="mpJoin"><span data-t="mpJoin"></span><small class="sub" data-t="mpJoinS"></small></button><button class="info" id="mpInfo">?</button></div>
+<p class="dnote" id="mpNote"></p><button class="btn mb" id="mpWho" style="font-size:16px;padding:12px"></button><button class="btn mb" data-back data-t="back"></button></section>
+<section id="mpJoinP" class="pg hide"><h2 data-t="mpJoin"></h2><p class="dnote" data-t="mpCodeH"></p>
+<input class="fi" id="mjCode" inputmode="numeric" autocomplete="off" maxlength="7" data-ph="mpCodePh" data-go="mjGo">
+<div class="amsg" id="mjMsg"></div><button class="btn p mb" id="mjGo" data-t="mpJoinGo"></button><button class="btn mb" id="mjBack" data-t="back"></button></section>
+<section id="mpP" class="pg hide"><h2 id="mpT"></h2><div class="mpHead"></div><p id="mpWait" class="mpw hide"></p><div id="mpBody"></div><button class="btn mb" id="mpLeave" style="margin-top:12px"></button></section>
+<section id="mpWaitP" class="pg hide"><h2 id="mwT"></h2><div id="mwS"></div><p class="mpw" id="mwM"></p><button class="btn mb" id="mwLeave" style="margin-top:12px"></button></section>
+<section id="mpResP" class="pg hide"><h2 id="mrT"></h2><div id="mrW"></div><div id="mrB"></div><div id="mrBtn" style="margin-top:14px"></div><div id="mrInv"></div><button class="btn mb" id="mrLeave" style="margin-top:4px"></button></section>
 <section id="frP" class="pg hide"><h2 data-t="friends"></h2>
 <div class="row"><input class="fi" id="frIn" maxlength="12" autocomplete="off" data-ph="frPh" data-go="frAdd" style="margin:0"><button class="btn p" id="frAdd" data-t="add"></button></div>
 <div class="amsg" id="frMsg"></div><div id="frL"></div><button class="btn mb" id="frBack" data-t="back" style="margin-top:12px"></button></section>
@@ -170,6 +190,7 @@ iW:`<p>Eight scrambled words to find: 5, 6, 7 and 8 letters, then 5, 6, 7 and 8 
 rW:`<p>Eight scrambled words to find: 5, 6, 7 and 8 letters, then 5, 6, 7 and 8 letters again.</p><p>You have 2 minutes for the whole game. Type your answer or tap the letters (each letter once). Each correct word scores 1 point per letter.</p><p>You can skip a word and come back to it later. Answers appear once the music has finished.</p><p>Before the game, choose the dictionary: French or English.</p>`,
 rL:`<p>Ten letters are drawn: each time, you choose a vowel or a consonant (at least 2 of each).</p><p>You have 30 seconds to build the longest word you can, using each letter once. Tap Submit to propose your word: the round ends and your word scores 1 point per letter.</p><p>At the end, the longest possible word from the dictionary is revealed. French or English dictionary, your choice.</p>`,
 rC:`<p>Six tiles are drawn at random (1 to 10, and 25, 50, 75, 100), along with a target between 101 and 999.</p><p>Using + − × ÷ (positive whole results only) and each tile at most once, reach the target or get as close as you can. Tap a tile, an operator, then a second tile. Each intermediate result appears at the right of its line and can be selected for the next step.</p><p>You have 45 seconds: the round runs until the time and the music are over, but you can tap Finish to see the result sooner. Your result is the best number reached by your calculations.</p><p>Scoring: 10 points for an exact hit; 7 points for a gap of 1 to 5; 5 points for a gap of 6 to 15; 0 points for a gap of 16 or more, or if no calculation was made.</p>`}};
+Object.assign(T.fr,{"pM": "Multijoueur", "mM": "Multijoueur", "dM": "en direct, jusqu'à 16 joueurs", "and": "et", "mpLive": "Crée un salon et invite jusqu'à 15 joueurs : tout le monde joue en même temps, chacun sur son téléphone.", "mpNew": "Créer un salon", "mpNewS": "tu es l'hôte et tu choisis le jeu", "mpJoin": "Rejoindre un salon", "mpJoinS": "avec le code ou le QR code de l'hôte", "mpCodeH": "Entre le code du salon donné par l'hôte, ou scanne son QR code avec l'appareil photo.", "mpCodePh": "Code du salon", "mpJoinGo": "Rejoindre", "mpNameT": "Ton nom", "mpNameH": "Il sera affiché aux autres joueurs du salon.", "mpNamePh": "Ton nom (12 caractères max.)", "mpNameE": "Ton nom doit faire entre 1 et 12 caractères.", "mpWhoA": "👤 Compte {n} : tes résultats multijoueur sont sauvegardés", "mpWhoG": "👤 Invité : {n} (modifier) · résultats non sauvegardés", "mpWhoG0": "👤 Invité : choisir mon nom · résultats non sauvegardés", "mpCon": "Connexion au salon…", "mpNoRoom": "Aucun salon ouvert avec ce code.", "mpFull": "Ce salon est complet (16 joueurs maximum).", "mpBadCode": "Le code du salon contient 6 chiffres.", "mpErr": "Connexion au salon impossible : vérifie ta connexion.", "mpOff": "Le multijoueur a besoin d'une connexion internet : vérifie ta connexion puis réessaie.", "mpRoomOf": "Salon de {n}", "mpCode": "Code du salon", "mpShare": "Partager", "mpQR": "QR code", "mpPl": "Joueurs", "mpPlT": "Joueurs connectés : {n}/16", "mpHost": "hôte", "mpYou": "toi", "mpOffl": "déconnecté", "mpAcc": "compte", "mpGst": "invité", "mpQRH": "Scanne ce QR code avec l'appareil photo pour rejoindre le salon.", "mpShareT": "Viens jouer avec moi à Des chiffres et des lettres ! Code du salon : {n}", "mpCopied": "Invitation copiée : colle-la dans un message !", "mpHostPrep": "⏳ L'hôte prépare la partie…", "mpChoose": "Choisis le jeu", "mpO": "Jeu original", "mpOS": "5 ou 15 minutes · le plus de points gagne", "mpQ": "Partie rapide", "mpQS": "une seule manche · le meilleur résultat gagne", "mpReady": "Prêt à lancer", "mpGo": "▶ Lancer la partie", "mpNeed1": "Il faut au moins un invité connecté pour lancer la partie : partage le code du salon.", "mpWaitGo": "⏳ En attente du lancement par l'hôte…", "mpNbP": "👥 Joueurs connectés : {n}", "mpClose": "Fermer le salon", "mpCloseQ": "Fermer le salon ? Tous les joueurs seront déconnectés.", "mpLeave": "Quitter le salon", "mpLeaveQ": "Quitter le salon ?", "mpStop": "✕ Arrêter la partie", "mpStopQ": "Arrêter la partie pour tous les joueurs ? Le salon reviendra au choix du jeu.", "mpClosed": "L'hôte a fermé le salon.", "mpLost": "La connexion avec l'hôte a été perdue : le salon est fermé.", "mpStopped": "L'hôte a arrêté la partie.", "mpKick": "Ce salon est complet (16 joueurs maximum).", "mpAloneT": "Partie arrêtée", "mpAlone": "Tous les invités se sont déconnectés. Tu reviens au choix du jeu : partage le code du salon pour inviter d'autres joueurs.", "mpWarn": "📡 Connexion à l'hôte…", "mpHostPicks": "L'hôte choisit les voyelles et les consonnes…", "mpWaitO": "⏳ En attente des autres joueurs… ({n}/{m})", "mpSpec": "Manche en cours", "mpSpecH": "⏳ Tu joueras dès la prochaine manche.", "mpWaitH": "⏳ En attente de l'hôte…", "mpRoundRes": "Résultats de la manche", "mpProv": "Classement provisoire", "mpFinal": "Classement final", "mpWin": "🏆 {n} remporte la partie !", "mpWinQ": "🏆 {n} gagne !", "mpTie": "🏆 Égalité : {n} !", "mpNext": "Manche suivante : {n} ▶", "mpQuitG": "Quitter la partie", "mpQuitGQ": "Quitter la partie ? Tous les joueurs reviendront au choix du jeu.", "mpAgain": "🔁 Rejouer", "mpChange": "Changer de jeu", "mpInv": "Inviter d'autres joueurs", "mpInvH": "Ils joueront dès la manche suivante (en partant de 0 point).", "mpInvE": "Ils joueront dès la prochaine partie.", "mpMiss": "pas de réponse", "mpS": "Multijoueur", "mpSaved": "Résultat sauvegardé sur ton compte", "mpSaveKo": "Résultat non sauvegardé (vérifie ta connexion).", "mpNoSave": "Invité : résultat non sauvegardé (crée un compte pour garder tes résultats).", "mpRec": "Multijoueur", "mpRecG": "En invité, les résultats multijoueur ne sont pas sauvegardés : crée un compte pour les garder.", "mpRecNone": "Aucune partie multijoueur pour l'instant.", "mpRecErr": "Résultats multijoueur indisponibles (vérifie ta connexion).", "mpInvite": "🎮 Invitation au salon {n} : choisis comment tu veux jouer.", "rM": "<p>Le multijoueur en direct se joue jusqu'à 16 joueurs, chacun sur son téléphone, tous en même temps.</p><p>L'hôte crée un salon et partage le code à 6 chiffres ou le QR code. Les invités rejoignent le salon pendant que l'hôte choisit le jeu : ils voient le même écran que lui en attendant le lancement. Il faut au moins un invité pour lancer la partie.</p><p><b>Jeu original</b> (partie complète ou courte) : tout le monde joue les mêmes tirages, les points de chaque manche s'additionnent et le classement provisoire s'affiche après chaque manche. Le joueur qui a le plus de points gagne. Pour Le mot le plus long, c'est l'hôte qui choisit les voyelles et les consonnes.</p><p><b>Partie rapide</b> : une seule manche de Le mot le plus long, Le compte est bon ou Les mots de la fin. Le meilleur résultat gagne ; en cas d'égalité, le plus rapide passe devant.</p><p>On peut rejoindre un salon à tout moment : pendant que l'hôte prépare la partie, ou en cours de partie (on joue alors dès la manche suivante, en partant de 0 point).</p><p>Si l'hôte quitte, le salon est fermé. Si tous les invités se déconnectent, la partie s'arrête. Les résultats multijoueur sont sauvegardés pour les joueurs qui ont un compte (menu Records).</p>"});Object.assign(T.en,{"pM": "Multiplayer", "mM": "Multiplayer", "dM": "live, up to 16 players", "and": "and", "mpLive": "Create a room and invite up to 15 players: everyone plays at the same time, each on their own phone.", "mpNew": "Create a room", "mpNewS": "you are the host and choose the game", "mpJoin": "Join a room", "mpJoinS": "with the host's code or QR code", "mpCodeH": "Enter the room code given by the host, or scan their QR code with your camera.", "mpCodePh": "Room code", "mpJoinGo": "Join", "mpNameT": "Your name", "mpNameH": "It will be shown to the other players in the room.", "mpNamePh": "Your name (max 12 characters)", "mpNameE": "Your name must be 1 to 12 characters long.", "mpWhoA": "👤 Account {n}: your multiplayer results are saved", "mpWhoG": "👤 Guest: {n} (edit) · results not saved", "mpWhoG0": "👤 Guest: choose my name · results not saved", "mpCon": "Connecting to the room…", "mpNoRoom": "No open room with this code.", "mpFull": "This room is full (16 players maximum).", "mpBadCode": "The room code has 6 digits.", "mpErr": "Can't connect to the room: check your network.", "mpOff": "Multiplayer needs an internet connection: check your network and try again.", "mpRoomOf": "{n}'s room", "mpCode": "Room code", "mpShare": "Share", "mpQR": "QR code", "mpPl": "Players", "mpPlT": "Players connected: {n}/16", "mpHost": "host", "mpYou": "you", "mpOffl": "disconnected", "mpAcc": "account", "mpGst": "guest", "mpQRH": "Scan this QR code with your camera to join the room.", "mpShareT": "Come and play Des chiffres et des lettres with me! Room code: {n}", "mpCopied": "Invitation copied: paste it in a message!", "mpHostPrep": "⏳ The host is setting up the game…", "mpChoose": "Choose the game", "mpO": "Original game", "mpOS": "5 or 15 minutes · most points wins", "mpQ": "Quick play", "mpQS": "a single round · best result wins", "mpReady": "Ready to start", "mpGo": "▶ Start the game", "mpNeed1": "At least one guest must be connected to start the game: share the room code.", "mpWaitGo": "⏳ Waiting for the host to start…", "mpNbP": "👥 Players connected: {n}", "mpClose": "Close the room", "mpCloseQ": "Close the room? All players will be disconnected.", "mpLeave": "Leave the room", "mpLeaveQ": "Leave the room?", "mpStop": "✕ Stop the game", "mpStopQ": "Stop the game for all players? The room will go back to choosing the game.", "mpClosed": "The host closed the room.", "mpLost": "The connection with the host was lost: the room is closed.", "mpStopped": "The host stopped the game.", "mpKick": "This room is full (16 players maximum).", "mpAloneT": "Game stopped", "mpAlone": "All the guests have disconnected. You're back to choosing the game: share the room code to invite other players.", "mpWarn": "📡 Connecting to the host…", "mpHostPicks": "The host is choosing vowels and consonants…", "mpWaitO": "⏳ Waiting for the other players… ({n}/{m})", "mpSpec": "Round in progress", "mpSpecH": "⏳ You'll play from the next round.", "mpWaitH": "⏳ Waiting for the host…", "mpRoundRes": "Round results", "mpProv": "Current standings", "mpFinal": "Final standings", "mpWin": "🏆 {n} wins the game!", "mpWinQ": "🏆 {n} wins!", "mpTie": "🏆 Tie: {n}!", "mpNext": "Next round: {n} ▶", "mpQuitG": "Quit the game", "mpQuitGQ": "Quit the game? All players will go back to choosing the game.", "mpAgain": "🔁 Play again", "mpChange": "Change game", "mpInv": "Invite other players", "mpInvH": "They will play from the next round (starting from 0 points).", "mpInvE": "They will play from the next game.", "mpMiss": "no answer", "mpS": "Multiplayer", "mpSaved": "Result saved to your account", "mpSaveKo": "Result not saved (check your network).", "mpNoSave": "Guest: result not saved (create an account to keep your results).", "mpRec": "Multiplayer", "mpRecG": "As a guest, multiplayer results aren't saved: create an account to keep them.", "mpRecNone": "No multiplayer games yet.", "mpRecErr": "Multiplayer results unavailable (check your network).", "mpInvite": "🎮 Invitation to room {n}: choose how you want to play.", "rM": "<p>Live multiplayer is played by up to 16 players, each on their own phone, all at the same time.</p><p>The host creates a room and shares the 6-digit code or the QR code. Guests join the room while the host chooses the game: they see the same screen until it starts. At least one guest is needed to start the game.</p><p><b>Original game</b> (complete or short): everyone plays the same draws, points from each round add up and the current standings are shown after each round. The player with the most points wins. For Longest Word, the host chooses the vowels and consonants.</p><p><b>Quick play</b>: a single round of Longest Word, Countdown Numbers or Final Words. The best result wins; ties are broken by time.</p><p>You can join a room at any time: while the host is setting up the game, or during a game (you then play from the next round, starting from 0 points).</p><p>If the host leaves, the room is closed. If all the guests disconnect, the game stops. Multiplayer results are saved for players with an account (Records menu).</p>"});
 let L="fr";try{L=localStorage.getItem("fwlang")||"fr"}catch(e){}
 const $=id=>document.getElementById(id),t=(k,n,m)=>T[L][k].replace("{n}",n).replace("{m}",m),all=s=>document.querySelectorAll(s);
 const sh=(a,r=Math.random)=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -179,6 +200,7 @@ const show=id=>all(".pg").forEach(e=>e.classList.toggle("hide",e.id!==id));
 const fmt=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const A={theme:new Audio("assets/theme.mp3"),ding:new Audio("assets/ding.mp3"),chiffres:new Audio("assets/musique-chiffres.mp3"),lettres:new Audio("assets/musique-lettres.mp3"),l60:new Audio("assets/lettres-60.mp3"),linf:new Audio("assets/lettres-infini.mp3"),c90:new Audio("assets/chiffres-90.mp3"),cinf:new Audio("assets/chiffres-infini.mp3"),clic:new Audio("assets/tirage-clic.mp3"),cible:new Audio("assets/tirage-cible.mp3")};
+let MP=null,mpr=null,mpJoin0=null,wlk=null,mrTok=0;
 let music=null,musicOn=true,pending=null,timer,tmo,dtm,mode,dl,dict,rounds,queue,cur,score,best,locked,over=true,ld,nv,nc,rk="W",party=null,rc=null,rs=0;
 const NS=[].concat(...[0,1,2,3].map(()=>["c","l","l"]),["w"]),QS=["c","l","c","l","w"];
 let AC=null,src=[];const BUF={};
@@ -204,15 +226,16 @@ $("modal").onclick=e=>{if(e.target.id==="modal")closeModal()};
 const IT={N:"pN",Q:"pQ",W:"mW"};
 all("[data-info]").forEach(b=>b.onclick=()=>{const k=b.dataset.info;modal(t(IT[k]),t("i"+k),[{l:t("close"),c:"p",f:closeModal}])});
 // manche en cours
-function setStage(){const m=party?party.steps[party.i]:mode,dc=(m==="l"||m==="w")&&dl?'<span class="dic">'+t("dic"+dl)+"</span>":"";let s=party?[t("round",party.i+1,party.steps.length),t("m"+m.toUpperCase())]:daily?[t("pD"),t("m"+m.toUpperCase())]:dc?[t("m"+m.toUpperCase())]:[];if(dc)s.push(dc);if(party)s.push(t("total")+" "+party.total+" "+t("pts"));s=s.join(" · ");all(".stg").forEach(e=>{e.innerHTML=s;e.classList.toggle("hide",!s)})}
+function setStage(){if(MP&&MP.R&&(mpr||MP.R.ph==="draw")){const R=MP.R,g=mpr?mpr.g:"l",s=[t("mpS")];if(R.mo==="o")s.push(t("round",R.i+1,R.st.length));s.push(t("m"+g.toUpperCase()));if(g!=="c"&&R.dl)s.push('<span class="dic">'+t("dic"+R.dl)+"</span>");if(R.mo==="o"&&R.pl[MID])s.push(t("total")+" "+R.pl[MID].tot+" "+t("pts"));all(".stg").forEach(e=>{e.innerHTML=s.join(" · ");e.classList.remove("hide")});return}
+ const m=party?party.steps[party.i]:mode,dc=(m==="l"||m==="w")&&dl?'<span class="dic">'+t("dic"+dl)+"</span>":"";let s=party?[t("round",party.i+1,party.steps.length),t("m"+m.toUpperCase())]:daily?[t("pD"),t("m"+m.toUpperCase())]:dc?[t("m"+m.toUpperCase())]:[];if(dc)s.push(dc);if(party)s.push(t("total")+" "+party.total+" "+t("pts"));s=s.join(" · ");all(".stg").forEach(e=>{e.innerHTML=s;e.classList.toggle("hide",!s)})}
 // langue
 function applyLang(){rsv();document.documentElement.lang=L;all("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));all("[data-ph]").forEach(e=>e.placeholder=t(e.dataset.ph));all(".lang").forEach(e=>e.textContent=L==="fr"?"🇬🇧 English":"🇫🇷 Français");renderIntro();renderProfB();if(!$("profP").classList.contains("hide"))renderProf();if(!$("frP").classList.contains("hide"))drawFr();
- if(!$("ruleT").classList.contains("hide"))showRule(rk);if(!$("recordsP").classList.contains("hide"))renderR();if(!$("dailyP").classList.contains("hide"))renderD();if(!$("rankP").classList.contains("hide"))rank(rkG,rkO);setStage()}
+ if(!$("ruleT").classList.contains("hide"))showRule(rk);if(!$("recordsP").classList.contains("hide"))renderR();if(!$("dailyP").classList.contains("hide"))renderD();if(!$("rankP").classList.contains("hide"))rank(rkG,rkO);if(!$("mpMenu").classList.contains("hide"))renderMpWho();if(MP&&MP.R&&!$("mpWaitP").classList.contains("hide"))mpWaitShow();else if(MP&&MP.R&&["setup","res","end"].includes(MP.R.ph))mpRender();setStage()}
 all(".lang").forEach(b=>b.onclick=()=>{L=L==="fr"?"en":"fr";try{localStorage.setItem("fwlang",L)}catch(e){}applyLang()});
 // intro
 function toHome(){$("vid").pause();show("home");renderProfB();if(ME)refreshAcc()}
 function unlockA(){Object.values(A).forEach(a=>{a.muted=true;a.play().then(()=>{a.pause();a.currentTime=0;a.muted=false}).catch(()=>{a.muted=false})})}
-function launch(acc){unlockA();setMe(acc?ACC:null);show("vidP");try{$("vid").currentTime=0}catch(e){}$("vid").play().catch(toHome)}
+function launch(acc){unlockA();setMe(acc?ACC:null);if(mpJoin0){const c=mpJoin0;mpJoin0=null;renderIntro();toHome();mpOpenJoin(c);return}show("vidP");try{$("vid").currentTime=0}catch(e){}$("vid").play().catch(toHome)}
 $("vid").onended=toHome;$("vid").onerror=toHome;$("vskip").onclick=toHome;
 // navigation
 all("[data-back]").forEach(b=>b.onclick=()=>show("home"));
@@ -237,7 +260,7 @@ function rsv(){const o=getS();["n","q"].forEach(ty=>{const b=$("res"+ty),x=o[ty]
 ["n","q"].forEach(ty=>$("res"+ty).onclick=()=>{const x=getS()[ty];if(!x)return;trn=null;dur={l:30,c:45};party={type:ty,steps:ty==="n"?NS:QS,i:x.i,total:x.total};$("dst").textContent="";show("dictP");goDict(x.dl)});
 all("[data-d]").forEach(b=>b.onclick=()=>goDict(b.dataset.d));
 function quitGame(){if(daily&&!daily.done)dFinish();const wasD=daily;ctok++;sfxStop();clearTimeout(tmo);clearTimeout(dtm);clearInterval(timer);pending=null;stopM();over=true;party=null;daily=null;closeModal();setStage();if(wasD)openDaily();else show("home")}
-all("[data-quit]").forEach(b=>b.onclick=()=>daily&&!daily.done?modal(t("quit"),"<p>"+t("quitD")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{dFinish();quitGame()}}]):party?modal(t("quit"),"<p>"+t(party.i>0?"quitS":"quitQ")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:quitGame}]):quitGame());
+all("[data-quit]").forEach(b=>b.onclick=()=>MP?(MP.host?mpStopAsk():mpLeaveAsk()):daily&&!daily.done?modal(t("quit"),"<p>"+t("quitD")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{dFinish();quitGame()}}]):party?modal(t("quit"),"<p>"+t(party.i>0?"quitS":"quitQ")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:quitGame}]):quitGame());
 $("tomenu").onclick=quitGame;
 function runStep(){mode=party.steps[party.i];mode==="c"?startC():mode==="l"?startL():startW()}
 const replay=()=>{if(daily)return;if(party){party.i=0;party.total=0;runStep()}else mode==="c"?startC():mode==="w"?startW():startL()};
@@ -268,11 +291,11 @@ $("ok").onclick=()=>{const r=rounds[queue[cur]],a=$("ans").value.trim().toLowerC
  if(mode==="w"){if(a.length!==r.w.length){msg(t("useAll",r.w.length),"ko");return}
   if(key(a)!==key(r.w)){msg(t("noMatch"),"ko");return}
   if(a!==r.w&&!dict.set.has(a)){msg(t("notDict"),"ko");return}
-  r.done=1;score+=r.w.length;if(daily)daily.lt=dEl();ding();queue.splice(cur,1);if(cur>=queue.length)cur=0;draw();msg(t("good",r.w.length),"ok");return}
+  r.done=1;score+=r.w.length;if(daily||mpr)(daily||mpr).lt=dEl();ding();queue.splice(cur,1);if(cur>=queue.length)cur=0;draw();msg(t("good",r.w.length),"ok");return}
  if(!tryL(a))return;endL()};
 function tryL(a){const c={};rounds[0].l.forEach(x=>c[x]=(c[x]||0)+1);for(const x of a){if(!c[x]){msg(t("badL"),"ko");return false}c[x]--}
  if(!dict.set.has(a)){msg(t("notDict"),"ko");return false}
- if(a.length>best.length){best=a;score=a.length;if(daily)daily.lt=Math.min(dEl(),dur.l*1000)}return true}
+ if(a.length>best.length){best=a;score=a.length;if(daily||mpr)(daily||mpr).lt=Math.min(dEl(),dur.l*1000)}return true}
 function endL(){if(over)return;clearInterval(timer);lock(true);stopM();pending=null;results(t("ended"),xL())}
 const key=w=>w.split("").sort().join("");
 function timeUp(){if(mode==="l"){const a=$("ans").value.trim();if(a)tryL(a)}lock(true);msg(t("timeUp"),"ko");afterMusic(()=>results(t("timeUp"),mode==="w"?xW():xL()))}
@@ -282,14 +305,14 @@ function xL(){const b=bestWords(rounds[0].l,dict.list),f=a=>a.map(w=>w.toUpperCa
  return'<p style="text-align:center">'+t("yourBest")+" <b>"+(best?best.toUpperCase():t("none"))+'</b></p><p style="text-align:center">'+t("bestOf")+" <b>"+(b.length?f(b):t("none"))+"</b> ("+(b[0]?b[0].length:0)+")</p>"}
 // mots de la fin
 function startW(){clearTimeout(tmo);clearTimeout(dtm);const P=dl==="fr"?F:W,pk={};[5,6,7,8].forEach(n=>pk[n]=sh(P[n]).slice(0,2));rounds=[];
- if(daily)rounds=genDaily(daily.day,daily.g).rounds;else [0,1].forEach(k=>[5,6,7,8].forEach(n=>{const w=pk[n][k];rounds.push({w,l:scr(w),done:0})}));
+ if(mpr)rounds=MP.R.d.rounds.map(r=>({w:r.w,l:r.l.slice(),done:0}));else if(daily)rounds=genDaily(daily.day,daily.g).rounds;else [0,1].forEach(k=>[5,6,7,8].forEach(n=>{const w=pk[n][k];rounds.push({w,l:scr(w),done:0})}));
  queue=rounds.map((_,i)=>i);cur=0;score=0;over=false;setStage();gameUI();runTimer(120,$("time"),timeUp);dT0();playM(A.theme);if(!dict.ok)msg(t("offline"),"ko")}
 // mot le plus long
 const WT={fr:{v:{a:8,e:15,i:7,o:5,u:6,y:1},c:{b:2,c:3,d:4,f:2,g:2,h:2,j:1,k:1,l:5,m:3,n:6,p:3,q:1,r:6,s:6,t:6,v:2,w:1,x:1,z:1}},en:{v:{a:8,e:12,i:7,o:7,u:3},c:{b:2,c:3,d:4,f:2,g:3,h:2,j:1,k:1,l:4,m:3,n:6,p:3,q:1,r:6,s:6,t:9,v:1,w:2,x:1,y:2,z:1}}};
 const wp=o=>{const a=Object.entries(o).flatMap(([k,n])=>Array(n).fill(k));return a[Math.floor(Math.random()*a.length)]};
 function startL(){if(daily)return startDL();$("vcRow").classList.remove("hide");clearTimeout(tmo);clearTimeout(dtm);stopM();clearInterval(timer);over=true;ld=[];nv=nc=0;rdS();setStage();$("drawH").textContent=t("drawT");show("drawP");if(!dict.ok)$("dmsg").textContent=t("offline");else $("dmsg").textContent=t("drawH")}
 function rdS(){$("slots").innerHTML=Array.from({length:10},(_,i)=>'<div class="tile" style="cursor:default'+(ld[i]?"":";opacity:.3")+'">'+(ld[i]?ld[i].toUpperCase():"?")+"</div>").join("");$("vow").disabled=nv>=8||ld.length>=10;$("con").disabled=nc>=8||ld.length>=10}
-function dr(ty){if(ld.length>=10)return;sfx(A.clic);ld.push(wp(WT[dl][ty]));ty==="v"?nv++:nc++;rdS();if(ld.length===10){clearTimeout(dtm);dtm=setTimeout(beginL,900)}}
+function dr(ty){if(MP&&MP.R&&MP.R.ph==="draw"){if(MP.host)mpPick(ty);return}if(ld.length>=10)return;sfx(A.clic);ld.push(wp(WT[dl][ty]));ty==="v"?nv++:nc++;rdS();if(ld.length===10){clearTimeout(dtm);dtm=setTimeout(beginL,900)}}
 $("vow").onclick=()=>dr("v");$("con").onclick=()=>dr("c");
 function beginL(){rounds=[{w:"",l:ld.slice(),done:0}];queue=[0];cur=0;score=0;best="";over=false;gameUI();if(dur.l){runTimer(dur.l,$("time"),timeUp);dT0()}else{clearInterval(timer);$("time").textContent="∞";$("time").classList.remove("low")}$("lend").classList.toggle("hide",!!dur.l);playM(A[DM.l[dur.l]])}
 $("lend").onclick=()=>{if(over)return;const a=$("ans").value.trim();if(a)tryL(a);endL()};
@@ -300,7 +323,7 @@ function genT(p,R=Math.random){for(let k=0;k<3000;k++){const a=sh(p,R),n=3+Math.
 const lockC=b=>["undo","rst"].forEach(id=>$(id).disabled=b);
 const setTg=(d,k)=>{$("tg").innerHTML=d.map((x,i)=>"<b"+(i===k?' class="rl"':"")+">"+x+"</b>").join("")};
 function startC(){mode="c";clearTimeout(tmo);clearTimeout(dtm);stopM();clearInterval(timer);over=true;const tok=++ctok;
- if(daily){const g=genDaily(daily.day,"c");P=g.P;tgt=g.tgt}else{P=sh(PL).slice(0,6);tgt=genT(P)}items=P.map(v=>({v,u:0}));lines=[];sa=so=null;cl=true;bv=null;score=0;shown=0;rv=true;ctu=false;
+ if(mpr){P=MP.R.d.P.slice();tgt=MP.R.d.tgt}else if(daily){const g=genDaily(daily.day,"c");P=g.P;tgt=g.tgt}else{P=sh(PL).slice(0,6);tgt=genT(P)}items=P.map(v=>({v,u:0}));lines=[];sa=so=null;cl=true;bv=null;score=0;shown=0;rv=true;ctu=false;
  setStage();show("cGame");$("ctime").textContent=dur.c?fmt(dur.c):"∞";$("ctime").classList.remove("low");msg("","","cmsg");lockC(true);setTg([0,0,0]);rdC();revealC(tok)}
 async function revealC(tok){
  for(let i=0;i<6;i++){await wait(i?550:700);if(tok!==ctok)return;shown=i+1;sfx(A.clic);rdC()}
@@ -324,7 +347,7 @@ const cState=()=>bv===tgt?msg(t("exact"),"ok","cmsg"):msg("","","cmsg");
 function ap(a,o,b){const x=items[a].v,y=items[b].v;let r;if(o==="+")r=x+y;else if(o==="×")r=x*y;else if(o==="−")r=x-y;else r=y?x/y:0;
  if(r<=0||!Number.isInteger(r)){msg(t("opBad"),"ko","cmsg");so=null;rdC();return}
  items[a].u=items[b].u=1;items.push({v:r,u:0});lines.push({a:x,o,b:y,r,i:items.length-1,ia:a,ib:b});sa=so=null;
- if(bv===null||Math.abs(r-tgt)<Math.abs(bv-tgt)){bv=r;if(daily)bt=Math.min(dEl(),dur.c*1000)}cState();rdC()}
+ if(bv===null||Math.abs(r-tgt)<Math.abs(bv-tgt)){bv=r;if(daily||mpr)bt=Math.min(dEl(),dur.c*1000)}cState();rdC()}
 $("undo").onclick=()=>{if(cl||!lines.length)return;const l=lines.pop();items.pop();items[l.ia].u=0;items[l.ib].u=0;sa=so=null;cState();rdC()};
 $("rst").onclick=()=>{if(cl)return;items=P.map(v=>({v,u:0}));lines=[];sa=so=null;cState();rdC()};
 $("cdone").onclick=()=>{if($("cGame").classList.contains("hide"))return;if(rv){ctok++;rv=false;shown=6;sfxStop();bv=null;setTg(String(tgt).split(""));over=false}cEnd()};
@@ -347,7 +370,7 @@ function allR(){let o=null;try{o=JSON.parse(localStorage.getItem(RK)||"null")}ca
  if(!o){o={n:[],q:[],w:[]};try{o.w=JSON.parse(localStorage.getItem("fwrec")||"[]")}catch(e){}}return o}
 const loadR=c=>allR()[c]||[];
 function saveR(c,a){const o=allR();o[c]=a;try{localStorage.setItem(RK,JSON.stringify(o))}catch(e){}}
-function results(why,html){if(over)return;over=true;clearInterval(timer);pending=null;stopM();closeModal();show("end");
+function results(why,html){if(over)return;if(mpr)return mpEnd(why,html);over=true;clearInterval(timer);pending=null;stopM();closeModal();show("end");
  $("why").textContent=why;$("final").textContent=score+" "+t("pts");$("extra").innerHTML=html;
  let last=true,cat=!party&&!daily&&mode==="w"?"w":null,sc=score;
  if(party){party.total+=score;last=party.i>=party.steps.length-1;{const o=getS();if(last)delete o[party.type];else o[party.type]={i:party.i+1,total:party.total,dl};putS(o)}$("ptot").textContent=(last?t("partyEnd")+" ":"")+t("total")+" : "+party.total+" "+t("pts");if(last){cat=party.type;sc=party.total}}
@@ -357,7 +380,7 @@ function results(why,html){if(over)return;over=true;clearInterval(timer);pending
  $("drk").classList.toggle("hide",!daily);if(daily){$("again").classList.add("hide");dFinish();const o=myD(daily.day,daily.g),m=DGM[daily.g];if(o){$("ptot").textContent=t("pD")+" : "+rkVal(m,{result:o.r,detail:o.x},true)+(rkNo(m,{result:o.r})?"":" · "+fmtT(o.t));$("ptot").classList.remove("hide")}}}
 $("save").onclick=()=>{const a=loadR(rc);a.push({n:$("pseudo").value.trim()||"???",s:rs,d:new Date().toLocaleDateString("fr-FR")});a.sort((x,y)=>y.s-x.s);saveR(rc,a.slice(0,10));$("saveBox").classList.add("hide");$("why").textContent=t("saved")};
 function renderR(){const o=allR();let h="";[["n","pN"],["q","pQ"],["w","mW"]].forEach(([c,k])=>{const a=o[c]||[];if(a.length)h+="<h3>"+t(k)+"</h3>"+a.map((r,i)=>'<div class="res"><span>'+(i+1)+". "+r.n.replace(/</g,"&lt;")+"</span><span>"+r.s+" "+t("pts")+" · "+r.d+"</span></div>").join("")});
- $("rlist").innerHTML=h||'<p style="text-align:center;color:var(--mut)">'+t("noScores")+"</p>"}
+ $("rlist").innerHTML=h||'<p style="text-align:center;color:var(--mut)">'+t("noScores")+"</p>";renderMR()}
 // la partie du jour
 // ↓↓↓ Classement en ligne : colle ici l'URL du projet Supabase et sa clé publique (publishable / anon), voir le guide
 const SB={url:"https://destghbdqigegolliggd.supabase.co",key:"sb_publishable_arAUj7PGF7TMzS1IcHYnVw_1MroacPZ"};
@@ -386,8 +409,8 @@ function genDaily(day,g){const r=rngOf("dcdl|"+day+"|"+g);
  if(DGM[g]==="l"){const pool=(g==="lf"?F:W)[10],w=pool[Math.floor(r()*pool.length)];return{w,l:scr(w,r)}}
  const S=g==="wf"?F:W,rounds=[],pk={};[5,6,7,8].forEach(n=>pk[n]=sh(S[n],r).slice(0,2));[0,1].forEach(k=>[5,6,7,8].forEach(n=>{const w=pk[n][k];rounds.push({w,l:scr(w,r),done:0})}));return{rounds}}
 const nameOf=g=>t("m"+DGM[g].toUpperCase())+(DGL[g]?" "+t("g"+DGL[g]):"");
-const dT0=()=>{if(daily)daily.t0=performance.now()};
-const dEl=()=>daily&&daily.t0?performance.now()-daily.t0:0;
+const dT0=()=>{const k=daily||mpr;if(k)k.t0=performance.now()};
+const dEl=()=>{const k=daily||mpr;return k&&k.t0?performance.now()-k.t0:0};
 function dResult(){const m=DGM[daily.g];
  if(m==="l")return best?{r:best.length,x:best,t:Math.round(daily.lt||30000)}:{...WORST.l};
  if(m==="c")return bv===null?{...WORST.c}:{r:Math.abs(tgt-bv),x:String(bv),t:Math.round(bt)};
@@ -491,7 +514,7 @@ async function syncAcc(){if(!ME||!sb||!SESS||syncing)return;syncing=true;const i
   for(const x of r.data||[]){if(daily&&!daily.done&&daily.day===x.day&&daily.g===x.game)continue;(o2[x.day]=o2[x.day]||{})[x.game]={r:x.result,x:x.detail||"",t:x.time_cs*10,done:1,sent:1}}
   putD(o2);if(!$("dailyP").classList.contains("hide"))renderD()}catch(e){}finally{syncing=false}}
 // affichage
-function renderIntro(){const a=ACC;$("accIn").classList.toggle("hide",!a);if(a)$("meName").textContent="▶ "+a.pseudo;$("goLogin").classList.toggle("hide",!!a);$("goSignup").classList.toggle("p",!a);$("goGuest").classList.toggle("p",!a)}
+function renderIntro(){const a=ACC;$("invN").classList.toggle("hide",!mpJoin0);if(mpJoin0)$("invN").textContent=t("mpInvite",fmtCode(mpJoin0));$("accIn").classList.toggle("hide",!a);if(a)$("meName").textContent="▶ "+a.pseudo;$("goLogin").classList.toggle("hide",!!a);$("goSignup").classList.toggle("p",!a);$("goGuest").classList.toggle("p",!a)}
 function renderProfB(){const b=$("prof");if(!b)return;b.innerHTML=ME?esc("👤 "+ME.pseudo+" · "+t("prof"))+(ME.pending?'<span class="bdg">'+ME.pending+"</span>":""):esc("👤 "+t("prof")+" · "+t("guestN"))}
 function am(id,s,ok){const e=$(id);if(!e)return;e.textContent=s||"";e.className="amsg"+(ok?" ok":"")}
 const okMail=s=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s),cleanPs=s=>s.trim().replace(/\s+/g," ");
@@ -518,7 +541,7 @@ function hashNote(){const ok=[{l:t("ok"),c:"p",f:closeModal}];
  if(location.hash||/[?&](error|code|type|message)=/.test(location.search))try{history.replaceState(null,"",location.pathname)}catch(e){}}
 // navigation des écrans de compte
 function goAuth(p,from){authFrom=from||"intro";closeModal();["liMsg","suMsg","fgMsg"].forEach(i=>am(i,""));if(p==="signupP"&&!$("suPs").value){try{$("suPs").value=localStorage.getItem("fwpseudo")||""}catch(e){}}show(p)}
-function backTo(p){if(p==="dailyP")openDaily();else if(p==="profP")openProf(profFrom);else if(p==="rankP")rank(rkG,rkO);else{if(p==="intro")renderIntro();if(p==="home")renderProfB();show(p)}}
+function backTo(p){if(p==="dailyP")openDaily();else if(p==="profP")openProf(profFrom);else if(p==="rankP")rank(rkG,rkO);else{if(p==="intro")renderIntro();if(p==="home")renderProfB();if(p==="mpMenu")renderMpWho();show(p)}}
 function afterAuth(){["liPw","suPw"].forEach(i=>$(i).value="");if(authFrom==="intro")launch(true);else{setMe(ACC);backTo(authFrom)}}
 all("[data-aback]").forEach(b=>b.onclick=()=>backTo(authFrom));
 document.addEventListener("keydown",e=>{if(e.key!=="Enter")return;const g=e.target&&e.target.dataset?e.target.dataset.go:null;if(!g)return;e.preventDefault();if(g==="m"){const b=all("#mbtn .btn");if(b.length)b[b.length-1].click()}else $(g).click()});
@@ -593,5 +616,1138 @@ $("frAdd").onclick=()=>busy("frAdd",async()=>{const v=cleanPs($("frIn").value);i
  const M={sent:["frSent",1],accepted:["frAcc",1],already:["frAlr",0],pending:["frPend",0],notfound:["frNf",0],self:["frSelf",0],auth:["eAuth",0]}[r.data]||["eGen",0];
  am("frMsg",t(M[0],v),!!M[1]);if(M[1])$("frIn").value="";loadFr()});
 $("pFr").onclick=openFr;$("frBack").onclick=()=>openProf(profFrom);
+// QR code : « QRCode for JavaScript », Copyright (c) 2009 Kazuhiko Arase, licence MIT (via qrcode-terminal)
+const QRC=(()=>{const D={},C={};const R=n=>{if(!C[n]){const m={exports:{}};D[n](m);C[n]=m.exports}return C[n]};
+D['QRMode']=function(module){module.exports = {
+MODE_NUMBER: 1 << 0,
+MODE_ALPHA_NUM: 1 << 1,
+MODE_8BIT_BYTE: 1 << 2,
+MODE_KANJI: 1 << 3
+};
+};
+D['QRErrorCorrectLevel']=function(module){module.exports = {
+L: 1,
+M: 0,
+Q: 3,
+H: 2
+};
+};
+D['QRMaskPattern']=function(module){module.exports = {
+PATTERN000: 0,
+PATTERN001: 1,
+PATTERN010: 2,
+PATTERN011: 3,
+PATTERN100: 4,
+PATTERN101: 5,
+PATTERN110: 6,
+PATTERN111: 7
+};
+};
+D['QRMath']=function(module){var QRMath = {
+glog: function (n) {
+if (n < 1) {
+throw new Error("glog(" + n + ")");
+}
+return QRMath.LOG_TABLE[n];
+},
+gexp: function (n) {
+while (n < 0) {
+n += 255;
+}
+while (n >= 256) {
+n -= 255;
+}
+return QRMath.EXP_TABLE[n];
+},
+EXP_TABLE: new Array(256),
+LOG_TABLE: new Array(256)
+};
+for (var i = 0; i < 8; i++) {
+QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+^ QRMath.EXP_TABLE[i - 5]
+^ QRMath.EXP_TABLE[i - 6]
+^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+QRMath.LOG_TABLE[QRMath.EXP_TABLE[i]] = i;
+}
+module.exports = QRMath;
+};
+D['QRPolynomial']=function(module){var QRMath = R('QRMath');
+function QRPolynomial(num, shift) {
+if (num.length === undefined) {
+throw new Error(num.length + "/" + shift);
+}
+var offset = 0;
+while (offset < num.length && num[offset] === 0) {
+offset++;
+}
+this.num = new Array(num.length - offset + shift);
+for (var i = 0; i < num.length - offset; i++) {
+this.num[i] = num[i + offset];
+}
+}
+QRPolynomial.prototype = {
+get: function (index) {
+return this.num[index];
+},
+getLength: function () {
+return this.num.length;
+},
+multiply: function (e) {
+var num = new Array(this.getLength() + e.getLength() - 1);
+for (var i = 0; i < this.getLength(); i++) {
+for (var j = 0; j < e.getLength(); j++) {
+num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i)) + QRMath.glog(e.get(j)));
+}
+}
+return new QRPolynomial(num, 0);
+},
+mod: function (e) {
+if (this.getLength() - e.getLength() < 0) {
+return this;
+}
+var ratio = QRMath.glog(this.get(0)) - QRMath.glog(e.get(0));
+var num = new Array(this.getLength());
+for (var i = 0; i < this.getLength(); i++) {
+num[i] = this.get(i);
+}
+for (var x = 0; x < e.getLength(); x++) {
+num[x] ^= QRMath.gexp(QRMath.glog(e.get(x)) + ratio);
+}
+return new QRPolynomial(num, 0).mod(e);
+}
+};
+module.exports = QRPolynomial;
+};
+D['QR8bitByte']=function(module){var QRMode = R('QRMode');
+function QR8bitByte(data) {
+this.mode = QRMode.MODE_8BIT_BYTE;
+this.data = data;
+}
+QR8bitByte.prototype = {
+getLength: function () {
+return this.data.length;
+},
+write: function (buffer) {
+for (var i = 0; i < this.data.length; i++) {
+buffer.put(this.data.charCodeAt(i), 8);
+}
+}
+};
+module.exports = QR8bitByte;
+};
+D['QRBitBuffer']=function(module){function QRBitBuffer() {
+this.buffer = [];
+this.length = 0;
+}
+QRBitBuffer.prototype = {
+get: function (index) {
+var bufIndex = Math.floor(index / 8);
+return ((this.buffer[bufIndex] >>> (7 - index % 8)) & 1) == 1;
+},
+put: function (num, length) {
+for (var i = 0; i < length; i++) {
+this.putBit(((num >>> (length - i - 1)) & 1) == 1);
+}
+},
+getLengthInBits: function () {
+return this.length;
+},
+putBit: function (bit) {
+var bufIndex = Math.floor(this.length / 8);
+if (this.buffer.length <= bufIndex) {
+this.buffer.push(0);
+}
+if (bit) {
+this.buffer[bufIndex] |= (0x80 >>> (this.length % 8));
+}
+this.length++;
+}
+};
+module.exports = QRBitBuffer;
+};
+D['QRRSBlock']=function(module){var QRErrorCorrectLevel = R('QRErrorCorrectLevel');
+function QRRSBlock(totalCount, dataCount) {
+this.totalCount = totalCount;
+this.dataCount = dataCount;
+}
+QRRSBlock.RS_BLOCK_TABLE = [
+[1, 26, 19],
+[1, 26, 16],
+[1, 26, 13],
+[1, 26, 9],
+[1, 44, 34],
+[1, 44, 28],
+[1, 44, 22],
+[1, 44, 16],
+[1, 70, 55],
+[1, 70, 44],
+[2, 35, 17],
+[2, 35, 13],
+[1, 100, 80],
+[2, 50, 32],
+[2, 50, 24],
+[4, 25, 9],
+[1, 134, 108],
+[2, 67, 43],
+[2, 33, 15, 2, 34, 16],
+[2, 33, 11, 2, 34, 12],
+[2, 86, 68],
+[4, 43, 27],
+[4, 43, 19],
+[4, 43, 15],
+[2, 98, 78],
+[4, 49, 31],
+[2, 32, 14, 4, 33, 15],
+[4, 39, 13, 1, 40, 14],
+[2, 121, 97],
+[2, 60, 38, 2, 61, 39],
+[4, 40, 18, 2, 41, 19],
+[4, 40, 14, 2, 41, 15],
+[2, 146, 116],
+[3, 58, 36, 2, 59, 37],
+[4, 36, 16, 4, 37, 17],
+[4, 36, 12, 4, 37, 13],
+[2, 86, 68, 2, 87, 69],
+[4, 69, 43, 1, 70, 44],
+[6, 43, 19, 2, 44, 20],
+[6, 43, 15, 2, 44, 16],
+[4, 101, 81],
+[1, 80, 50, 4, 81, 51],
+[4, 50, 22, 4, 51, 23],
+[3, 36, 12, 8, 37, 13],
+[2, 116, 92, 2, 117, 93],
+[6, 58, 36, 2, 59, 37],
+[4, 46, 20, 6, 47, 21],
+[7, 42, 14, 4, 43, 15],
+[4, 133, 107],
+[8, 59, 37, 1, 60, 38],
+[8, 44, 20, 4, 45, 21],
+[12, 33, 11, 4, 34, 12],
+[3, 145, 115, 1, 146, 116],
+[4, 64, 40, 5, 65, 41],
+[11, 36, 16, 5, 37, 17],
+[11, 36, 12, 5, 37, 13],
+[5, 109, 87, 1, 110, 88],
+[5, 65, 41, 5, 66, 42],
+[5, 54, 24, 7, 55, 25],
+[11, 36, 12],
+[5, 122, 98, 1, 123, 99],
+[7, 73, 45, 3, 74, 46],
+[15, 43, 19, 2, 44, 20],
+[3, 45, 15, 13, 46, 16],
+[1, 135, 107, 5, 136, 108],
+[10, 74, 46, 1, 75, 47],
+[1, 50, 22, 15, 51, 23],
+[2, 42, 14, 17, 43, 15],
+[5, 150, 120, 1, 151, 121],
+[9, 69, 43, 4, 70, 44],
+[17, 50, 22, 1, 51, 23],
+[2, 42, 14, 19, 43, 15],
+[3, 141, 113, 4, 142, 114],
+[3, 70, 44, 11, 71, 45],
+[17, 47, 21, 4, 48, 22],
+[9, 39, 13, 16, 40, 14],
+[3, 135, 107, 5, 136, 108],
+[3, 67, 41, 13, 68, 42],
+[15, 54, 24, 5, 55, 25],
+[15, 43, 15, 10, 44, 16],
+[4, 144, 116, 4, 145, 117],
+[17, 68, 42],
+[17, 50, 22, 6, 51, 23],
+[19, 46, 16, 6, 47, 17],
+[2, 139, 111, 7, 140, 112],
+[17, 74, 46],
+[7, 54, 24, 16, 55, 25],
+[34, 37, 13],
+[4, 151, 121, 5, 152, 122],
+[4, 75, 47, 14, 76, 48],
+[11, 54, 24, 14, 55, 25],
+[16, 45, 15, 14, 46, 16],
+[6, 147, 117, 4, 148, 118],
+[6, 73, 45, 14, 74, 46],
+[11, 54, 24, 16, 55, 25],
+[30, 46, 16, 2, 47, 17],
+[8, 132, 106, 4, 133, 107],
+[8, 75, 47, 13, 76, 48],
+[7, 54, 24, 22, 55, 25],
+[22, 45, 15, 13, 46, 16],
+[10, 142, 114, 2, 143, 115],
+[19, 74, 46, 4, 75, 47],
+[28, 50, 22, 6, 51, 23],
+[33, 46, 16, 4, 47, 17],
+[8, 152, 122, 4, 153, 123],
+[22, 73, 45, 3, 74, 46],
+[8, 53, 23, 26, 54, 24],
+[12, 45, 15, 28, 46, 16],
+[3, 147, 117, 10, 148, 118],
+[3, 73, 45, 23, 74, 46],
+[4, 54, 24, 31, 55, 25],
+[11, 45, 15, 31, 46, 16],
+[7, 146, 116, 7, 147, 117],
+[21, 73, 45, 7, 74, 46],
+[1, 53, 23, 37, 54, 24],
+[19, 45, 15, 26, 46, 16],
+[5, 145, 115, 10, 146, 116],
+[19, 75, 47, 10, 76, 48],
+[15, 54, 24, 25, 55, 25],
+[23, 45, 15, 25, 46, 16],
+[13, 145, 115, 3, 146, 116],
+[2, 74, 46, 29, 75, 47],
+[42, 54, 24, 1, 55, 25],
+[23, 45, 15, 28, 46, 16],
+[17, 145, 115],
+[10, 74, 46, 23, 75, 47],
+[10, 54, 24, 35, 55, 25],
+[19, 45, 15, 35, 46, 16],
+[17, 145, 115, 1, 146, 116],
+[14, 74, 46, 21, 75, 47],
+[29, 54, 24, 19, 55, 25],
+[11, 45, 15, 46, 46, 16],
+[13, 145, 115, 6, 146, 116],
+[14, 74, 46, 23, 75, 47],
+[44, 54, 24, 7, 55, 25],
+[59, 46, 16, 1, 47, 17],
+[12, 151, 121, 7, 152, 122],
+[12, 75, 47, 26, 76, 48],
+[39, 54, 24, 14, 55, 25],
+[22, 45, 15, 41, 46, 16],
+[6, 151, 121, 14, 152, 122],
+[6, 75, 47, 34, 76, 48],
+[46, 54, 24, 10, 55, 25],
+[2, 45, 15, 64, 46, 16],
+[17, 152, 122, 4, 153, 123],
+[29, 74, 46, 14, 75, 47],
+[49, 54, 24, 10, 55, 25],
+[24, 45, 15, 46, 46, 16],
+[4, 152, 122, 18, 153, 123],
+[13, 74, 46, 32, 75, 47],
+[48, 54, 24, 14, 55, 25],
+[42, 45, 15, 32, 46, 16],
+[20, 147, 117, 4, 148, 118],
+[40, 75, 47, 7, 76, 48],
+[43, 54, 24, 22, 55, 25],
+[10, 45, 15, 67, 46, 16],
+[19, 148, 118, 6, 149, 119],
+[18, 75, 47, 31, 76, 48],
+[34, 54, 24, 34, 55, 25],
+[20, 45, 15, 61, 46, 16]
+];
+QRRSBlock.getRSBlocks = function (typeNumber, errorCorrectLevel) {
+var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+if (rsBlock === undefined) {
+throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+}
+var length = rsBlock.length / 3;
+var list = [];
+for (var i = 0; i < length; i++) {
+var count = rsBlock[i * 3 + 0];
+var totalCount = rsBlock[i * 3 + 1];
+var dataCount = rsBlock[i * 3 + 2];
+for (var j = 0; j < count; j++) {
+list.push(new QRRSBlock(totalCount, dataCount));
+}
+}
+return list;
+};
+QRRSBlock.getRsBlockTable = function (typeNumber, errorCorrectLevel) {
+switch (errorCorrectLevel) {
+case QRErrorCorrectLevel.L:
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+case QRErrorCorrectLevel.M:
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+case QRErrorCorrectLevel.Q:
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+case QRErrorCorrectLevel.H:
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+default:
+return undefined;
+}
+};
+module.exports = QRRSBlock;
+};
+D['QRUtil']=function(module){var QRMode = R('QRMode');
+var QRPolynomial = R('QRPolynomial');
+var QRMath = R('QRMath');
+var QRMaskPattern = R('QRMaskPattern');
+var QRUtil = {
+PATTERN_POSITION_TABLE: [
+[],
+[6, 18],
+[6, 22],
+[6, 26],
+[6, 30],
+[6, 34],
+[6, 22, 38],
+[6, 24, 42],
+[6, 26, 46],
+[6, 28, 50],
+[6, 30, 54],
+[6, 32, 58],
+[6, 34, 62],
+[6, 26, 46, 66],
+[6, 26, 48, 70],
+[6, 26, 50, 74],
+[6, 30, 54, 78],
+[6, 30, 56, 82],
+[6, 30, 58, 86],
+[6, 34, 62, 90],
+[6, 28, 50, 72, 94],
+[6, 26, 50, 74, 98],
+[6, 30, 54, 78, 102],
+[6, 28, 54, 80, 106],
+[6, 32, 58, 84, 110],
+[6, 30, 58, 86, 114],
+[6, 34, 62, 90, 118],
+[6, 26, 50, 74, 98, 122],
+[6, 30, 54, 78, 102, 126],
+[6, 26, 52, 78, 104, 130],
+[6, 30, 56, 82, 108, 134],
+[6, 34, 60, 86, 112, 138],
+[6, 30, 58, 86, 114, 142],
+[6, 34, 62, 90, 118, 146],
+[6, 30, 54, 78, 102, 126, 150],
+[6, 24, 50, 76, 102, 128, 154],
+[6, 28, 54, 80, 106, 132, 158],
+[6, 32, 58, 84, 110, 136, 162],
+[6, 26, 54, 82, 110, 138, 166],
+[6, 30, 58, 86, 114, 142, 170]
+],
+G15: (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+G18: (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+G15_MASK: (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1),
+getBCHTypeInfo: function (data) {
+var d = data << 10;
+while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15)));
+}
+return ((data << 10) | d) ^ QRUtil.G15_MASK;
+},
+getBCHTypeNumber: function (data) {
+var d = data << 12;
+while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18)));
+}
+return (data << 12) | d;
+},
+getBCHDigit: function (data) {
+var digit = 0;
+while (data !== 0) {
+digit++;
+data >>>= 1;
+}
+return digit;
+},
+getPatternPosition: function (typeNumber) {
+return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+},
+getMask: function (maskPattern, i, j) {
+switch (maskPattern) {
+case QRMaskPattern.PATTERN000: return (i + j) % 2 === 0;
+case QRMaskPattern.PATTERN001: return i % 2 === 0;
+case QRMaskPattern.PATTERN010: return j % 3 === 0;
+case QRMaskPattern.PATTERN011: return (i + j) % 3 === 0;
+case QRMaskPattern.PATTERN100: return (Math.floor(i / 2) + Math.floor(j / 3)) % 2 === 0;
+case QRMaskPattern.PATTERN101: return (i * j) % 2 + (i * j) % 3 === 0;
+case QRMaskPattern.PATTERN110: return ((i * j) % 2 + (i * j) % 3) % 2 === 0;
+case QRMaskPattern.PATTERN111: return ((i * j) % 3 + (i + j) % 2) % 2 === 0;
+default:
+throw new Error("bad maskPattern:" + maskPattern);
+}
+},
+getErrorCorrectPolynomial: function (errorCorrectLength) {
+var a = new QRPolynomial([1], 0);
+for (var i = 0; i < errorCorrectLength; i++) {
+a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0));
+}
+return a;
+},
+getLengthInBits: function (mode, type) {
+if (1 <= type && type < 10) {
+switch (mode) {
+case QRMode.MODE_NUMBER: return 10;
+case QRMode.MODE_ALPHA_NUM: return 9;
+case QRMode.MODE_8BIT_BYTE: return 8;
+case QRMode.MODE_KANJI: return 8;
+default:
+throw new Error("mode:" + mode);
+}
+}
+else if (type < 27) {
+switch (mode) {
+case QRMode.MODE_NUMBER: return 12;
+case QRMode.MODE_ALPHA_NUM: return 11;
+case QRMode.MODE_8BIT_BYTE: return 16;
+case QRMode.MODE_KANJI: return 10;
+default:
+throw new Error("mode:" + mode);
+}
+}
+else if (type < 41) {
+switch (mode) {
+case QRMode.MODE_NUMBER: return 14;
+case QRMode.MODE_ALPHA_NUM: return 13;
+case QRMode.MODE_8BIT_BYTE: return 16;
+case QRMode.MODE_KANJI: return 12;
+default:
+throw new Error("mode:" + mode);
+}
+}
+else {
+throw new Error("type:" + type);
+}
+},
+getLostPoint: function (qrCode) {
+var moduleCount = qrCode.getModuleCount();
+var lostPoint = 0;
+var row = 0;
+var col = 0;
+for (row = 0; row < moduleCount; row++) {
+for (col = 0; col < moduleCount; col++) {
+var sameCount = 0;
+var dark = qrCode.isDark(row, col);
+for (var r = -1; r <= 1; r++) {
+if (row + r < 0 || moduleCount <= row + r) {
+continue;
+}
+for (var c = -1; c <= 1; c++) {
+if (col + c < 0 || moduleCount <= col + c) {
+continue;
+}
+if (r === 0 && c === 0) {
+continue;
+}
+if (dark === qrCode.isDark(row + r, col + c)) {
+sameCount++;
+}
+}
+}
+if (sameCount > 5) {
+lostPoint += (3 + sameCount - 5);
+}
+}
+}
+for (row = 0; row < moduleCount - 1; row++) {
+for (col = 0; col < moduleCount - 1; col++) {
+var count = 0;
+if (qrCode.isDark(row, col))
+count++;
+if (qrCode.isDark(row + 1, col))
+count++;
+if (qrCode.isDark(row, col + 1))
+count++;
+if (qrCode.isDark(row + 1, col + 1))
+count++;
+if (count === 0 || count === 4) {
+lostPoint += 3;
+}
+}
+}
+for (row = 0; row < moduleCount; row++) {
+for (col = 0; col < moduleCount - 6; col++) {
+if (qrCode.isDark(row, col) &&
+!qrCode.isDark(row, col + 1) &&
+qrCode.isDark(row, col + 2) &&
+qrCode.isDark(row, col + 3) &&
+qrCode.isDark(row, col + 4) &&
+!qrCode.isDark(row, col + 5) &&
+qrCode.isDark(row, col + 6)) {
+lostPoint += 40;
+}
+}
+}
+for (col = 0; col < moduleCount; col++) {
+for (row = 0; row < moduleCount - 6; row++) {
+if (qrCode.isDark(row, col) &&
+!qrCode.isDark(row + 1, col) &&
+qrCode.isDark(row + 2, col) &&
+qrCode.isDark(row + 3, col) &&
+qrCode.isDark(row + 4, col) &&
+!qrCode.isDark(row + 5, col) &&
+qrCode.isDark(row + 6, col)) {
+lostPoint += 40;
+}
+}
+}
+var darkCount = 0;
+for (col = 0; col < moduleCount; col++) {
+for (row = 0; row < moduleCount; row++) {
+if (qrCode.isDark(row, col)) {
+darkCount++;
+}
+}
+}
+var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+lostPoint += ratio * 10;
+return lostPoint;
+}
+};
+module.exports = QRUtil;
+};
+D['index']=function(module){var QR8bitByte = R('QR8bitByte');
+var QRUtil = R('QRUtil');
+var QRPolynomial = R('QRPolynomial');
+var QRRSBlock = R('QRRSBlock');
+var QRBitBuffer = R('QRBitBuffer');
+function QRCode(typeNumber, errorCorrectLevel) {
+this.typeNumber = typeNumber;
+this.errorCorrectLevel = errorCorrectLevel;
+this.modules = null;
+this.moduleCount = 0;
+this.dataCache = null;
+this.dataList = [];
+}
+QRCode.prototype = {
+addData: function (data) {
+var newData = new QR8bitByte(data);
+this.dataList.push(newData);
+this.dataCache = null;
+},
+isDark: function (row, col) {
+if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+throw new Error(row + "," + col);
+}
+return this.modules[row][col];
+},
+getModuleCount: function () {
+return this.moduleCount;
+},
+make: function () {
+if (this.typeNumber < 1) {
+var typeNumber = 1;
+for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+var buffer = new QRBitBuffer();
+var totalDataCount = 0;
+for (var i = 0; i < rsBlocks.length; i++) {
+totalDataCount += rsBlocks[i].dataCount;
+}
+for (var x = 0; x < this.dataList.length; x++) {
+var data = this.dataList[x];
+buffer.put(data.mode, 4);
+buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber));
+data.write(buffer);
+}
+if (buffer.getLengthInBits() <= totalDataCount * 8)
+break;
+}
+this.typeNumber = typeNumber;
+}
+this.makeImpl(false, this.getBestMaskPattern());
+},
+makeImpl: function (test, maskPattern) {
+this.moduleCount = this.typeNumber * 4 + 17;
+this.modules = new Array(this.moduleCount);
+for (var row = 0; row < this.moduleCount; row++) {
+this.modules[row] = new Array(this.moduleCount);
+for (var col = 0; col < this.moduleCount; col++) {
+this.modules[row][col] = null;
+}
+}
+this.setupPositionProbePattern(0, 0);
+this.setupPositionProbePattern(this.moduleCount - 7, 0);
+this.setupPositionProbePattern(0, this.moduleCount - 7);
+this.setupPositionAdjustPattern();
+this.setupTimingPattern();
+this.setupTypeInfo(test, maskPattern);
+if (this.typeNumber >= 7) {
+this.setupTypeNumber(test);
+}
+if (this.dataCache === null) {
+this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+}
+this.mapData(this.dataCache, maskPattern);
+},
+setupPositionProbePattern: function (row, col) {
+for (var r = -1; r <= 7; r++) {
+if (row + r <= -1 || this.moduleCount <= row + r)
+continue;
+for (var c = -1; c <= 7; c++) {
+if (col + c <= -1 || this.moduleCount <= col + c)
+continue;
+if ((0 <= r && r <= 6 && (c === 0 || c === 6)) ||
+(0 <= c && c <= 6 && (r === 0 || r === 6)) ||
+(2 <= r && r <= 4 && 2 <= c && c <= 4)) {
+this.modules[row + r][col + c] = true;
+}
+else {
+this.modules[row + r][col + c] = false;
+}
+}
+}
+},
+getBestMaskPattern: function () {
+var minLostPoint = 0;
+var pattern = 0;
+for (var i = 0; i < 8; i++) {
+this.makeImpl(true, i);
+var lostPoint = QRUtil.getLostPoint(this);
+if (i === 0 || minLostPoint > lostPoint) {
+minLostPoint = lostPoint;
+pattern = i;
+}
+}
+return pattern;
+},
+createMovieClip: function (target_mc, instance_name, depth) {
+var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+var cs = 1;
+this.make();
+for (var row = 0; row < this.modules.length; row++) {
+var y = row * cs;
+for (var col = 0; col < this.modules[row].length; col++) {
+var x = col * cs;
+var dark = this.modules[row][col];
+if (dark) {
+qr_mc.beginFill(0, 100);
+qr_mc.moveTo(x, y);
+qr_mc.lineTo(x + cs, y);
+qr_mc.lineTo(x + cs, y + cs);
+qr_mc.lineTo(x, y + cs);
+qr_mc.endFill();
+}
+}
+}
+return qr_mc;
+},
+setupTimingPattern: function () {
+for (var r = 8; r < this.moduleCount - 8; r++) {
+if (this.modules[r][6] !== null) {
+continue;
+}
+this.modules[r][6] = (r % 2 === 0);
+}
+for (var c = 8; c < this.moduleCount - 8; c++) {
+if (this.modules[6][c] !== null) {
+continue;
+}
+this.modules[6][c] = (c % 2 === 0);
+}
+},
+setupPositionAdjustPattern: function () {
+var pos = QRUtil.getPatternPosition(this.typeNumber);
+for (var i = 0; i < pos.length; i++) {
+for (var j = 0; j < pos.length; j++) {
+var row = pos[i];
+var col = pos[j];
+if (this.modules[row][col] !== null) {
+continue;
+}
+for (var r = -2; r <= 2; r++) {
+for (var c = -2; c <= 2; c++) {
+if (Math.abs(r) === 2 ||
+Math.abs(c) === 2 ||
+(r === 0 && c === 0)) {
+this.modules[row + r][col + c] = true;
+}
+else {
+this.modules[row + r][col + c] = false;
+}
+}
+}
+}
+}
+},
+setupTypeNumber: function (test) {
+var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+var mod;
+for (var i = 0; i < 18; i++) {
+mod = (!test && ((bits >> i) & 1) === 1);
+this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+}
+for (var x = 0; x < 18; x++) {
+mod = (!test && ((bits >> x) & 1) === 1);
+this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+}
+},
+setupTypeInfo: function (test, maskPattern) {
+var data = (this.errorCorrectLevel << 3) | maskPattern;
+var bits = QRUtil.getBCHTypeInfo(data);
+var mod;
+for (var v = 0; v < 15; v++) {
+mod = (!test && ((bits >> v) & 1) === 1);
+if (v < 6) {
+this.modules[v][8] = mod;
+}
+else if (v < 8) {
+this.modules[v + 1][8] = mod;
+}
+else {
+this.modules[this.moduleCount - 15 + v][8] = mod;
+}
+}
+for (var h = 0; h < 15; h++) {
+mod = (!test && ((bits >> h) & 1) === 1);
+if (h < 8) {
+this.modules[8][this.moduleCount - h - 1] = mod;
+}
+else if (h < 9) {
+this.modules[8][15 - h - 1 + 1] = mod;
+}
+else {
+this.modules[8][15 - h - 1] = mod;
+}
+}
+this.modules[this.moduleCount - 8][8] = (!test);
+},
+mapData: function (data, maskPattern) {
+var inc = -1;
+var row = this.moduleCount - 1;
+var bitIndex = 7;
+var byteIndex = 0;
+for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+if (col === 6)
+col--;
+while (true) {
+for (var c = 0; c < 2; c++) {
+if (this.modules[row][col - c] === null) {
+var dark = false;
+if (byteIndex < data.length) {
+dark = (((data[byteIndex] >>> bitIndex) & 1) === 1);
+}
+var mask = QRUtil.getMask(maskPattern, row, col - c);
+if (mask) {
+dark = !dark;
+}
+this.modules[row][col - c] = dark;
+bitIndex--;
+if (bitIndex === -1) {
+byteIndex++;
+bitIndex = 7;
+}
+}
+}
+row += inc;
+if (row < 0 || this.moduleCount <= row) {
+row -= inc;
+inc = -inc;
+break;
+}
+}
+}
+}
+};
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+QRCode.createData = function (typeNumber, errorCorrectLevel, dataList) {
+var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+var buffer = new QRBitBuffer();
+for (var i = 0; i < dataList.length; i++) {
+var data = dataList[i];
+buffer.put(data.mode, 4);
+buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber));
+data.write(buffer);
+}
+var totalDataCount = 0;
+for (var x = 0; x < rsBlocks.length; x++) {
+totalDataCount += rsBlocks[x].dataCount;
+}
+if (buffer.getLengthInBits() > totalDataCount * 8) {
+throw new Error("code length overflow. (" +
+buffer.getLengthInBits() +
+">" +
+totalDataCount * 8 +
+")");
+}
+if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+buffer.put(0, 4);
+}
+while (buffer.getLengthInBits() % 8 !== 0) {
+buffer.putBit(false);
+}
+while (true) {
+if (buffer.getLengthInBits() >= totalDataCount * 8) {
+break;
+}
+buffer.put(QRCode.PAD0, 8);
+if (buffer.getLengthInBits() >= totalDataCount * 8) {
+break;
+}
+buffer.put(QRCode.PAD1, 8);
+}
+return QRCode.createBytes(buffer, rsBlocks);
+};
+QRCode.createBytes = function (buffer, rsBlocks) {
+var offset = 0;
+var maxDcCount = 0;
+var maxEcCount = 0;
+var dcdata = new Array(rsBlocks.length);
+var ecdata = new Array(rsBlocks.length);
+for (var r = 0; r < rsBlocks.length; r++) {
+var dcCount = rsBlocks[r].dataCount;
+var ecCount = rsBlocks[r].totalCount - dcCount;
+maxDcCount = Math.max(maxDcCount, dcCount);
+maxEcCount = Math.max(maxEcCount, ecCount);
+dcdata[r] = new Array(dcCount);
+for (var i = 0; i < dcdata[r].length; i++) {
+dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+}
+offset += dcCount;
+var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+var modPoly = rawPoly.mod(rsPoly);
+ecdata[r] = new Array(rsPoly.getLength() - 1);
+for (var x = 0; x < ecdata[r].length; x++) {
+var modIndex = x + modPoly.getLength() - ecdata[r].length;
+ecdata[r][x] = (modIndex >= 0) ? modPoly.get(modIndex) : 0;
+}
+}
+var totalCodeCount = 0;
+for (var y = 0; y < rsBlocks.length; y++) {
+totalCodeCount += rsBlocks[y].totalCount;
+}
+var data = new Array(totalCodeCount);
+var index = 0;
+for (var z = 0; z < maxDcCount; z++) {
+for (var s = 0; s < rsBlocks.length; s++) {
+if (z < dcdata[s].length) {
+data[index++] = dcdata[s][z];
+}
+}
+}
+for (var xx = 0; xx < maxEcCount; xx++) {
+for (var t = 0; t < rsBlocks.length; t++) {
+if (xx < ecdata[t].length) {
+data[index++] = ecdata[t][xx];
+}
+}
+}
+return data;
+};
+module.exports = QRCode;
+};
+return{make(s){const Q=R('index'),q=new Q(-1,R('QRErrorCorrectLevel').M);q.addData(s);q.make();return q}}})();
+// ===== multijoueur en direct : salons (Supabase Realtime, l'hôte fait foi) =====
+const MPMAX=16,MPDL={l:50000,c:75000,w:150000};
+const MID=(()=>{let v="";try{v=sessionStorage.getItem("fwmid")||""}catch(e){}if(!v){v=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);try{sessionStorage.setItem("fwmid",v)}catch(e){}}return v})();
+(()=>{try{const u=new URLSearchParams(location.search),c=(u.get("salon")||"").replace(/\D/g,"");if(c.length===6)mpJoin0=c;if(u.has("salon")){u.delete("salon");const q=u.toString();history.replaceState(null,"",location.pathname+(q?"?"+q:"")+location.hash)}}catch(e){}})();
+const fmtCode=c=>String(c).slice(0,3)+" "+String(c).slice(3);
+const mpNm=()=>{if(ME)return ME.pseudo;try{return localStorage.getItem("fwmname")||localStorage.getItem("fwpseudo")||""}catch(e){return""}};
+const DP={},preDict=l=>DP[l]||(DP[l]=loadDict(l).then(d=>{if(!d.ok)delete DP[l];return d}));
+function toast(s){const e=$("toast");e.textContent=s;e.classList.remove("hide");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.add("hide"),2400)}
+async function wakeOn(){try{if(navigator.wakeLock&&!wlk){wlk=await navigator.wakeLock.request("screen");wlk.addEventListener("release",()=>{wlk=null})}}catch(e){}}
+function wakeOff(){try{if(wlk)wlk.release()}catch(e){}wlk=null}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&MP)wakeOn()});
+addEventListener("pagehide",()=>{if(MP&&MP.host)mpSend("bye",{})});
+// menu multijoueur
+function renderMpWho(){const n=mpNm();$("mpWho").textContent=ME?t("mpWhoA",ME.pseudo):n?t("mpWhoG",n):t("mpWhoG0")}
+function mpAskName(then){modal(t("mpNameT"),"<p>"+t("mpNameH")+"</p>"+mIn("mA","text",t("mpNamePh"),mpNm())+mMsg,[{l:t("cancel"),f:closeModal},{l:t("ok"),c:"p",f:()=>{const v=cleanPs($("mA").value);if(!v||v.length>12)return am("mMsg",t("mpNameE"));try{localStorage.setItem("fwmname",v)}catch(e){}closeModal();renderMpWho();if(then)then()}}]);$("mA").maxLength=12}
+$("multi").onclick=()=>{renderMpWho();$("mpNote").textContent="";show("mpMenu")};
+$("mpWho").onclick=()=>ME?openProf("mpMenu"):mpAskName();
+$("mpInfo").onclick=()=>modal(t("pM"),t("rM"),[{l:t("close"),c:"p",f:closeModal}]);
+$("mpNew").onclick=()=>mpCreate();
+$("mpJoin").onclick=()=>mpOpenJoin("");
+$("mjGo").onclick=()=>mpJoinGo();$("mjBack").onclick=()=>{renderMpWho();show("mpMenu")};
+$("mjCode").oninput=e=>{const v=e.target.value.replace(/\D/g,"").slice(0,6);e.target.value=v.length>3?v.slice(0,3)+" "+v.slice(3):v};
+function mpOpenJoin(c){am("mjMsg","");$("mjCode").value=c?fmtCode(c):"";show("mpJoinP");if(c)mpJoinGo();else setTimeout(()=>$("mjCode").focus(),50)}
+async function mpReady(){for(let k=0;k<50&&!authReady;k++)await wait(150);if(sb)return true;modal(t("oops"),"<p>"+t("mpOff")+"</p>",[{l:t("close"),c:"p",f:closeModal}]);return false}
+async function mpCreate(){if(MP)return;const b=$("mpNew");if(b.disabled)return;if(!await mpReady())return;if(!mpNm())return mpAskName(mpCreate);
+ b.disabled=true;$("mpNote").textContent=t("mpCon");
+ try{for(let k=0;k<4;k++){const r=await mpConnect(String(100000+Math.floor(Math.random()*900000)),true);if(r==="ok"){$("mpNote").textContent="";return mpInitHost()}if(r!=="taken")break}$("mpNote").textContent=t("mpErr")}
+ finally{b.disabled=false}}
+async function mpJoinGo(){if(MP)return;const b=$("mjGo");if(b.disabled)return;const c=$("mjCode").value.replace(/\D/g,"");am("mjMsg","");
+ if(c.length!==6)return am("mjMsg",t("mpBadCode"));if(!await mpReady())return;if(!mpNm())return mpAskName(mpJoinGo);
+ b.disabled=true;am("mjMsg",t("mpCon"),true);
+ try{const r=await mpConnect(c,false);if(r!=="ok")return am("mjMsg",t({none:"mpNoRoom",full:"mpFull"}[r]||"mpErr"));
+  wakeOn();if(!MP.R){mpSend("hi",{});MP.wst=setTimeout(()=>{if(MP&&!MP.R)mpQuit("mpErr")},9000)}}
+ finally{b.disabled=false}}
+// connexion au salon : "ok", "taken" (code déjà pris), "none" (pas de salon), "full" ou "err"
+function mpPresOf(ch){const s=ch.presenceState(),o={};for(const k in s){const m=s[k]&&s[k][0];if(m)o[k]=m}return o}
+const mpMeta=M=>({n:mpNm(),h:M.host?1:0,a:ME?1:0});
+function mpConnect(code,host){return new Promise(res=>{let done=false,synced=false;
+ const ch=sb.channel("dcdl-"+code,{config:{broadcast:{self:false,ack:false},presence:{key:MID}}});
+ const M={ch,code,host,R:null,R0:null,pres:{},rid:0,ans:{},pg:null,html:{},saved:{},played:{},trk:false,ldn:0};
+ const fin=v=>{if(done)return;done=true;clearTimeout(to);if(v!=="ok")try{sb.removeChannel(ch)}catch(e){}res(v)};
+ const to=setTimeout(()=>fin("err"),12000);
+ ch.on("presence",{event:"sync"},()=>{synced=true;M.pres=mpPresOf(ch);if(MP===M)mpPres()});
+ ch.on("broadcast",{event:"st"},({payload:p})=>{if(M.host||!p)return;if(!M.R0)M.R0=p;if(MP===M)mpOnState(p)});
+ ch.on("broadcast",{event:"ans"},({payload:p})=>{if(MP===M&&M.host)mpOnAns(p)});
+ ch.on("broadcast",{event:"hi"},()=>{if(MP===M&&M.host&&M.R)mpPush(true)});
+ ch.on("broadcast",{event:"pg"},({payload:p})=>{if(MP===M&&!M.host&&p){M.pg=p;mpWaitRefresh()}});
+ ch.on("broadcast",{event:"bye"},()=>{if(MP===M&&!M.host)mpQuit("mpClosed")});
+ ch.on("broadcast",{event:"kick"},({payload:p})=>{if(MP===M&&!M.host&&p&&p.id===MID)mpQuit("mpKick")});
+ ch.subscribe(async st=>{
+  if(st==="SUBSCRIBED"){
+   if(M.trk){try{await ch.track(mpMeta(M))}catch(e){}return}// reconnexion après une coupure
+   for(let k=0;k<20&&!synced;k++)await wait(100);
+   let P=mpPresOf(ch);const hasHost=()=>Object.keys(P).some(k=>k!==MID&&P[k].h);
+   if(!host&&!hasHost()){try{ch.send({type:"broadcast",event:"hi",payload:{}})}catch(e){}for(let k=0;k<25&&!M.R0&&!hasHost();k++){await wait(100);P=mpPresOf(ch)}}
+   const others=Object.keys(P).filter(k=>k!==MID).length;
+   const v=host?(hasHost()?"taken":"ok"):!hasHost()&&!M.R0?"none":others>=MPMAX?"full":"ok";
+   if(v!=="ok"||done)return fin(v==="ok"?"err":v);
+   MP=M;M.pres=P;M.trk=true;try{await ch.track(mpMeta(M))}catch(e){}fin("ok");if(M.R0&&!M.R)mpOnState(M.R0)
+  }else if((st==="CHANNEL_ERROR"||st==="TIMED_OUT")&&!M.trk)fin("err")})})}
+function mpSend(ev,p){try{MP.ch.send({type:"broadcast",event:ev,payload:p})}catch(e){}}
+function mpPush(quiet){const R=MP.R;R.v++;mpSend("st",R);if(!quiet)mpRender()}
+function mpInitHost(){const n=mpNm();MP.R={c:MP.code,v:0,ph:"setup",scr:"modes",mo:null,ty:null,dl:null,hid:MID,hn:n,pl:{[MID]:{n,a:ME?1:0,tot:0,on:1,np:0}},rid:0,i:0,st:[],ids:[],d:null,ld:[],nv:0,nc:0,last:null,gid:""};wakeOn();mpPres();mpPush()}
+function mpOnState(p){clearTimeout(MP.wst);const prev=MP.R;if(prev&&p.v<=prev.v)return;MP.R=p;mpRender(prev)}
+// présence : qui est connecté
+const mpOnIds=()=>Object.keys(MP.R.pl).filter(id=>id===MID||MP.R.pl[id].on);
+const mpGuests=()=>Object.keys(MP.R.pl).filter(id=>id!==MID&&MP.R.pl[id].on).length;
+function mpPres(){if(!MP)return;if(MP.host)mpHostPres();else mpGuestPres();mpHeadRefresh()}
+function mpHostPres(){const R=MP.R,P=MP.pres;if(!R)return;let ch=false,n=mpOnIds().length;
+ for(const id in P){if(id===MID)continue;const p=P[id],x=R.pl[id],nm=String(p.n||"?").slice(0,12);
+  if(!x){if(n>=MPMAX){mpSend("kick",{id});continue}R.pl[id]={n:nm,a:p.a?1:0,tot:0,on:1,np:0};n++;ch=true}
+  else if(!x.on||x.n!==nm){x.on=1;x.n=nm;x.a=p.a?1:0;ch=true}}
+ for(const id in R.pl)if(id!==MID&&R.pl[id].on&&!P[id]){R.pl[id].on=0;if(R.ph==="setup")delete R.pl[id];ch=true}
+ if(ch)mpPush();mpAloneCheck();if(R.ph==="play")mpCheckDone()}
+function mpGuestPres(){const on=Object.values(MP.pres).some(p=>p.h);
+ if(on){clearTimeout(MP.gone);MP.gone=null;mpWarn(false)}
+ else if(!MP.gone&&MP.R){mpWarn(true);MP.gone=setTimeout(()=>{if(MP&&!Object.values(MP.pres).some(p=>p.h))mpQuit("mpLost")},20000)}}
+function mpWarn(b){$("mpWarn").classList.toggle("hide",!b)}
+const LIVE=["draw","play","res"];
+function mpAloneCheck(){const R=MP.R;if(!MP.host||!R)return;
+ if(LIVE.includes(R.ph)&&!mpGuests()){if(!MP.alone)MP.alone=setTimeout(()=>{if(!MP)return;MP.alone=null;if(LIVE.includes(MP.R.ph)&&!mpGuests())mpAlone()},2500)}
+ else if(MP.alone){clearTimeout(MP.alone);MP.alone=null}}
+function mpAlone(){mpAbortLocal();mpToSetup();modal(t("mpAloneT"),"<p>"+t("mpAlone")+"</p>",[{l:t("ok"),c:"p",f:closeModal}])}
+function mpToSetup(){const R=MP.R;clearTimeout(MP.dlt);clearTimeout(MP.dtm);R.ph="setup";R.scr="modes";R.last=null;R.d=null;R.ld=[];for(const id in R.pl)if(id!==MID&&!R.pl[id].on)delete R.pl[id];mpPush()}
+// quitter le salon
+function mpQuit(k){const M=MP;if(!M)return;if(M.host)mpSend("bye",{});mpAbortLocal();MP=null;
+ [M.gone,M.alone,M.dlt,M.dtm,M.wst].forEach(x=>clearTimeout(x));clearInterval(M.rs);
+ setTimeout(()=>{try{M.ch.untrack()}catch(e){}try{sb.removeChannel(M.ch)}catch(e){}},M.host?400:0);
+ wakeOff();mpWarn(false);closeModal();renderMpWho();$("mpNote").textContent="";show("mpMenu");setStage();
+ if(k)modal(t("pM"),"<p>"+t(k)+"</p>",[{l:t("ok"),c:"p",f:closeModal}])}
+function mpLeaveAsk(){if(!MP)return;const h=MP.host;modal(t(h?"mpClose":"mpLeave"),"<p>"+t(h?"mpCloseQ":"mpLeaveQ")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{closeModal();mpQuit()}}])}
+function mpStopAsk(){modal(t("mpStop"),"<p>"+t("mpStopQ")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{closeModal();if(MP&&MP.host){mpAbortLocal();mpToSetup()}}}])}
+$("mpLeave").onclick=mpLeaveAsk;$("mrLeave").onclick=mpLeaveAsk;$("mwLeave").onclick=()=>MP&&MP.host?mpStopAsk():mpLeaveAsk();
+// code du salon, partage, QR code, liste des joueurs
+const SHI='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" stroke="currentColor" stroke-width="2"/></svg>';
+const QRI='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="currentColor"><path d="M3 3h8v8H3zm2 2v4h4V5zm8-2h8v8h-8zm2 2v4h4V5zM3 13h8v8H3zm2 2v4h4v-4zm8-2h3v3h-3zm3 3h3v3h-3zm-3 3h3v2h-3zm5-6h3v3h-3zm1 6h2v2h-2z"/></svg>';
+const mpUrl=()=>RED+"?salon="+MP.code;
+function mpHead(){const n=Object.values(MP.R.pl).filter(x=>x.on).length;
+ return'<div class="room"><small>'+t("mpCode")+'</small><b class="rc">'+fmtCode(MP.code)+'</b><div class="row"><button class="btn" data-mpa="share">'+SHI+t("mpShare")+'</button><button class="btn" data-mpa="qr">'+QRI+t("mpQR")+'</button><button class="btn" data-mpa="pl" aria-label="'+t("mpPl")+'">👥 '+n+"</button></div></div>"}
+function mpHeadRefresh(){all(".mpHead").forEach(e=>e.innerHTML=MP&&MP.R?mpHead():"")}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-mpa]");if(!b||!MP||!MP.R)return;const a=b.dataset.mpa;a==="share"?mpShare():a==="qr"?mpQR():mpPlayers()});
+async function mpShare(){const url=mpUrl(),txt=t("mpShareT",fmtCode(MP.code));
+ if(navigator.share){try{await navigator.share({title:"Des chiffres et des lettres",text:txt,url});return}catch(e){if(e&&e.name==="AbortError")return}}
+ try{await navigator.clipboard.writeText(txt+"\n"+url);toast(t("mpCopied"))}catch(e){modal(t("mpShare"),"<p>"+esc(txt)+'</p><p style="word-break:break-all">'+esc(url)+"</p>",[{l:t("close"),c:"p",f:closeModal}])}}
+function qrSvg(s){const q=QRC.make(s),n=q.getModuleCount(),m=4,z=n+2*m;let d="";for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c))d+="M"+(c+m)+" "+(r+m)+"h1v1h-1z";
+ return'<svg class="qr" viewBox="0 0 '+z+" "+z+'" shape-rendering="crispEdges"><rect width="'+z+'" height="'+z+'" fill="#fff"/><path d="'+d+'" fill="#14233f"/></svg>'}
+function mpQR(){modal(t("mpQR"),qrSvg(mpUrl())+'<div class="qrc">'+fmtCode(MP.code)+"</div><p>"+t("mpQRH")+"</p>",[{l:t("close"),c:"p",f:closeModal}])}
+function mpPlayers(){const R=MP.R,ids=Object.keys(R.pl).sort((a,b)=>(b===R.hid)-(a===R.hid)||(R.pl[b].on-R.pl[a].on)),n=ids.filter(id=>R.pl[id].on).length;
+ modal(t("mpPlT",n),ids.map(id=>{const x=R.pl[id];return'<div class="fr'+(x.on?"":" off")+'"><span>'+(id===R.hid?"👑 ":"")+esc(x.n)+(id===MID?" <small>("+t("mpYou")+")</small>":"")+"</span><small>"+(id===R.hid?t("mpHost")+" · ":"")+t(x.on?(x.a?"mpAcc":"mpGst"):"mpOffl")+"</small></div>"}).join(""),[{l:t("close"),c:"p",f:closeModal}])}
+// affichage selon l'état du salon (le même pour l'hôte et les invités)
+function mpRender(prev){if(!MP||!MP.R)return;const R=MP.R,ph=R.ph,pp=prev&&prev.ph;mpHeadRefresh();if(R.dl)preDict(R.dl);
+ if(ph==="setup"){const was=!!mpr;mpAbortLocal();if(!MP.host&&(was||LIVE.includes(pp)))modal(t("pM"),"<p>"+t("mpStopped")+"</p>",[{l:t("ok"),c:"p",f:closeModal}]);return mpSetup()}
+ if(ph==="draw")return mpDraw();
+ if(ph==="play"){if(MP.rid!==R.rid){if(R.ids.includes(MID))mpStartLocal();else mpWaitShow()}else if(!mpr||mpr.done||mpr.ld)mpWaitShow();return}
+ if(mpr){if(!mpr.done)mpAbortLocal();else mpr=null}
+ mpResShow();if(ph==="end")mpSave()}
+// préparation de la partie (les invités voient le même écran, sans pouvoir toucher)
+function mpTitle(){const R=MP.R;return t(R.mo==="o"?"mpO":"mpQ")}
+function mpSub(){const R=MP.R,a=[R.mo==="o"?t(R.ty==="n"?"pN":"pQ")+" ("+t(R.ty==="n"?"d15":"d5")+")":t("m"+R.ty.toUpperCase())+" ("+t({l:"s30",c:"s45",w:"s120"}[R.ty])+")"];if(R.dl)a.push(t("dic"+R.dl));return a.join(" · ")}
+function mpSetup(){const R=MP.R,h=MP.host,dis=h?"":" disabled";show("mpP");$("mpT").textContent=t("mpRoomOf",R.hn);
+ $("mpWait").classList.toggle("hide",h);$("mpWait").textContent=t(R.scr==="ready"?"mpWaitGo":"mpHostPrep");
+ const B=(k,lab,sub,cls)=>'<button class="btn '+(cls===undefined?"p":cls)+' mb" data-ms="'+k+'"'+dis+">"+(sub?"<span>"+lab+'</span><small class="sub">'+sub+"</small>":lab)+"</button>",
+  I=(k,lab,sub,inf)=>'<div class="mrow">'+B(k,lab,sub)+'<button class="info" data-info="'+inf+'">?</button></div>',back=B("back",t("back"),"","");
+ let x;
+ if(R.scr==="modes")x="<h3>"+t("mpChoose")+"</h3>"+B("o",t("mpO"),t("mpOS"))+B("q",t("mpQ"),t("mpQS"));
+ else if(R.scr==="orig")x="<h3>"+t("mpO")+"</h3>"+I("n",t("pN"),t("d15"),"N")+I("q",t("pQ"),t("d5"),"Q")+back;
+ else if(R.scr==="quick")x="<h3>"+t("mpQ")+"</h3>"+B("l",t("mL"),t("s30"))+B("c",t("mC"),t("s45"))+I("w",t("mW"),t("s120"),"W")+back;
+ else if(R.scr==="dict")x="<h3>"+t("chooseDict")+"</h3>"+B("fr",t("dFr"))+B("en",t("dEn"))+back;
+ else{const g=mpGuests();x="<h3>"+t("mpReady")+'</h3><div class="pcard"><div class="pn">'+mpTitle()+'</div><div class="pm">'+mpSub()+'</div><div class="pm">'+t("mpNbP",mpOnIds().length)+"</div></div>"+(h?B("go",t("mpGo"))+(g?"":'<p class="dnote">'+t("mpNeed1")+"</p>"):"")+back}
+ $("mpBody").innerHTML=x;const go=$("mpBody").querySelector('[data-ms="go"]');if(go)go.disabled=!mpGuests();
+ $("mpLeave").textContent=t(h?"mpClose":"mpLeave");$("mpBody").classList.toggle("mir",!h)}
+$("mpBody").onclick=e=>{const i=e.target.closest("[data-info]");if(i){const k=i.dataset.info;return modal(t(IT[k]),t("i"+k),[{l:t("close"),c:"p",f:closeModal}])}
+ const b=e.target.closest("[data-ms]");if(!b||b.disabled||!MP||!MP.host)return;const R=MP.R,k=b.dataset.ms;
+ if(k==="go")return mpLaunch();
+ if(k==="back")R.scr=R.scr==="ready"?(R.mo==="q"&&R.ty==="c"?"quick":"dict"):R.scr==="dict"?(R.mo==="o"?"orig":"quick"):"modes";
+ else if(R.scr==="modes"){R.mo=k;R.scr=k==="o"?"orig":"quick"}
+ else if(R.scr==="orig"){R.ty=k;R.scr="dict"}
+ else if(R.scr==="quick"){R.ty=k;if(k==="c"){R.dl=null;R.scr="ready"}else R.scr="dict"}
+ else if(R.scr==="dict"){R.dl=k;R.scr="ready"}
+ mpPush()};
+// déroulement de la partie (côté hôte)
+function mpLaunch(){const R=MP.R;if(!mpGuests())return;R.gid=Date.now().toString(36)+Math.random().toString(36).slice(2,8);R.st=R.mo==="o"?(R.ty==="n"?NS:QS).slice():[R.ty];R.i=0;
+ for(const id in R.pl){if(id!==MID&&!R.pl[id].on)delete R.pl[id];else{R.pl[id].tot=0;R.pl[id].np=0}}mpRound()}
+function mpRound(){const R=MP.R,g=R.st[R.i];R.last=null;
+ if(g==="l"){R.ph="draw";R.ld=[];R.nv=R.nc=0;R.d=null;return mpPush()}
+ if(g==="c"){const P=sh(PL).slice(0,6);return mpPlay({g,P,tgt:genT(P)})}
+ const S=R.dl==="fr"?F:W,pk={},rs=[];[5,6,7,8].forEach(n=>pk[n]=sh(S[n]).slice(0,2));[0,1].forEach(k=>[5,6,7,8].forEach(n=>{const w=pk[n][k];rs.push({w,l:scr(w)})}));mpPlay({g,rounds:rs})}
+function mpPick(ty){const R=MP.R;if(R.ph!=="draw"||R.ld.length>=10||(ty==="v"?R.nv:R.nc)>=8)return;R.ld.push(wp(WT[R.dl][ty]));ty==="v"?R.nv++:R.nc++;mpPush();
+ if(R.ld.length===10){clearTimeout(MP.dtm);MP.dtm=setTimeout(()=>{if(MP&&MP.R.ph==="draw")mpPlay({g:"l",l:MP.R.ld.slice()})},900)}}
+function mpPlay(d){const R=MP.R;R.d=d;R.ph="play";R.rid++;R.ids=mpOnIds();R.ids.forEach(id=>R.pl[id].np=(R.pl[id].np||0)+1);MP.ans={};MP.pg=null;const rid=R.rid;
+ clearTimeout(MP.dlt);MP.dlt=setTimeout(()=>{if(MP&&MP.R.ph==="play"&&MP.R.rid===rid)mpPublish()},MPDL[d.g]);mpPush()}
+const mpClean=a=>({p:Math.max(0,Math.min(999,a.p|0)),r:Math.max(0,Math.min(9999,a.r|0)),x:String(a.x||"").slice(0,20),t:Math.max(0,Math.min(999999,a.t|0))});
+function mpOnAns(p){const R=MP.R;if(!p||!p.a||R.ph!=="play"||p.rid!==R.rid||!R.ids.includes(p.id))return;if(!MP.ans[p.id])MP.ans[p.id]=mpClean(p.a);mpPgSend();mpCheckDone()}
+function mpPgSend(){const p={rid:MP.R.rid,d:Object.keys(MP.ans)};MP.pg=p;mpSend("pg",p);mpWaitRefresh()}
+function mpCheckDone(){const R=MP.R;if(R.ph!=="play")return;if(R.ids.filter(id=>id===MID||(R.pl[id]&&R.pl[id].on)).every(id=>MP.ans[id]))mpPublish()}
+const mpInv=(g,x)=>x.m||(g==="c"?x.r>=9999:!x.r);
+function mpPublish(){const R=MP.R;if(R.ph!=="play")return;clearTimeout(MP.dlt);const g=R.d.g,q=R.mo==="q";
+ const rows=R.ids.filter(id=>R.pl[id]).map(id=>{const a=MP.ans[id];return a?{id,n:R.pl[id].n,...a}:{id,n:R.pl[id].n,p:0,r:g==="c"?9999:0,x:"",t:0,m:1}});
+ const key=x=>{const v=mpInv(g,x);return q?[v?1:0,g==="c"?x.r:-x.r,v?0:x.t]:[x.m?1:0,-x.p,x.t]};
+ rows.sort((a,b)=>{const A=key(a),B=key(b);for(let k=0;k<3;k++)if(A[k]!==B[k])return A[k]-B[k];return 0});
+ rows.forEach((x,i)=>{const pv=rows[i-1];x.pos=i&&(q?key(pv).join()===key(x).join():pv.p===x.p)?pv.pos:i+1});
+ if(!q)rows.forEach(x=>{if(R.pl[x.id])R.pl[x.id].tot+=x.p});
+ R.last={g,i:R.i,rid:R.rid,rows};R.ph=q||R.i>=R.st.length-1?"end":"res";mpPush()}
+// déroulement de la manche (chaque joueur sur son téléphone)
+function mpDraw(){const R=MP.R;mpAbortLocal();mode="l";dl=R.dl;ld=R.ld.slice();nv=R.nv;nc=R.nc;if(!ld.length)MP.ldn=0;
+ $("vcRow").classList.remove("hide");setStage();rdS();if(!MP.host)$("vow").disabled=$("con").disabled=true;
+ $("drawH").textContent=t("drawT");$("dmsg").textContent=MP.host?(ld.length<10?t("drawH"):""):t("mpHostPicks");
+ if(ld.length>MP.ldn)sfx(A.clic);MP.ldn=ld.length;if($("drawP").classList.contains("hide"))show("drawP")}
+async function mpStartLocal(){const R=MP.R,rid=R.rid,g=R.d.g;MP.rid=rid;MP.played[R.gid]=1;clearInterval(MP.rs);closeModal();
+ mpr={rid,g,t0:0,lt:0,done:0,ld:0};party=null;daily=null;trn=null;dur={l:30,c:45};dl=R.dl;mode=g;
+ if(g==="c")return startC();
+ if(!D[dl]){mpr.ld=1;mpWaitShow()}dict=await preDict(dl);
+ if(!mpr||mpr.rid!==rid||!MP||MP.R.rid!==rid||MP.R.ph!=="play")return;mpr.ld=0;mode=g;
+ if(g==="w")startW();else{ld=R.d.l.slice();setStage();beginL()}}
+function mpAbortLocal(){if(!mpr)return;ctok++;sfxStop();clearTimeout(tmo);clearTimeout(dtm);clearInterval(timer);pending=null;stopM();over=true;mpr=null;if(MP)clearInterval(MP.rs)}
+// fin de la manche pour ce joueur : envoi du résultat à l'hôte
+function mpEnd(why,html){over=true;clearInterval(timer);pending=null;stopM();closeModal();const g=mpr.g;let a;
+ if(g==="l")a={p:score,r:best?best.length:0,x:best||"",t:best?Math.round(mpr.lt||30000):30000};
+ else if(g==="c")a=bv===null?{p:0,r:9999,x:"",t:45000}:{p:score,r:Math.abs(tgt-bv),x:String(bv),t:Math.round(bt)};
+ else{const n=rounds.filter(x=>x.done).length;a={p:score,r:n,x:n+"/8",t:n?Math.round(mpr.lt):120000}}
+ mpr.done=1;MP.mine=a;MP.html[mpr.rid]={why,html};const rid=mpr.rid;
+ if(MP.host){MP.ans[MID]=a;mpPgSend();mpWaitShow();mpCheckDone();return}
+ const go=()=>{const R=MP&&MP.R;if(!R||R.rid!==rid||R.ph!=="play"||(MP.pg&&MP.pg.rid===rid&&MP.pg.d.includes(MID))){if(MP)clearInterval(MP.rs);return}mpSend("ans",{id:MID,rid,a})};
+ clearInterval(MP.rs);go();MP.rs=setInterval(go,2500);mpWaitShow()}
+const mpVal=(g,a)=>MP.R.mo==="q"?rkVal(g,{result:a.r,detail:a.x},true):a.p+" "+t("pts");
+function mpWaitShow(){const R=MP.R;if(!R||R.ph!=="play")return;const g=R.d.g,h=MP.host;show("mpWaitP");$("mwLeave").textContent=t(h?"mpStop":"mpLeave");
+ if(mpr&&mpr.ld){$("mwT").textContent=t("m"+g.toUpperCase());$("mwS").textContent="";$("mwM").textContent=t("loading");return}
+ if(MP.rid===R.rid&&R.ids.includes(MID)){$("mwT").textContent=(MP.html[R.rid]||{}).why||t("ended");$("mwS").textContent=MP.mine?mpVal(g,MP.mine):"";mpWaitRefresh()}
+ else{$("mwT").textContent=t("mpSpec");$("mwS").textContent=t("m"+g.toUpperCase());$("mwM").textContent=t("mpSpecH")}}
+function mpWaitRefresh(){const R=MP&&MP.R;if(!R||R.ph!=="play"||$("mpWaitP").classList.contains("hide")||MP.rid!==R.rid||!R.ids.includes(MID)||(mpr&&!mpr.done))return;
+ const m=R.ids.filter(id=>id===MID||(R.pl[id]&&R.pl[id].on)).length,d=MP.pg&&MP.pg.rid===R.rid?MP.pg.d.length:1;$("mwM").textContent=t("mpWaitO",Math.min(d,m),m)}
+// résultats de la manche, classement provisoire et final
+function mpStand(fin){const R=MP.R,a=Object.keys(R.pl).filter(id=>!fin||R.pl[id].np).map(id=>({id,...R.pl[id]})).sort((x,y)=>y.tot-x.tot);a.forEach((x,i)=>x.pos=i&&a[i-1].tot===x.tot?a[i-1].pos:i+1);return a}
+const andJ=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" "+t("and")+" "+a[a.length-1];
+function mpSol(){const R=MP.R,d=R.d;if(!d)return"";
+ if(d.g==="c")return'<div class="plates">'+d.P.map(v=>'<div class="plate" style="cursor:default">'+v+"</div>").join("")+'</div><p style="text-align:center">'+t("solution")+" ("+d.tgt+")</p>"+solHTML(solve(d.P,d.tgt));
+ if(d.g==="w")return d.rounds.map(r=>'<div class="res"><span>'+r.l.join("").toUpperCase()+"</span><span>"+r.w.toUpperCase()+"</span></div>").join("");
+ const b=D[R.dl]?bestWords(d.l,D[R.dl].list):[];return'<div class="tiles">'+d.l.map(c=>'<div class="tile" style="cursor:default">'+c.toUpperCase()+"</div>").join("")+"</div>"+(b.length?'<p style="text-align:center">'+t("bestOf")+" <b>"+b.map(w=>w.toUpperCase()).join(", ")+"</b> ("+b[0].length+")</p>":"")}
+function mpResShow(){const R=MP.R,Z=R.last;if(!Z)return mpSetup();const g=Z.g,q=R.mo==="q",end=R.ph==="end",h=MP.host,on=id=>R.pl[id]&&R.pl[id].on;show("mpResP");
+ $("mrT").textContent=q?t("mpQ")+" · "+t("m"+g.toUpperCase()):(end?t("partyEnd")+" · ":"")+t("round",Z.i+1,R.st.length)+" · "+t("m"+g.toUpperCase());
+ let w="";if(end){const top=q?Z.rows.filter(x=>x.pos===1&&!mpInv(g,x)):mpStand(1).filter(x=>x.pos===1&&x.tot>0),nm=andJ(top.map(x=>x.n));if(top.length)w=top.length>1?t("mpTie",nm):t(q?"mpWinQ":"mpWin",nm)}
+ $("mrW").innerHTML=w?'<div class="win">'+esc(w)+"</div>":"";
+ const own=MP.html[Z.rid],row=x=>'<div class="res'+(x.id===MID?" me":"")+'"><span class="rn"><b>'+x.pos+".</b>"+esc(x.n)+(on(x.id)?"":"<small> · "+t("mpOffl")+"</small>")+'</span><span class="rv"><b>'+(x.m?t("mpMiss"):rkVal(g,{result:x.r,detail:x.x},true))+"</b>"+(q?(mpInv(g,x)?"":" · "+fmtT(x.t)):" · +"+x.p+" "+t("pts"))+"</span></div>";
+ let b=(own?'<h3 class="ct">'+esc(own.why)+"</h3>"+own.html:'<h3 class="ct">'+t("solT")+"</h3>"+mpSol())+"<h3>"+t("mpRoundRes")+"</h3>"+Z.rows.map(row).join("");
+ if(!q){const s=mpStand(end);b+="<h3>"+t(end?"mpFinal":"mpProv")+"</h3>"+s.map(x=>'<div class="res'+(x.id===MID?" me":"")+'"><span class="rn"><b>'+x.pos+".</b>"+esc(x.n)+(x.on?"":"<small> · "+t("mpOffl")+"</small>")+'</span><span class="rv"><b>'+x.tot+" "+t("pts")+"</b></span></div>").join("")}
+ if(end&&MP.played[R.gid])b+='<p class="dnote" id="mrSave" style="margin-top:10px">'+(ME?MP.saved[R.gid]==="ok"?"✓ "+t("mpSaved"):"":t("mpNoSave"))+"</p>";
+ $("mrB").innerHTML=b;
+ const nx=R.st[R.i+1];$("mrBtn").innerHTML=h?'<div class="row">'+(end?'<button class="btn p" data-mr="again">'+t("mpAgain")+'</button><button class="btn" data-mr="change">'+t("mpChange")+"</button>":'<button class="btn p" data-mr="next">'+t("mpNext",nx?t("m"+nx.toUpperCase()):"")+'</button><button class="btn" data-mr="quit">'+t("mpQuitG")+"</button>")+"</div>":'<p class="mpw">'+t("mpWaitH")+"</p>";
+ $("mrInv").innerHTML="<h3>"+t("mpInv")+'</h3><p class="dnote">'+t(end?"mpInvE":"mpInvH")+'</p><div class="mpHead">'+mpHead()+"</div>";
+ $("mrLeave").classList.toggle("hide",h&&!end);$("mrLeave").textContent=t(h?"mpClose":"mpLeave")}
+$("mrBtn").onclick=e=>{const b=e.target.closest("[data-mr]");if(!b||!MP||!MP.host)return;const k=b.dataset.mr,R=MP.R;
+ if(k==="next"){if(R.ph==="res"){R.i++;mpRound()}}
+ else if(k==="again"){if(!mpGuests())return modal(t("mpReady"),"<p>"+t("mpNeed1")+"</p>",[{l:t("ok"),c:"p",f:closeModal}]);mpLaunch()}
+ else if(k==="change")mpToSetup();
+ else modal(t("mpQuitG"),"<p>"+t("mpQuitGQ")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{closeModal();if(MP&&MP.host)mpToSetup()}}])};
+// sauvegarde du résultat final (comptes uniquement)
+function mpSave(){const R=MP.R,k=R.gid;if(!R.last||!ME||!sb||!SESS||!MP.played[k]||MP.saved[k])return;let rank,players,points,detail="";
+ if(R.mo==="q"){const x=R.last.rows.find(y=>y.id===MID);if(!x)return;rank=x.pos;players=R.last.rows.length;points=x.p;detail=x.m?"":String(x.x||"")}
+ else{const s=mpStand(1),x=s.find(y=>y.id===MID);if(!x)return;rank=x.pos;players=s.length;points=x.tot}
+ MP.saved[k]="…";const M=MP;
+ sb.rpc("submit_multi",{p_gid:k,p_mode:R.mo,p_game:R.ty,p_dict:R.dl||null,p_rank:rank,p_players:players,p_points:points,p_detail:detail.slice(0,20)}).then(r=>{if(r.error)throw r.error;M.saved[k]="ok";const e=$("mrSave");if(e&&MP===M&&MP.R.gid===k)e.textContent="✓ "+t("mpSaved")}).catch(()=>{M.saved[k]="ko";const e=$("mrSave");if(e&&MP===M)e.textContent=t("mpSaveKo")})}
+// records multijoueur (comptes)
+async function renderMR(){const el=$("rMulti"),h="<h3>"+t("mpRec")+"</h3>",tok=++mrTok;
+ if(!ME){el.innerHTML=h+'<p class="dnote">'+t("mpRecG")+"</p>";return}el.innerHTML=h+'<p class="dnote">'+t("frLoad")+"</p>";let a=null;
+ if(sb&&SESS){try{const r=await sb.rpc("my_multi");if(r.error)throw r.error;a=r.data||[]}catch(e){}}if(tok!==mrTok)return;
+ if(!a){el.innerHTML=h+'<p class="dnote">'+t("mpRecErr")+"</p>";return}if(!a.length){el.innerHTML=h+'<p class="dnote">'+t("mpRecNone")+"</p>";return}
+ el.innerHTML=h+a.map(x=>{const md=["🥇","🥈","🥉"][x.rank-1]||"",nm=x.mode==="o"?t("mpO")+" · "+t(x.game==="n"?"pN":"pQ"):t("m"+String(x.game).toUpperCase()),v=x.mode==="o"?x.points+" "+t("pts"):x.detail?esc(x.game==="l"?String(x.detail).toUpperCase():x.detail):"—";
+  return'<div class="res"><span>'+md+x.rank+"/"+x.players+" · "+nm+'</span><span class="rv"><b>'+v+"</b> · "+new Date(x.created_at).toLocaleDateString(L==="fr"?"fr-FR":"en-GB")+"</span></div>"}).join("")}
 applyLang();loadSB();
 </script></body></html>
