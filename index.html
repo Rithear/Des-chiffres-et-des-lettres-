@@ -98,6 +98,7 @@ button.fr{width:100%;border:0;color:var(--tx);font:inherit;text-align:left;curso
 .dfsp{font-size:56px;text-align:center;margin:6px 0;opacity:.45}.dfsp.on{opacity:1;animation:pls 1s ease-in-out infinite}@keyframes pls{50%{transform:scale(1.15)}}
 #dfNum.dfsw{font-size:24px;letter-spacing:1px;word-break:break-all;min-height:56px}
 .kb>div{display:flex;gap:4px;justify-content:center;margin-bottom:6px}.kb .btn{flex:1 1 0;min-width:0;max-width:42px;padding:12px 0;font-size:17px}.kb .btn.w{max-width:72px;flex:1.6 1 0}
+.frc{background:var(--card);border-radius:12px;padding:12px;margin:0 0 12px;text-align:center}.frc small{display:block;color:var(--mut);font-size:13px}.frc b{display:block;font-size:34px;letter-spacing:4px;color:var(--ac);margin:2px 0 10px;font-variant-numeric:tabular-nums}.frc .row{margin:0}.frc .btn{background:#0e1a30;font-size:15px;padding:10px 8px}
 .btn.dfrb{background:#0e1a30;border:1px solid var(--ac);color:var(--ac)}
 </style></head><body>
 <section id="vidP" class="pg hide"><video id="vid" src="assets/generique.mp4" playsinline preload="auto"></video><button class="btn" id="vskip" data-t="skip"></button></section>
@@ -175,7 +176,7 @@ button.fr{width:100%;border:0;color:var(--tx);font:inherit;text-align:left;curso
 <div id="saveBox" class="hide"><p style="text-align:center" data-t="newRec"></p><div class="row"><input id="pseudo" maxlength="10" style="text-transform:none" data-ph="name"><button class="btn p" id="save" data-t="save"></button></div></div>
 <div class="row"><button class="btn p hide" id="next" data-t="next"></button><button class="btn p hide" id="drk" data-t="seeRank"></button><button class="btn p" id="again" data-t="again"></button><button class="btn" id="tomenu" data-t="menu"></button></div></section>
 <section id="profP" class="pg hide"><h2 data-t="prof"></h2>
-<div id="pAcc"><div class="pcard"><div class="pn" id="pName"></div><div class="pm" id="pMail"></div></div><div class="amsg" id="pMsg"></div>
+<div id="pAcc"><div class="pcard"><div class="pn" id="pName"></div><div class="pm" id="pMail"></div><div class="pm" id="pCode"></div></div><div class="amsg" id="pMsg"></div>
 <button class="btn p mb" id="pFr"></button><button class="btn mb" id="pPs" data-t="chPs"></button><button class="btn mb" id="pPw" data-t="chPw"></button><button class="btn mb" id="pMl" data-t="chMl"></button><button class="btn mb" id="pOut" data-t="logout"></button><button class="btn mb dng" id="pDel" data-t="delAcc"></button></div>
 <div id="pGst"><p class="dnote" data-t="gInfo"></p><button class="btn p mb hide" id="pUse"></button><button class="btn p mb" id="pLi" data-t="login"></button><button class="btn p mb" id="pSu" data-t="signup"></button></div>
 <button class="btn mb" id="pBack" data-t="back"></button></section>
@@ -191,6 +192,7 @@ button.fr{width:100%;border:0;color:var(--tx);font:inherit;text-align:left;curso
 <section id="mpWaitP" class="pg hide"><h2 id="mwT"></h2><div id="mwS"></div><p class="mpw" id="mwM"></p><button class="btn mb" id="mwLeave" style="margin-top:12px"></button></section>
 <section id="mpResP" class="pg hide"><h2 id="mrT"></h2><div id="mrW"></div><div id="mrB"></div><div id="mrBtn" style="margin-top:14px"></div><div id="mrInv"></div><button class="btn mb" id="mrLeave" style="margin-top:4px"></button></section>
 <section id="frP" class="pg hide"><h2 data-t="friends"></h2>
+<div class="frc"><small data-t="frCodeT"></small><b id="frCode">…</b><div class="row"><button class="btn" id="frCopy" data-t="frCopy"></button><button class="btn" id="frInv" data-t="frInv"></button></div></div>
 <div class="row"><input class="fi" id="frIn" maxlength="12" autocomplete="off" data-ph="frPh" data-go="frAdd" style="margin:0"><button class="btn p" id="frAdd" data-t="add"></button></div>
 <div class="amsg" id="frMsg"></div><div id="frL"></div><button class="btn mb" id="frBack" data-t="back" style="margin-top:12px"></button></section>
 <section id="chMenu" class="pg hide"><h2 data-t="chT"></h2><p class="dnote" data-t="chH"></p>
@@ -244,7 +246,7 @@ const show=id=>all(".pg").forEach(e=>e.classList.toggle("hide",e.id!==id));
 const fmt=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const A={theme:new Audio("assets/theme.mp3"),ding:new Audio("assets/ding.mp3"),chiffres:new Audio("assets/musique-chiffres.mp3"),lettres:new Audio("assets/musique-lettres.mp3"),l60:new Audio("assets/lettres-60.mp3"),linf:new Audio("assets/lettres-infini.mp3"),c90:new Audio("assets/chiffres-90.mp3"),cinf:new Audio("assets/chiffres-infini.mp3"),clic:new Audio("assets/tirage-clic.mp3"),cible:new Audio("assets/tirage-cible.mp3"),defis:new Audio("assets/musique-defis.mp3")};
-let MP=null,mpr=null,mpJoin0=null,wlk=null,mrTok=0;
+let MP=null,mpr=null,mpJoin0=null,frIn0=null,wlk=null,mrTok=0;
 let music=null,musicOn=true,pending=null,timer,tmo,dtm,mode,dl,dict,rounds,queue,cur,score,best,tried="",locked,over=true,ld,nv,nc,rk="W",party=null,rc=null,rs=0;
 const NS0=[].concat(...[0,1,2,3].map(()=>["c","l","l"]),["w"]),QS0=["c","l","c","l","w"],LP=["c","l","l"],DF4=["t","k","u","s"],mkNS=()=>{const d=sh(DF4).slice(0,2);return[...LP,...LP,...d,...LP,...LP,"w"]},mkQS=()=>["c","l",DF4[Math.floor(Math.random()*4)],"c","l","w"];
 let AC=null,src=[];const BUF={};
@@ -279,7 +281,7 @@ all(".lang").forEach(b=>b.onclick=()=>{L=L==="fr"?"en":"fr";try{localStorage.set
 // intro
 function toHome(){$("vid").pause();show("home");renderProfB();if(ME)refreshAcc()}
 function unlockA(){Object.values(A).forEach(a=>{a.muted=true;a.play().then(()=>{a.pause();a.currentTime=0;a.muted=false}).catch(()=>{a.muted=false})})}
-function launch(acc){unlockA();setMe(acc?ACC:null);if(chIn0){const o=chIn0;chIn0=null;renderIntro();toHome();chOpenLink(o);return}if(mpJoin0){const c=mpJoin0;mpJoin0=null;renderIntro();toHome();mpOpenJoin(c);return}show("vidP");try{$("vid").currentTime=0}catch(e){}$("vid").play().catch(toHome)}
+function launch(acc){unlockA();setMe(acc?ACC:null);if(frIn0&&!chIn0&&!mpJoin0){renderIntro();toHome();acc?frFromLink():frNeedAcc();return}if(chIn0){const o=chIn0;chIn0=null;renderIntro();toHome();chOpenLink(o);return}if(mpJoin0){const c=mpJoin0;mpJoin0=null;renderIntro();toHome();mpOpenJoin(c);return}show("vidP");try{$("vid").currentTime=0}catch(e){}$("vid").play().catch(toHome)}
 $("vid").onended=toHome;$("vid").onerror=toHome;$("vskip").onclick=toHome;
 // navigation
 all("[data-back]").forEach(b=>b.onclick=()=>show("home"));
@@ -528,7 +530,7 @@ const QH=new URLSearchParams((location.hash||"").replace(/^#/,"")+"&"+(location.
 const HT=QH.get("type"),HE=QH.get("error_description")||QH.get("error"),HM=QH.get("message");
 if(HT==="recovery")recov=true;
 function cacheAcc(){try{return JSON.parse(localStorage.getItem("fwacc")||"null")}catch(e){return null}}
-function putAcc(){try{ACC?localStorage.setItem("fwacc",JSON.stringify({id:ACC.id,pseudo:ACC.pseudo,email:ACC.email})):localStorage.removeItem("fwacc")}catch(e){}}
+function putAcc(){try{ACC?localStorage.setItem("fwacc",JSON.stringify({id:ACC.id,pseudo:ACC.pseudo,email:ACC.email,code:ACC.code||""})):localStorage.removeItem("fwacc")}catch(e){}}
 (()=>{const c=cacheAcc();let has=false;try{has=!!localStorage.getItem("fwauth")}catch(e){}if(c&&has)ACC={id:c.id,email:c.email||"",pseudo:c.pseudo,pending:0}})();
 function loadSB(){if(!SB.url){ACC=null;authReady=true;renderIntro();return}
  const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";s.onload=initAuth;s.onerror=()=>{authReady=true;renderIntro();hashNote()};document.head.appendChild(s)}
@@ -540,11 +542,11 @@ async function initAuth(){
 async function onAuth(ev,s){if(!authReady)return;if(ev==="PASSWORD_RECOVERY")recov=true;await setSess(s);renderIntro();if(recov&&s&&$("newPwP").classList.contains("hide"))show("newPwP")}
 async function setSess(s){SESS=s||null;const u=SESS&&SESS.user;
  if(!u){const was=!!ME;if(ME)setMe(null);ACC=null;putAcc();renderProfB();if(was&&!bye&&authReady)modal(t("oops"),"<p>"+t("eAuth")+"</p>",[{l:t("ok"),c:"p",f:closeModal}]);return}
- if(!ACC||ACC.id!==u.id){const c=cacheAcc();if(ME)setMe(null);ACC={id:u.id,email:u.email||"",pseudo:(c&&c.id===u.id&&c.pseudo)||(u.user_metadata&&u.user_metadata.pseudo)||"?",pending:0}}
+ if(!ACC||ACC.id!==u.id){const c=cacheAcc();if(ME)setMe(null);ACC={id:u.id,email:u.email||"",pseudo:(c&&c.id===u.id&&c.pseudo)||(u.user_metadata&&u.user_metadata.pseudo)||"?",code:(c&&c.id===u.id&&c.code)||"",pending:0}}
  else ACC.email=u.email||ACC.email;
  putAcc();await refreshAcc();if(ME&&ME===ACC)syncAcc()}
-async function refreshAcc(){if(sb&&ACC&&SESS){const id=ACC.id;try{const r=await sb.rpc("my_profile");if(r.error)throw r.error;const p=(r.data||[])[0];if(p&&ACC&&ACC.id===id){ACC.pseudo=p.pseudo;ACC.pending=p.pending|0;putAcc()}}catch(e){}}
- renderIntro();renderProfB();if(!$("profP").classList.contains("hide"))renderProf()}
+async function refreshAcc(){if(sb&&ACC&&SESS){const id=ACC.id;try{const r=await sb.rpc("my_profile");if(r.error)throw r.error;const p=(r.data||[])[0];if(p&&ACC&&ACC.id===id){ACC.pseudo=p.pseudo;ACC.pending=p.pending|0;if(p.code)ACC.code=p.code;putAcc()}}catch(e){}}
+ renderIntro();renderProfB();if(!$("profP").classList.contains("hide"))renderProf();if(!$("frP").classList.contains("hide"))drawFrCode()}
 function setMe(a){ME=a||null;DK=ME?"fwdaily:"+ME.id:"fwdaily";renderProfB();if(ME){importGuest();syncAcc()}}
 // les résultats joués en invité sur cet appareil passent sur le compte
 function importGuest(){if(!ME)return;let g={};try{g=JSON.parse(localStorage.getItem("fwdaily")||"{}")}catch(e){}const o=getD(),lim=addDay(pToday(),-30);let ch=0;
@@ -558,7 +560,7 @@ async function syncAcc(){if(!ME||!sb||!SESS||syncing)return;syncing=true;const i
   for(const x of r.data||[]){if(daily&&!daily.done&&daily.day===x.day&&daily.g===x.game)continue;(o2[x.day]=o2[x.day]||{})[x.game]={r:x.result,x:x.detail||"",t:x.time_cs*10,done:1,sent:1}}
   putD(o2);if(!$("dailyP").classList.contains("hide"))renderD()}catch(e){}finally{syncing=false}}
 // affichage
-function renderIntro(){const a=ACC;$("invN").classList.toggle("hide",!mpJoin0&&!chIn0);if(mpJoin0)$("invN").textContent=t("mpInvite",fmtCode(mpJoin0));else if(chIn0)$("invN").textContent=chIn0==="bad"?t("chBad"):chIn0.a?t("chInvR",chIn0.a.n):t("chInv",chIn0.n);$("accIn").classList.toggle("hide",!a);if(a)$("meName").textContent="▶ "+a.pseudo;$("goLogin").classList.toggle("hide",!!a);$("goSignup").classList.toggle("p",!a);$("goGuest").classList.toggle("p",!a)}
+function renderIntro(){const a=ACC;$("invN").classList.toggle("hide",!mpJoin0&&!chIn0&&!frIn0);if(frIn0&&!mpJoin0&&!chIn0)$("invN").textContent=t("frLinkInv",fmtCode(frIn0));else if(mpJoin0)$("invN").textContent=t("mpInvite",fmtCode(mpJoin0));else if(chIn0)$("invN").textContent=chIn0==="bad"?t("chBad"):chIn0.a?t("chInvR",chIn0.a.n):t("chInv",chIn0.n);$("accIn").classList.toggle("hide",!a);if(a)$("meName").textContent="▶ "+a.pseudo;$("goLogin").classList.toggle("hide",!!a);$("goSignup").classList.toggle("p",!a);$("goGuest").classList.toggle("p",!a)}
 function renderProfB(){const b=$("prof");if(!b)return;b.innerHTML=ME?esc("👤 "+ME.pseudo+" · "+t("prof"))+(ME.pending?'<span class="bdg">'+ME.pending+"</span>":""):esc("👤 "+t("prof")+" · "+t("guestN"))}
 function am(id,s,ok){const e=$(id);if(!e)return;e.textContent=s||"";e.className="amsg"+(ok?" ok":"")}
 const okMail=s=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s),cleanPs=s=>s.trim().replace(/\s+/g," ");
@@ -586,7 +588,7 @@ function hashNote(){const ok=[{l:t("ok"),c:"p",f:closeModal}];
 // navigation des écrans de compte
 function goAuth(p,from){authFrom=from||"intro";closeModal();["liMsg","suMsg","fgMsg"].forEach(i=>am(i,""));if(p==="signupP"&&!$("suPs").value){try{$("suPs").value=localStorage.getItem("fwpseudo")||""}catch(e){}}show(p)}
 function backTo(p){if(p==="chMenu")return openChMenu();if(p==="dailyP")openDaily();else if(p==="profP")openProf(profFrom);else if(p==="rankP")rank(rkG,rkO);else{if(p==="intro")renderIntro();if(p==="home")renderProfB();if(p==="mpMenu")renderMpWho();show(p)}}
-function afterAuth(){["liPw","suPw"].forEach(i=>$(i).value="");if(authFrom==="intro")launch(true);else{setMe(ACC);backTo(authFrom)}}
+function afterAuth(){["liPw","suPw"].forEach(i=>$(i).value="");if(authFrom==="intro")launch(true);else{setMe(ACC);backTo(authFrom);if(frIn0)frFromLink()}}
 all("[data-aback]").forEach(b=>b.onclick=()=>backTo(authFrom));
 document.addEventListener("keydown",e=>{if(e.key!=="Enter")return;const g=e.target&&e.target.dataset?e.target.dataset.go:null;if(!g)return;e.preventDefault();if(g==="m"){const b=all("#mbtn .btn");if(b.length)b[b.length-1].click()}else $(g).click()});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-eye]");if(!b)return;const i=$(b.dataset.eye);i.type=i.type==="password"?"text":"password"});
@@ -623,7 +625,7 @@ $("suGo").onclick=()=>busy("suGo",async()=>{if(authFrom==="intro")unlockA();cons
 // profil
 function openProf(from){profFrom=from||"home";am("pMsg","");renderProf();show("profP");refreshAcc()}
 function renderProf(){const a=!!ME;$("pAcc").classList.toggle("hide",!a);$("pGst").classList.toggle("hide",a);
- if(a){$("pName").textContent=ME.pseudo;$("pMail").textContent=ME.email;$("pFr").innerHTML=esc("👥 "+t("friends"))+(ME.pending?'<span class="bdg">'+ME.pending+"</span>":"")}
+ if(a){$("pName").textContent=ME.pseudo;$("pMail").textContent=ME.email;$("pCode").textContent=ME.code?t("pCode",fmtCode(ME.code)):"";$("pFr").innerHTML=esc("👥 "+t("friends"))+(ME.pending?'<span class="bdg">'+ME.pending+"</span>":"")}
  else{$("pUse").classList.toggle("hide",!ACC);if(ACC)$("pUse").textContent=t("useAcc",ACC.pseudo)}}
 $("prof").onclick=()=>openProf("home");$("pBack").onclick=()=>backTo(profFrom);
 $("pUse").onclick=()=>{setMe(ACC);renderProf()};
@@ -647,7 +649,8 @@ $("pDel").onclick=()=>{if(!needSb())return;modal(t("delAcc"),t("delH")+mIn("mA",
  const pw=$("mA").value;if(!pw)return am("mMsg",t("eFill"));if(!await checkPw(pw))return;const id=ME.id,r=await sb.rpc("delete_my_account");if(r.error)return am("mMsg",errT(r.error));
  try{localStorage.removeItem("fwdaily:"+id)}catch(e){}await doLogout();modal(t("delAcc"),"<p>"+t("delOk")+"</p>",[{l:t("ok"),c:"p",f:closeModal}])})}])};
 // amis
-function openFr(){if(!needSb())return;am("frMsg","");$("frIn").value="";FRL=null;drawFr();show("frP");loadFr()}
+function openFr(){if(!needSb())return;am("frMsg","");$("frIn").value="";FRL=null;drawFr();drawFrCode();show("frP");loadFr();refreshAcc()}
+function drawFrCode(){$("frCode").textContent=ME&&ME.code?fmtCode(ME.code):"…";$("frCopy").disabled=$("frInv").disabled=!(ME&&ME.code)}
 async function loadFr(){const tok=++frTok;try{const r=await sb.rpc("friend_list");if(r.error)throw r.error;if(tok!==frTok)return;FRL=r.data||[];drawFr();if(ME){ME.pending=FRL.filter(x=>x.state==="in").length;renderProfB()}}catch(e){if(tok===frTok&&!FRL)$("frL").innerHTML='<p class="dnote">'+esc(errT(e))+"</p>"}}
 function drawFr(){const F0=FRL;if(!F0){$("frL").innerHTML='<p class="dnote">'+t("frLoad")+"</p>";return}
  const sec=(st,title,bt)=>{const a=F0.filter(x=>x.state===st);return a.length?"<h3>"+title+"</h3>"+a.map(x=>'<div class="fr"><span>'+esc(x.pseudo)+(st==="out"?" <small>· "+t("frWait")+"</small>":"")+"</span>"+bt(x)+"</div>").join(""):""};
@@ -656,9 +659,23 @@ async function frDo(p,okMsg){try{const r=await p;if(r.error)throw r.error;am("fr
 $("frL").onclick=e=>{const b=e.target.closest("button");if(!b||!FRL||!sb)return;const id=b.dataset.fa||b.dataset.fn||b.dataset.fr,x=FRL.find(y=>y.id===id);if(!x)return;
  if(b.dataset.fa||b.dataset.fn)return frDo(sb.rpc("friend_answer",{p_user:id,p_ok:!!b.dataset.fa}),b.dataset.fa?t("frAcc",x.pseudo):"");
  modal(t("friends"),"<p>"+esc(t(x.state==="out"?"frCan":"frRm",x.pseudo))+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{closeModal();frDo(sb.rpc("friend_remove",{p_user:id}),"")}}])};
-$("frAdd").onclick=()=>busy("frAdd",async()=>{const v=cleanPs($("frIn").value);if(!v||!needSb())return;am("frMsg","");const r=await sb.rpc("friend_add",{p_pseudo:v});if(r.error)return am("frMsg",errT(r.error));
- const M={sent:["frSent",1],accepted:["frAcc",1],already:["frAlr",0],pending:["frPend",0],notfound:["frNf",0],self:["frSelf",0],auth:["eAuth",0]}[r.data]||["eGen",0];
- am("frMsg",t(M[0],v),!!M[1]);if(M[1])$("frIn").value="";loadFr()});
+const FRM={sent:["frSent",1],accepted:["frAcc",1],already:["frAlr",0],pending:["frPend",0],notfound:["frNf",0],self:["frSelf",0],auth:["eAuth",0]};
+async function frByCode(c){const r=await sb.rpc("friend_add_code",{p_code:c});if(r.error)throw r.error;const x=(r.data||[])[0]||{};return{st:x.status||"",who:x.who||""}}
+$("frAdd").onclick=()=>busy("frAdd",async()=>{const v=cleanPs($("frIn").value);if(!v||!needSb())return;am("frMsg","");
+ const c=v.replace(/\s/g,"");let st,who=v;
+ if(/^\d{6}$/.test(c)){const x=await frByCode(c);st=x.st;who=x.who||v;if(st==="notfound"){const r=await sb.rpc("friend_add",{p_pseudo:v});if(!r.error&&r.data!=="notfound"){st=r.data;who=v}else{st="notfound";who=fmtCode(c)}}if(st==="self")who="";}
+ else{const r=await sb.rpc("friend_add",{p_pseudo:v});if(r.error)return am("frMsg",errT(r.error));st=r.data}
+ const M=FRM[st]||["eGen",0];am("frMsg",t(st==="notfound"&&/^\d{6}$/.test(c)?"frNfC":M[0],who),!!M[1]);if(M[1])$("frIn").value="";loadFr()});
+$("frCopy").onclick=async()=>{if(!ME||!ME.code)return;try{await navigator.clipboard.writeText(ME.code);toast(t("frCopied"))}catch(e){modal(t("frCodeT"),'<p class="qrc">'+fmtCode(ME.code)+"</p>",[{l:t("close"),c:"p",f:closeModal}])}};
+$("frInv").onclick=async()=>{if(!ME||!ME.code)return;const url=RED+"?ami="+ME.code,txt=t("frShareT",ME.pseudo,fmtCode(ME.code));
+ if(navigator.share){try{await navigator.share({title:"Des chiffres et des lettres",text:txt,url});return}catch(e){if(e&&e.name==="AbortError")return}}
+ try{await navigator.clipboard.writeText(txt+"\n"+url);toast(t("mpCopied"))}catch(e){modal(t("frInv"),"<p>"+esc(txt)+'</p><p style="word-break:break-all">'+esc(url)+"</p>",[{l:t("close"),c:"p",f:closeModal}])}};
+// lien d'invitation reçu : la demande part dès qu'un compte est connecté
+function frClrLink(){frIn0=null;try{localStorage.removeItem("fwfrin")}catch(e){}renderIntro()}
+function frNeedAcc(){modal(t("frLinkT"),t("frLinkG"),[{l:t("cancel"),f:()=>{closeModal();frClrLink()}},{l:t("login"),f:()=>goAuth("loginP","home")},{l:t("signup"),c:"p",f:()=>goAuth("signupP","home")}])}
+async function frFromLink(n){const c=frIn0;if(!c)return;if(!sb||!SESS||!ME){if((n|0)<10)setTimeout(()=>frFromLink((n|0)+1),700);return}frClrLink();
+ let m;try{const x=await frByCode(c);const M=FRM[x.st]||["eGen",0];m=t(x.st==="notfound"?"frNfC":x.st==="sent"?"frSentL":M[0],x.st==="notfound"?fmtCode(c):x.who)}catch(e){m=errT(e)}
+ modal(t("frLinkT"),"<p>"+esc(m)+"</p>",[{l:t("ok"),f:closeModal},{l:t("frSee"),c:"p",f:()=>{closeModal();profFrom="home";openFr()}}])}
 $("pFr").onclick=openFr;$("frBack").onclick=()=>openProf(profFrom);
 // QR code : « QRCode for JavaScript », Copyright (c) 2009 Kazuhiko Arase, licence MIT (via qrcode-terminal)
 const QRC=(()=>{const D={},C={};const R=n=>{if(!C[n]){const m={exports:{}};D[n](m);C[n]=m.exports}return C[n]};
@@ -1568,6 +1585,7 @@ return{make(s){const Q=R('index'),q=new Q(-1,R('QRErrorCorrectLevel').M);q.addDa
 // ===== multijoueur en direct : salons (Supabase Realtime, l'hôte fait foi) =====
 const MPMAX=16,MPDL={l:50000,c:75000,w:150000};
 const MID=(()=>{let v="";try{v=sessionStorage.getItem("fwmid")||""}catch(e){}if(!v){v=Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);try{sessionStorage.setItem("fwmid",v)}catch(e){}}return v})();
+(()=>{try{const u=new URLSearchParams(location.search),f=(u.get("ami")||"").replace(/\D/g,"");if(f.length===6){frIn0=f;try{localStorage.setItem("fwfrin",f)}catch(e){}}else{try{const k=localStorage.getItem("fwfrin");if(/^\d{6}$/.test(k||""))frIn0=k}catch(e){}}if(u.has("ami")){u.delete("ami");const q=u.toString();history.replaceState(null,"",location.pathname+(q?"?"+q:"")+location.hash)}}catch(e){}})();
 (()=>{try{const u=new URLSearchParams(location.search),c=(u.get("salon")||"").replace(/\D/g,"");if(c.length===6)mpJoin0=c;if(u.has("salon")){u.delete("salon");const q=u.toString();history.replaceState(null,"",location.pathname+(q?"?"+q:"")+location.hash)}}catch(e){}})();
 const fmtCode=c=>String(c).slice(0,3)+" "+String(c).slice(3);
 const mpNm=()=>{if(ME)return ME.pseudo;try{return localStorage.getItem("fwmname")||localStorage.getItem("fwpseudo")||""}catch(e){return""}};
@@ -1974,6 +1992,15 @@ Object.assign(T.en,{pX:"Challenges",dX:"30 seconds per challenge",dfH:"The show'
  iQ:`<p>A short game in 6 rounds: numbers, letters, a random challenge (theme or mental maths), numbers, letters, then Final Words.</p><p>Points from all rounds add up.</p>`,
  chT:"⚔️ Link duel",dM:"live or link duel",chNone:"No duels yet. Pick a game above to start your first duel!",chBad:"This duel link is incomplete or damaged. Ask your opponent to send it again.",chStg:"⚔️ Duel against {n}",chReshare:"📤 Send the duel again",chNew:"⚔️ New duel",chQuitQ:"Quit? The duel will count with your current result (one try only).",chMine:"Your duel",chMineS:"My duel",chOwn:"This is your own duel: send it to someone else!",
  rM:T.en.rM.replace("<p><b>Link challenge</b>","<p><b>Challenges</b> (theme challenge and mental maths challenge) are played with a buzzer, in the Original game, Quick play or Custom game: the first player to buzz stops the clock and has 10 seconds to answer. If they're wrong, they can't answer again and the others can still buzz. The right answer scores 7 points; nobody scores if everyone is wrong or if nobody buzzes.</p><p><b>Link duel</b>").replace("Multiplayer › Link challenge › My duels","Multiplayer › Link duel › My duels").replace("the game (numbers, letters, final words or random)","the game (numbers, letters, final words, theme challenge, mental maths challenge or random)")});
+// ===== v11.1 : code ami et invitation par lien =====
+Object.assign(T.fr,{frCodeT:"Mon code ami",frCopy:"📋 Copier",frInv:"📤 Inviter un ami",frCopied:"Code ami copié !",frPh:"Code ami ou pseudo",frNfC:"Aucun joueur n'a le code ami {n}.",frSelf:"C'est ton propre code ou pseudo 😄",
+ frNone:"Tu n'as pas encore d'amis : ajoute-les avec leur code ami ou leur pseudo, ou envoie-leur une invitation.",frShareT:"Ajoute-moi en ami dans Des chiffres et des lettres ! Mon pseudo : {n} · mon code ami : {m}",
+ frLinkT:"👥 Invitation d'ami",frLinkG:"<p>Pour accepter cette invitation, il te faut un compte. Connecte-toi ou crée ton compte : la demande d'ami partira toute seule.</p>",frLinkInv:"👥 Invitation d'ami (code {n}) : connecte-toi ou crée un compte pour l'accepter.",
+ frSentL:"Demande d'ami envoyée à {n} ! Vous serez amis dès qu'il l'aura acceptée.",frSee:"👥 Mes amis",pCode:"Code ami : {n}"});
+Object.assign(T.en,{frCodeT:"My friend code",frCopy:"📋 Copy",frInv:"📤 Invite a friend",frCopied:"Friend code copied!",frPh:"Friend code or nickname",frNfC:"No player has the friend code {n}.",frSelf:"That's your own code or nickname 😄",
+ frNone:"You don't have any friends yet: add them with their friend code or nickname, or send them an invitation.",frShareT:"Add me as a friend in Des chiffres et des lettres! My nickname: {n} · my friend code: {m}",
+ frLinkT:"👥 Friend invitation",frLinkG:"<p>You need an account to accept this invitation. Log in or create your account: the friend request will be sent automatically.</p>",frLinkInv:"👥 Friend invitation (code {n}): log in or create an account to accept it.",
+ frSentL:"Friend request sent to {n}! You'll be friends as soon as they accept it.",frSee:"👥 My friends",pCode:"Friend code: {n}"});
 // ===== v11 : défis du lot 2, menus, règles =====
 Object.assign(T.fr,{dX:"4 défis de 30 secondes",mU:"L'un dans l'autre",nU:"L'un dans l'autre",mS:"Défi orthographe",nS:"Défi orthographe",
  dfUH:"Trouve le nom propre (les 10 lettres) et le nom commun caché dedans",dfUP:"Nom propre :",dfUC:"Nom commun :",dfUP0:"Nom propre (10 lettres)",dfUC0:"Nom commun",dfU10:"Le nom propre utilise les 10 lettres",dfUCE:"Écris aussi le nom commun",
