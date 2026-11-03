@@ -145,17 +145,22 @@ h3.mph{margin:16px 0 8px;text-align:left}
 .tbk .btn.on{background:var(--ac);color:#14233f;outline:0}
 #daL .fr{cursor:pointer}#daL .fr.on{outline:2px solid var(--ac)}#daL .fr.on span::after{content:" ✓";color:var(--ac)}#daL .fr.off{opacity:.5;cursor:default}.daS{margin:6px 0 2px}#tbFrL .fr{cursor:pointer}#tbFrL .fr.on{outline:2px solid var(--ac)}#tbFrL .fr.on span::after{content:" ✓";color:var(--ac)}
 .tbe .res .rn{flex:0 0 auto;margin-right:10px}.tbe .res .rv{text-align:right}
+/* v16 : hors connexion, mention © */
+body.nonet [data-net],body.nonet #recSc [data-rs="all"]{opacity:.4}
+.netS{text-align:center;color:var(--mut);font-size:14px;line-height:1.5;margin:-10px 0 14px}
+.foot{text-align:center;color:var(--mut);font-size:12px;line-height:1.5;margin:26px 0 0}.foot p{margin:2px 0}.foot .lnk{font-size:13px;margin:8px auto 0}
 </style></head><body>
 <section id="vidP" class="pg hide"><video id="vid" src="assets/generique.mp4" playsinline preload="auto"></video><button class="btn" id="vskip" data-t="skip"></button></section>
 <button id="homeB" class="hide" aria-label="Menu">🏠</button><div id="toast" class="hide"></div><div id="mpWarn" class="hide" data-t="mpWarn"></div>
 <div id="modal" class="hide"><div id="mcard"><h2 id="mt"></h2><div id="mb"></div><div id="mbtn"></div></div></div>
 <main>
-<section id="intro" class="pg"><h1>Des chiffres et des lettres</h1><p id="invN" class="mpw hide"></p>
-<div style="margin-top:48px"><div id="accIn" class="hide"><button class="btn p mb" id="goMe"><span id="meName"></span><small class="sub" data-t="playAs"></small></button><button class="btn mb" id="goOther" data-t="other"></button></div>
-<button class="btn p mb" id="goLogin" data-t="login"></button>
-<button class="btn p mb" id="goSignup" data-t="signup"></button>
+<section id="intro" class="pg"><h1>Des chiffres et des lettres</h1><p id="invN" class="mpw hide"></p><p class="netS hide"></p>
+<div style="margin-top:48px"><div id="accIn" class="hide"><button class="btn p mb" id="goMe"><span id="meName"></span><small class="sub" data-t="playAs"></small></button><button class="btn mb" id="goOther" data-t="other" data-net></button></div>
+<button class="btn p mb" id="goLogin" data-t="login" data-net></button>
+<button class="btn p mb" id="goSignup" data-t="signup" data-net></button>
 <div class="mrow"><button class="btn p mb" id="goGuest" data-t="guest"></button><button class="info" id="guestInfo">?</button></div>
-<button class="btn mb lang" style="margin-top:12px;font-size:16px;padding:12px"></button></div></section>
+<button class="btn mb lang" style="margin-top:12px;font-size:16px;padding:12px"></button></div>
+<div class="foot"><p data-t="copy"></p></div></section>
 <section id="loginP" class="pg hide"><h2 data-t="login"></h2>
 <input class="fi" id="liMail" type="email" autocomplete="email" data-ph="mail" data-go="liGo">
 <div class="pw"><input class="fi" id="liPw" type="password" autocomplete="current-password" data-ph="pw" data-go="liGo"><button class="eye" data-eye="liPw">👁</button></div>
@@ -172,15 +177,16 @@ h3.mph{margin:16px 0 8px;text-align:left}
 <section id="newPwP" class="pg hide"><h2 data-t="npT"></h2><p class="dnote" data-t="npH"></p>
 <div class="pw"><input class="fi" id="npPw" type="password" autocomplete="new-password" data-ph="pw6" data-go="npGo"><button class="eye" data-eye="npPw">👁</button></div>
 <div class="amsg" id="npMsg"></div><button class="btn p mb" id="npGo" data-t="submit"></button></section>
-<section id="home" class="pg hide"><h1>Des chiffres et des lettres</h1>
-<button class="btn p mb" id="daily"><span data-t="pD"></span><small class="sub" data-t="dD"></small></button>
+<section id="home" class="pg hide"><h1>Des chiffres et des lettres</h1><p class="netS hide"></p>
+<button class="btn p mb" id="daily" data-net><span data-t="pD"></span><small class="sub" data-t="dD"></small></button>
 <button class="btn p mb" id="orig"><span data-t="pO"></span><small class="sub" data-t="dO"></small></button>
 <button class="btn p mb" id="free"><span data-t="pF"></span><small class="sub" data-t="dF"></small></button>
-<button class="btn p mb" id="multi"><span data-t="pM"></span><span class="bdg hide" id="tbB0"></span><small class="sub" data-t="dM"></small></button>
+<button class="btn p mb" id="multi" data-net><span data-t="pM"></span><span class="bdg hide" id="tbB0"></span><small class="sub" data-t="dM"></small></button>
 <button class="btn p mb" id="train" data-t="pT"></button>
-<button class="btn bl mb" id="dicB" data-t="pDic"></button>
+<button class="btn bl mb" id="dicB" data-t="pDic" data-net></button>
 <div class="row"><button class="btn" id="rules" data-t="rules"></button><button class="btn" id="records" data-t="stats"></button></div>
-<button class="btn mb" id="prof" style="margin-top:12px;font-size:16px;padding:12px"></button><button class="btn mb lang" style="font-size:16px;padding:12px"></button></section>
+<button class="btn mb" id="prof" style="margin-top:12px;font-size:16px;padding:12px" data-net></button><button class="btn mb lang" style="font-size:16px;padding:12px"></button>
+<div class="foot"><p id="ofS" class="hide"></p><p data-t="copy"></p><button class="lnk" id="rldB" data-t="reload" data-net></button></div></section>
 <section id="origP" class="pg hide"><h2 data-t="pO"></h2>
 <div class="mrow"><button class="btn p mb" data-p="n"><span data-t="pN"></span><small class="sub" data-t="d15"></small></button><button class="info" data-info="N">?</button></div>
 <button class="btn mb hide" id="resn"></button>
@@ -234,7 +240,7 @@ h3.mph{margin:16px 0 8px;text-align:left}
 <div class="row cbar"><button class="btn" id="undo" data-t="undo"></button><button class="btn" id="rst" data-t="rst"></button><button class="btn p" id="cdone" data-t="done"></button></div></section>
 <section id="end" class="pg hide"><h2 id="why"></h2><div class="big" id="final"></div><div class="ptot hide" id="ptot"></div><div id="chBox"></div><div id="extra"></div>
 <div id="saveBox" class="recN hide"></div>
-<div class="row"><button class="btn p hide" id="next" data-t="next"></button><button class="btn p hide" id="drk" data-t="seeRank"></button><button class="btn p" id="again" data-t="again"></button><button class="btn" id="tomenu" data-t="menu"></button></div></section>
+<div class="row"><button class="btn p hide" id="next" data-t="next"></button><button class="btn p hide" id="drk" data-t="seeRank" data-net></button><button class="btn p" id="again" data-t="again"></button><button class="btn" id="tomenu" data-t="menu"></button></div></section>
 <section id="profP" class="pg hide"><h2 data-t="prof"></h2>
 <div id="pAcc"><div class="pcard"><div class="pn" id="pName"></div><div class="pm" id="pMail"></div><div class="pm" id="pCode"></div></div><div class="amsg" id="pMsg"></div>
 <button class="btn p mb" id="pFr"></button><button class="btn mb" id="pPs" data-t="chPs"></button><button class="btn mb" id="pPw" data-t="chPw"></button><button class="btn mb" id="pMl" data-t="chMl"></button><button class="btn mb" id="pOut" data-t="logout"></button><button class="btn mb dng" id="pDel" data-t="delAcc"></button></div>
@@ -354,7 +360,7 @@ function setStage(){if(MP&&MP.R&&(mpr||MP.R.ph==="draw")){const R=MP.R,g=mpr?mpr
  const m=party?party.steps[party.i]:mode,dc=(m==="l"||m==="w"||m==="t"||m==="u"||m==="s")&&dl?'<span class="dic">'+t("dic"+dl)+"</span>":"";let s=tbx?[esc(t("tbStg",tbx.opp)),t("tbStg2",tbx.tour,tbx.nt),t("m"+m.toUpperCase())]:party?[t("round",party.i+1,party.steps.length),t("m"+m.toUpperCase())]:daily?[t("pD"),t("m"+m.toUpperCase())]:chl&&chl.opp?[esc(t("chStg",chl.opp.n)),t("m"+m.toUpperCase())]:dc?[t("m"+m.toUpperCase())]:[];if(dc)s.push(dc);if(party)s.push(t("total")+" "+party.total+" "+t("pts"));s=s.join(" · ");all(".stg").forEach(e=>{e.innerHTML=s;e.classList.toggle("hide",!s)})}
 // langue
 function applyLang(){rsv();document.documentElement.lang=L;all("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));all("[data-ph]").forEach(e=>e.placeholder=t(e.dataset.ph));all(".lang").forEach(e=>e.textContent=L==="fr"?"🇬🇧 English":"🇫🇷 Français");renderIntro();renderProfB();if(!$("profP").classList.contains("hide"))renderProf();if(!$("frP").classList.contains("hide"))drawFr();
- if(!$("ruleT").classList.contains("hide"))showRule(rk);stLang();if(!$("dailyP").classList.contains("hide"))renderD();if(!$("rankP").classList.contains("hide"))rank(rkG,rkO);if(!$("mpMenu").classList.contains("hide"))renderMpWho();if(MP&&MP.R&&!$("mpWaitP").classList.contains("hide"))mpWaitShow();else if(MP&&MP.R&&["setup","res","end"].includes(MP.R.ph))mpRender();chLang();tbLang();setStage()}
+ if(!$("ruleT").classList.contains("hide"))showRule(rk);stLang();if(!$("dailyP").classList.contains("hide"))renderD();if(!$("rankP").classList.contains("hide"))rank(rkG,rkO);if(!$("mpMenu").classList.contains("hide"))renderMpWho();if(MP&&MP.R&&!$("mpWaitP").classList.contains("hide"))mpWaitShow();else if(MP&&MP.R&&["setup","res","end"].includes(MP.R.ph))mpRender();chLang();tbLang();setStage();netUI()}
 all(".lang").forEach(b=>b.onclick=()=>{L=L==="fr"?"en":"fr";try{localStorage.setItem("fwlang",L)}catch(e){}applyLang()});
 // intro
 function toHome(){$("vid").pause();show("home");renderProfB();if(ME)refreshAcc()}
@@ -607,7 +613,10 @@ function loadSB(){if(!SB.url){ACC=null;authReady=true;renderIntro();return}
 async function initAuth(){
  try{sb=window.supabase.createClient(SB.url,SB.key,{auth:{storageKey:"fwauth",persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:"implicit"}})}catch(e){sb=null;authReady=true;renderIntro();hashNote();return}
  sb.auth.onAuthStateChange((ev,s)=>{setTimeout(()=>onAuth(ev,s),0)});
- let s=null;try{s=(await sb.auth.getSession()).data.session}catch(e){}
+ // v16 : sans réseau, la session ne peut pas être renouvelée -> on garde le compte connu de l'appareil (parties mises en attente)
+ let er=null;const gp=sb.auth.getSession().then(r=>{er=r.error||null;return r.data.session},e=>{er=e||{};return null}),TO={};
+ const s=await Promise.race([gp,wait(6000).then(()=>TO)]);
+ if(s===TO||(!s&&ACC&&(!NET||netErr(er)))){SESS=null;authReady=true;renderIntro();hashNote();netUI();if(s===TO)gp.then(x=>{if(x&&!SESS)setSess(x).then(()=>{renderIntro();netUI()})});return}
  await setSess(s);authReady=true;renderIntro();if(recov&&s)show("newPwP");hashNote()}
 async function onAuth(ev,s){if(!authReady)return;if(ev==="PASSWORD_RECOVERY")recov=true;await setSess(s);renderIntro();if(recov&&s&&$("newPwP").classList.contains("hide"))show("newPwP")}
 async function setSess(s){SESS=s||null;const u=SESS&&SESS.user;
@@ -2659,7 +2668,7 @@ function tbPlan(st,names){const c=st.split("").filter(g=>g==="c").length,l=st.sp
  if(st.includes("w"))p.push("🏁 "+t("tbPlanW"));return p.join(" + ")}
 // ----- bouton maison et pastille -----
 const HBP=new Set(["daP","origP","trainP","dailyP","rankP","durP","freeP","rulesP","ruleT","statsP","recsP","recP","myStP","mpStP","dictP","profP","frP","mpMenu","mpJoinP","chMenu","chP","dfMenu","defP","tbMenu","tbNewP","tbP","tbRP"]);
-function onShow(id){if(!tbReady)return;const b=$("homeB");if(b)b.classList.toggle("hide",!HBP.has(id)||!!MP);
+function onShow(id){netUI();if(id==="home"&&NET&&ME&&SESS&&netPend())plSync().then(netUI);if(!tbReady)return;const b=$("homeB");if(b)b.classList.toggle("hide",!HBP.has(id)||!!MP);
  if(ME&&(id==="chMenu"||(id==="home"||id==="mpMenu")&&(!DAL||DAL.id!==ME.id||Date.now()-DAL.at>20000)))daLoad();
  if((id==="home"||id==="mpMenu")&&ME&&(!TBL||TBL.id!==ME.id||Date.now()-TBL.at>20000))tbLoad();else tbBadge()}
 $("homeB").onclick=()=>{if(MP)return;closeModal();tbx=null;chNav=false;dfNav=false;chCur=null;party=null;trn=null;toHome()};
@@ -2937,6 +2946,50 @@ Object.assign(T.en,{chT:"⚔️ Duels",chS:"by link or with friends · everyone 
  mDuel:"⚔️ Duels",mpNacc:"Buzzer and duels are counted since the statistics update.",
  rcHl:T.en.rcHl.replace("Link duel","Duels"),rcHc:T.en.rcHc.replace("Link duel","Duels"),mRivH:T.en.mRivH.replace("link duels","duels (by link or with friends)")});
 tbReady=true;
+
+// ===== v16 : jouable hors connexion =====
+// Liste des fichiers gardés sur le téléphone : [fichier, empreinte, taille].
+// IMPORTANT pour les prochaines versions : si un fichier de assets/ est ajouté ou modifié,
+// mettre à jour sa ligne ici (empreinte = 8 premiers caractères du sha1 du fichier).
+// sw.js, lui, n'a pas besoin d'être modifié.
+const OFFL=[["assets/chiffres-90.mp3","43a4b3b7",2209704],["assets/chiffres-infini.mp3","e2609dba",3365160],["assets/ding.mp3","042cd37c",15459],["assets/lettres-60.mp3","6768dc8a",1496040],["assets/lettres-infini.mp3","d84d612d",1362984],["assets/musique-chiffres.mp3","bc7e7489",753381],["assets/musique-defis.mp3","dce57112",725411],["assets/musique-lettres.mp3","81cab832",510965],["assets/theme.mp3","fe1caafd",1266516],["assets/tirage-cible.mp3","12f647fd",73187],["assets/tirage-clic.mp3","66d4ca86",8404],["assets/generique.mp4","7ea6ec59",2365868],["assets/dict-en.txt","0dc5d07b",1705245],["assets/dict-fr.txt","71786084",1709124]];
+const OFFX=["https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"];
+Object.assign(T.fr,{offNet:"📴 Connexion internet requise",netOff:"📴 Hors connexion : les modes solo restent jouables.",netQ1:"⏳ 1 partie en attente d'envoi",netQn:"⏳ {n} parties en attente d'envoi",netQh:"(envoi automatique au retour d'internet)",netSent:"✅ Parties hors connexion envoyées",
+ ofProg:"⬇️ Préparation du mode hors connexion… {n} %",ofOk:"✅ Jouable hors connexion",ofKo:"⚠️ Mode hors connexion incomplet (nouvel essai à la prochaine ouverture)",copy:"© 2026 Rithear – Tous droits réservés",reload:"🔄 Recharger le jeu",reloadGo:"Recharger",
+ reloadQ:"<p>Le jeu va être retéléchargé depuis internet pour récupérer la dernière version.</p><p>Ton compte, tes scores et tes statistiques ne sont pas touchés.</p><p>Le mode hors connexion sera préparé à nouveau (environ 17 Mo, de préférence en Wi-Fi).</p>"});
+Object.assign(T.en,{offNet:"📴 Internet connection required",netOff:"📴 Offline: solo modes are still playable.",netQ1:"⏳ 1 game waiting to be sent",netQn:"⏳ {n} games waiting to be sent",netQh:"(sent automatically when you're back online)",netSent:"✅ Offline games sent",
+ ofProg:"⬇️ Preparing offline mode… {n}%",ofOk:"✅ Playable offline",ofKo:"⚠️ Offline mode incomplete (will retry next time)",copy:"© 2026 Rithear – All rights reserved",reload:"🔄 Reload the game",reloadGo:"Reload",
+ reloadQ:"<p>The game will be downloaded again to get the latest version.</p><p>Your account, scores and statistics are not affected.</p><p>Offline mode will be prepared again (about 17 MB, Wi-Fi recommended).</p>"});
+var NET=navigator.onLine!==false,ofS=null,netOn=false,netTm=null;
+// erreur réseau (et non session vraiment expirée)
+function netErr(e){if(!e)return false;const m=String(e.message||e)+" "+(e.name||"");return e.name==="AuthRetryableFetchError"||e.status===0||/fetch|network|load failed|timed? ?out|abort/i.test(m)}
+function netPend(){if(!ME)return 0;try{return plGet(plKey()).filter(e=>e.u).length}catch(e){return 0}}
+function netUI(){if(!netOn)return;document.body.classList.toggle("nonet",!NET);const n=netPend(),l=[];
+ if(!NET)l.push(esc(t("netOff")));if(n&&(!NET||!SESS))l.push(esc(t(n>1?"netQn":"netQ1",n))+(NET?"":"<br><small>"+esc(t("netQh"))+"</small>"));
+ all(".netS").forEach(e=>{e.innerHTML=l.join("<br>");e.classList.toggle("hide",!l.length)});
+ const o=$("ofS");if(o){const v=ofS===101?t("ofOk"):ofS===-1?t("ofKo"):ofS!==null&&NET?t("ofProg",ofS):"";o.textContent=v;o.classList.toggle("hide",!v)}}
+function netSet(v){const was=NET;NET=v;netUI();if(v&&!was)netBack();clearInterval(netTm);if(!v)netTm=setInterval(netProbe,20000)}
+async function netProbe(){if(navigator.onLine===false)return netSet(false);let ok=false;try{const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),6000);await fetch("sw.js?ping="+Date.now(),{method:"HEAD",cache:"no-store",signal:ac.signal});clearTimeout(tm);ok=true}catch(e){}netSet(ok)}
+// retour d'internet : session renouvelée, puis envoi des parties en attente
+let netB=null;
+function netBack(){if(netB)return netB;const n0=netPend();netB=(async()=>{try{
+ if(!sb){if(SB.url&&!window.supabase)loadSB();return}
+ if(ACC&&!SESS){let r=null;try{r=await sb.auth.getSession()}catch(e){}const s=r&&r.data&&r.data.session;
+  if(s){await setSess(s);renderIntro()}else if(r&&!r.error){await setSess(null);renderIntro()}}
+ if(ME&&SESS){await Promise.all([plSync(),syncAcc()]);if(n0&&!netPend())toast(t("netSent"))}
+ if(ME&&SESS)tbLoad();swPre()}catch(e){}finally{netB=null;netUI()}})();return netB}
+window.addEventListener("online",netProbe);window.addEventListener("offline",()=>netSet(false));
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")netProbe()});
+// touches qui ont besoin d'internet : grisées, et un message si on les touche
+window.addEventListener("click",e=>{if(NET)return;const b=e.target.closest&&e.target.closest('[data-net],.wdef,#recSc [data-rs="all"]');if(!b)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();toast(t("offNet"))},true);
+// service worker : préparation du hors connexion
+function swPre(){if(!("serviceWorker"in navigator)||!NET)return;navigator.serviceWorker.ready.then(r=>{if(r.active)r.active.postMessage({t:"pre",f:OFFL,x:OFFX})}).catch(()=>{})}
+if("serviceWorker"in navigator&&(location.protocol==="https:"||location.hostname==="localhost"||location.hostname==="127.0.0.1")){
+ navigator.serviceWorker.addEventListener("message",e=>{const d=e.data||{};if(d.t==="prog")ofS=Math.min(99,d.p|0);else if(d.t==="ready")ofS=101;else if(d.t==="fail")ofS=-1;netUI()});
+ window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").then(()=>setTimeout(swPre,4000)).catch(()=>{})})}
+$("rldB").onclick=()=>modal(t("reload").replace("🔄 ",""),t("reloadQ"),[{l:t("cancel"),f:closeModal},{l:t("reloadGo"),c:"p",f:async()=>{closeModal();
+ try{const r=await navigator.serviceWorker.getRegistration();if(r){const sc=r.scope;await r.unregister();for(const k of await caches.keys())if(k.endsWith("|"+sc))await caches.delete(k)}}catch(e){}location.reload()}}]);
+netOn=true;netProbe();
 
 applyLang();loadSB();
 </script></body></html>
