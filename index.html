@@ -593,7 +593,7 @@ async function rank(g,off){syncD();off=Math.max(0,Math.min(RKN-1,off|0));rkG=g;r
  $("rkL").innerHTML=h}
 all("#rkTabs [data-sc]").forEach(b=>b.onclick=()=>{rkScope=b.dataset.sc;rank(rkG,rkO)});
 $("rkPrev").onclick=()=>rank(rkG,rkO+1);$("rkNext").onclick=()=>rank(rkG,rkO-1);$("rkSel").onchange=e=>rank(rkG,+e.target.value);$("rkBack").onclick=openDaily;
-const rkGo=d=>{const i=DG.indexOf(rkG);rank(DG[(i+d+DG.length)%DG.length],rkO)};$("rkGP").onclick=()=>rkGo(-1);$("rkGN").onclick=()=>rkGo(1);$("topBk").onclick=()=>$("rkBack").click();
+const rkGo=d=>{const i=DG.indexOf(rkG);rank(DG[(i+d+DG.length)%DG.length],rkO)};$("rkGP").onclick=()=>rkGo(-1);$("rkGN").onclick=()=>rkGo(1);
 function solD(day,g){const d=genDaily(day,g),m=DGM[g];
  if(m==="c")return'<div class="plates">'+d.P.map(v=>'<div class="plate" style="cursor:default">'+v+'</div>').join("")+'</div><div class="tgt">'+String(d.tgt).split("").map(x=>"<b>"+x+"</b>").join("")+"</div><p>"+t("oneSol")+"</p>"+solHTML(solve(d.P,d.tgt));
  if(m==="w")return"<p>"+t("wAns")+"</p>"+d.rounds.map(r=>'<div class="res"><span>'+r.l.join("").toUpperCase()+"</span>"+wdH(r.w,DGL[g])+"</div>").join("")+wdHint();
@@ -2677,9 +2677,15 @@ function tbPlan(st,names){const c=st.split("").filter(g=>g==="c").length,l=st.sp
  if(c)p.push("🔢 "+t("tbPlanC"));if(l)p.push("🔤 "+t(l>1?"tbPlanL2":"tbPlanL"));
  if(d.length)p.push("🎯 "+(names?d.map(g=>t("m"+g.toUpperCase())).join(" + "):d.length>1?t("tbPlanDn",d.length):t("tbPlanD1")));
  if(st.includes("w"))p.push("🏁 "+t("tbPlanW"));return p.join(" + ")}
+// ----- bouton retour en haut à droite (v17.1) : reprend le bouton Retour visible de l'écran affiché -----
+function bkFind(){const pg=document.querySelector("main>.pg:not(.hide)");if(!pg||!$("modal").classList.contains("hide"))return null;const L=t("back");let r=null;
+ pg.querySelectorAll("button").forEach(b=>{if(!b.disabled&&b.offsetParent&&(b.id==="tbRBack"||b.textContent.trim()===L))r=b});return r}
+let bkRaf=0;function bkUpd(){if(bkRaf)return;bkRaf=requestAnimationFrame(()=>{bkRaf=0;const b=$("topBk");if(b)b.classList.toggle("hide",!bkFind())})}
+new MutationObserver(bkUpd).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:["class","disabled"]});
+$("topBk").onclick=()=>{const b=bkFind();if(b)b.click()};
 // ----- bouton maison et pastille -----
 const HBP=new Set(["daP","origP","trainP","dailyP","rankP","durP","freeP","rulesP","ruleT","statsP","recsP","recP","myStP","mpStP","dictP","profP","frP","mpMenu","mpJoinP","chMenu","chP","dfMenu","defP","tbMenu","tbNewP","tbP","tbRP"]);
-function onShow(id){netUI();const tb=$("topBk");if(tb)tb.classList.toggle("hide",id!=="rankP"||!!MP);if(id==="home"&&NET&&ME&&SESS&&netPend())plSync().then(netUI);if(!tbReady)return;const b=$("homeB");if(b)b.classList.toggle("hide",!HBP.has(id)||!!MP);
+function onShow(id){netUI();bkUpd();if(id==="home"&&NET&&ME&&SESS&&netPend())plSync().then(netUI);if(!tbReady)return;const b=$("homeB");if(b)b.classList.toggle("hide",!HBP.has(id)||!!MP);
  if(ME&&(id==="chMenu"||(id==="home"||id==="mpMenu")&&(!DAL||DAL.id!==ME.id||Date.now()-DAL.at>20000)))daLoad();
  if((id==="home"||id==="mpMenu")&&ME&&(!TBL||TBL.id!==ME.id||Date.now()-TBL.at>20000))tbLoad();else tbBadge()}
 $("homeB").onclick=()=>{if(MP)return;closeModal();tbx=null;chNav=false;dfNav=false;chCur=null;party=null;trn=null;toHome()};
