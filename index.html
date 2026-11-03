@@ -145,6 +145,7 @@ h3.mph{margin:16px 0 8px;text-align:left}
 .tbk .btn.on{background:var(--ac);color:#14233f;outline:0}
 #daL .fr{cursor:pointer}#daL .fr.on{outline:2px solid var(--ac)}#daL .fr.on span::after{content:" ✓";color:var(--ac)}#daL .fr.off{opacity:.5;cursor:default}.daS{margin:6px 0 2px}#tbFrL .fr{cursor:pointer}#tbFrL .fr.on{outline:2px solid var(--ac)}#tbFrL .fr.on span::after{content:" ✓";color:var(--ac)}
 .tbe .res .rn{flex:0 0 auto;margin-right:10px}.tbe .res .rv{text-align:right}
+.gpUp{color:var(--ok);font-weight:800;margin-right:6px}.gpDn{color:var(--ko);font-weight:800;margin-right:6px}.res .rv .ok{color:var(--ok)}
 /* v16 : hors connexion, mention © */
 body.nonet [data-net],body.nonet #recSc [data-rs="all"]{opacity:.4}
 .netS{text-align:center;color:var(--mut);font-size:14px;line-height:1.5;margin:-10px 0 14px}
@@ -405,9 +406,9 @@ async function goDict(l){dl=l;if(dfIs(mode)&&!party)return startDf(mode);$("dst"
 // jeu de lettres commun
 function lock(b){["ok","del","shuf","skip","ans"].forEach(id=>$(id).disabled=b);locked=b}
 const mx=()=>mode==="w"?rounds[queue[cur]].w.length:10;
-function gameUI(){lock(false);msg("");ghOn();$("skip").classList.toggle("hide",mode==="l");show("gm");draw()}
+function gameUI(){lock(false);msg("");ghOn();$("skip").classList.toggle("hide",mode==="l"||!!(mpr&&mpr.g==="a"));show("gm");draw()}
 function draw(){$("dots").innerHTML=mode==="w"?rounds.map((r,i)=>'<i class="'+(r.done?"d ":"")+(i===queue[cur]?"c":"")+'"></i>').join(""):"";
- if(mode==="w"&&!queue.length){results(t("allFound"),xW());return}
+ if(mode==="w"&&!queue.length){results(t(mpr&&mpr.g==="a"?"gpGood":"allFound"),xW());return}
  const r=rounds[queue[cur]];$("len").textContent=mode==="w"?t("nLetters",r.w.length):t("longH");$("ans").value="";$("ans").maxLength=mx();$("score").textContent=score+" "+t("pts");msg("");rt()}
 function fit(s,l){const c={};l.forEach(x=>c[x]=(c[x]||0)+1);let o="";for(const x of s)if(c[x]){c[x]--;o+=x}return o}
 function rt(){const r=rounds[queue[cur]],v=$("ans").value.toLowerCase().split("");
@@ -420,8 +421,8 @@ $("skip").onclick=()=>{if(queue.length>1){cur=(cur+1)%queue.length;draw()}};
 $("ok").onclick=()=>{const r=rounds[queue[cur]],a=$("ans").value.trim().toLowerCase();if(mode!=="w"){if(over)return;if(a)tryL(a);return endL()}if(!a)return;
  if(mode==="w"){if(a.length!==r.w.length){msg(t("useAll",r.w.length),"ko");return}
   if(key(a)!==key(r.w)){msg(t("noMatch"),"ko");return}
-  if(a!==r.w&&!dict.set.has(a)){msg(t("notDict"),"ko");return}
-  r.done=1;score+=r.w.length;RTL=Math.min(performance.now()-RT0,120000);{const k=daily||mpr||chl||tbx;if(k){k.lt=dEl();if(k===chl&&!chl.opp&&chl.ev.length<60)chl.ev.push(Math.round(k.lt/100))}}ding();queue.splice(cur,1);if(cur>=queue.length)cur=0;draw();msg(t("good",r.w.length),"ok");return}
+  if(a!==r.w&&!dict.set.has(a)){if(mpr&&mpr.g==="a")return gpBadW(a);msg(t("notDict"),"ko");return}
+  r.done=1;if(mpr)mpr.wd=a;score+=r.w.length;RTL=Math.min(performance.now()-RT0,120000);{const k=daily||mpr||chl||tbx;if(k){k.lt=dEl();if(k===chl&&!chl.opp&&chl.ev.length<60)chl.ev.push(Math.round(k.lt/100))}}ding();queue.splice(cur,1);if(cur>=queue.length)cur=0;draw();msg(t("good",r.w.length),"ok");return}
 };
 function tryL(a){tried=a;const c={};rounds[0].l.forEach(x=>c[x]=(c[x]||0)+1);for(const x of a){if(!c[x])return false;c[x]--}
  if(!dict.set.has(a))return false;
@@ -435,8 +436,8 @@ function xL(){const b=bestWords(rounds[0].l,dict.list),f=a=>a.map(w=>wdH(w,dl)).
  return'<p style="text-align:center">'+(tried?t("yourW")+" <b>"+wdH(tried,dl)+'</b><br><span class="'+(best?"ok":"ko")+'">'+(best?t("wOk",best.length):t("wKo"))+"</span>":t("yourBest")+" <b>"+t("none")+"</b>")+'</p><p style="text-align:center">'+t("bestOf")+" <b>"+(b.length?f(b):t("none"))+"</b> ("+(b[0]?b[0].length:0)+")</p>"+wdHint()}
 // mots de la fin
 function startW(){clearTimeout(tmo);clearTimeout(dtm);chArm();const P=dl==="fr"?F:W,pk={};[5,6,7,8].forEach(n=>pk[n]=sh(P[n]).slice(0,2));rounds=[];
- if(mpr)rounds=MP.R.d.rounds.map(r=>({w:r.w,l:r.l.slice(),done:0}));else if(tbx)rounds=tbx.d.rounds.map(r=>({w:r.w,l:r.l.slice(),done:0}));else if(daily)rounds=genDaily(daily.day,daily.g).rounds;else if(chl&&chl.opp)rounds=chScr(chl.opp.W);else{const ws=[];[0,1].forEach(k=>[5,6,7,8].forEach(n=>ws.push(pk[n][k])));rounds=chScr(ws);if(chl)chl.W=ws}
- queue=rounds.map((_,i)=>i);cur=0;score=0;over=false;setStage();gameUI();runTimer(120,$("time"),timeUp);dT0();playM(A.theme);if(!dict.ok)msg(t("offline"),"ko")}
+ if(mpr&&mpr.g==="a")rounds=[{w:MP.R.d.w,l:MP.R.d.l.slice(),done:0}];else if(mpr)rounds=MP.R.d.rounds.map(r=>({w:r.w,l:r.l.slice(),done:0}));else if(tbx)rounds=tbx.d.rounds.map(r=>({w:r.w,l:r.l.slice(),done:0}));else if(daily)rounds=genDaily(daily.day,daily.g).rounds;else if(chl&&chl.opp)rounds=chScr(chl.opp.W);else{const ws=[];[0,1].forEach(k=>[5,6,7,8].forEach(n=>ws.push(pk[n][k])));rounds=chScr(ws);if(chl)chl.W=ws}
+ const ga=!!(mpr&&mpr.g==="a");queue=rounds.map((_,i)=>i);cur=0;score=0;over=false;setStage();gameUI();runTimer(ga?30:120,$("time"),timeUp);dT0();playM(ga?A.lettres:A.theme);if(!dict.ok)msg(t("offline"),"ko")}
 // mot le plus long
 const WT={fr:{v:{a:8,e:15,i:7,o:5,u:6,y:1},c:{b:2,c:3,d:4,f:2,g:2,h:2,j:1,k:1,l:5,m:3,n:6,p:3,q:1,r:6,s:6,t:6,v:2,w:1,x:1,z:1}},en:{v:{a:8,e:12,i:7,o:7,u:3},c:{b:2,c:3,d:4,f:2,g:3,h:2,j:1,k:1,l:4,m:3,n:6,p:3,q:1,r:6,s:6,t:9,v:1,w:2,x:1,y:2,z:1}}};
 const wp=o=>{const a=Object.entries(o).flatMap(([k,n])=>Array(n).fill(k));return a[Math.floor(Math.random()*a.length)]};
@@ -477,7 +478,7 @@ const cState=()=>bv===tgt?msg(t("exact"),"ok","cmsg"):msg("","","cmsg");
 function ap(a,o,b){const x=items[a].v,y=items[b].v;let r;if(o==="+")r=x+y;else if(o==="×")r=x*y;else if(o==="−")r=x-y;else r=y?x/y:0;
  if(r<=0||!Number.isInteger(r)){msg(t("opBad"),"ko","cmsg");so=null;rdC();return}
  items[a].u=items[b].u=1;items.push({v:r,u:0});lines.push({a:x,o,b:y,r,i:items.length-1,ia:a,ib:b});sa=so=null;
- if(bv===null||Math.abs(r-tgt)<Math.abs(bv-tgt)){bv=r;RTL=dur.c?Math.min(performance.now()-RT0,dur.c*1000):performance.now()-RT0;if(daily||mpr||chl||tbx)bt=Math.min(dEl(),dur.c*1000);if(chl&&!chl.opp&&chl.ev.length<60)chl.ev.push([Math.round(bt/100),r])}cState();rdC()}
+ if(bv===null||Math.abs(r-tgt)<Math.abs(bv-tgt)){bv=r;RTL=dur.c?Math.min(performance.now()-RT0,dur.c*1000):performance.now()-RT0;if(daily||mpr||chl||tbx)bt=Math.min(dEl(),dur.c*1000);if(chl&&!chl.opp&&chl.ev.length<60)chl.ev.push([Math.round(bt/100),r])}cState();rdC();if(bv===tgt&&mpr&&isGP())cEnd()}
 $("undo").onclick=()=>{if(cl||!lines.length)return;const l=lines.pop();items.pop();items[l.ia].u=0;items[l.ib].u=0;sa=so=null;cState();rdC()};
 $("rst").onclick=()=>{if(cl)return;items=P.map(v=>({v,u:0}));lines=[];sa=so=null;cState();rdC()};
 $("cdone").onclick=()=>{if($("cGame").classList.contains("hide"))return;if(rv){ctok++;rv=false;shown=6;sfxStop();bv=null;setTg(String(tgt).split(""));over=false}else if(chl&&!over&&chl.t0)chl.f=Math.round(Math.min(dEl(),45000)/100);cEnd()};
@@ -1781,35 +1782,37 @@ function mpRender(prev){if(!MP||!MP.R)return;const R=MP.R,ph=R.ph,pp=prev&&prev.
  if(mpr){if(!mpr.done)mpAbortLocal();else mpr=null}
  mpResShow();if(ph==="end")mpSave()}
 // préparation de la partie (les invités voient le même écran, sans pouvoir toucher)
-function mpTitle(){const R=MP.R;return t(R.mo==="o"?"mpO":R.mo==="p"?"mpP":"mpQ")}
-function mpSub(){const R=MP.R;if(R.mo==="p")return t("cuN",R.nr);const a=[R.mo==="o"?t(R.ty==="n"?"pN":"pQ")+" ("+t(R.ty==="n"?"d15":"d5")+")":t("m"+R.ty.toUpperCase())+" ("+t({l:"s30",c:"s45",w:"s120",t:"s30",k:"s30",u:"s30",s:"s30"}[R.ty])+")"];if(R.dl)a.push(t("dic"+R.dl));return a.join(" · ")}
+function mpTitle(){const R=MP.R;return t(R.mo==="o"?"mpO":R.mo==="g"?"gpT":R.mo==="p"?"mpP":"mpQ")}
+function mpSubT(){const R=MP.R;if(R.mo==="p")return t("cuN",R.nr);const a=[R.mo==="o"||R.mo==="g"?t(R.ty==="n"?"pN":"pQ")+" ("+t(R.mo==="g"?(R.ty==="n"?"gpDn":"gpDq"):(R.ty==="n"?"d15":"d5"))+")":t("m"+R.ty.toUpperCase())+" ("+t({l:"s30",c:"s45",w:"s120",t:"s30",k:"s30",u:"s30",s:"s30"}[R.ty])+")"];if(R.dl)a.push(t("dic"+R.dl));return a.join(" · ")}
 function mpSetup(){const R=MP.R,h=MP.host,dis=h?"":" disabled";show("mpP");$("mpT").textContent=t("mpRoomOf",R.hn);
  $("mpWait").classList.toggle("hide",h);$("mpWait").textContent=t(R.scr==="ready"?"mpWaitGo":"mpHostPrep");
  const B=(k,lab,sub,cls)=>'<button class="btn '+(cls===undefined?"p":cls)+' mb" data-ms="'+k+'"'+dis+">"+(sub?"<span>"+lab+'</span><small class="sub">'+sub+"</small>":lab)+"</button>",
   I=(k,lab,sub,inf)=>'<div class="mrow">'+B(k,lab,sub)+'<button class="info" data-info="'+inf+'">?</button></div>',back=B("back",t("back"),"","");
  let x;
- if(R.scr==="modes")x="<h3>"+t("mpChoose")+"</h3>"+B("o",t("mpO"),t("mpOS"))+B("q",t("mpQ"),t("mpQS"))+B("p",t("mpP"),t("mpPS"));
+ if(R.scr==="modes")x="<h3>"+t("mpChoose")+"</h3>"+B("o",t("mpO"),t("mpOS"))+B("q",t("mpQ"),t("mpQS"))+B("p",t("mpP"),t("mpPS"))+I("g",t("gpT"),t("gpS"),"G");
   else if(R.scr==="rounds")x="<h3>"+t("cuRounds")+'</h3><div class="ngrid">'+[2,3,4,5,10,15,20,25,30].map(n=>'<button class="btn p" data-ms="n'+n+'"'+dis+">"+n+"</button>").join("")+"</div>"+back;
  else if(R.scr==="orig")x="<h3>"+t("mpO")+"</h3>"+I("n",t("pN"),t("d15"),"N")+I("q",t("pQ"),t("d5"),"Q")+back;
  else if(R.scr==="quick")x="<h3>"+t("mpQ")+"</h3>"+B("l",t("mL"),t("s30"))+B("c",t("mC"),t("s45"))+I("w",t("mW"),t("s120"),"W")+I("t",t("mT"),t("s30"),"T")+I("k",t("mK"),t("s30"),"K")+I("u",t("mU"),t("s30"),"U")+I("s",t("mS"),t("s30"),"S")+back;
+ else if(R.scr==="gp")x="<h3>"+t("gpT")+"</h3>"+I("n",t("pN"),t("gpDn"),"GN")+I("q",t("pQ"),t("gpDq"),"GQ")+back;
  else if(R.scr==="dict")x="<h3>"+t("chooseDict")+"</h3>"+B("fr",t("dFr"))+B("en",t("dEn"))+back;
- else{const g=mpGuests();x="<h3>"+t("mpReady")+'</h3><div class="pcard"><div class="pn">'+mpTitle()+'</div><div class="pm">'+mpSub()+'</div><div class="pm">'+t("mpNbP",mpOnIds().length)+"</div></div>"+(h?B("go",t("mpGo"))+(g?"":'<p class="dnote">'+t("mpNeed1")+"</p>"):"")+back}
+ else{const g=mpGuests();x="<h3>"+t("mpReady")+'</h3><div class="pcard"><div class="pn">'+mpTitle()+'</div><div class="pm">'+mpSubT()+'</div><div class="pm">'+t("mpNbP",mpOnIds().length)+"</div></div>"+(h?B("go",t("mpGo"))+(g?"":'<p class="dnote">'+t("mpNeed1")+"</p>"):"")+back}
  $("mpBody").innerHTML=x;const go=$("mpBody").querySelector('[data-ms="go"]');if(go)go.disabled=!mpGuests();
  $("mpLeave").textContent=t(h?"mpClose":"mpLeave");$("mpBody").classList.toggle("mir",!h)}
 $("mpBody").onclick=e=>{const i=e.target.closest("[data-info]");if(i){const k=i.dataset.info;return modal(t(IT[k]),t("i"+k),[{l:t("close"),c:"p",f:closeModal}])}
  const b=e.target.closest("[data-ms]");if(!b||b.disabled||!MP||!MP.host)return;const R=MP.R,k=b.dataset.ms;
  if(k==="go")return mpLaunch();
- if(k==="back")R.scr=R.scr==="ready"&&R.mo==="p"?"rounds":R.scr==="ready"?(R.mo==="q"&&(R.ty==="c"||R.ty==="k")?"quick":"dict"):R.scr==="dict"?(R.mo==="o"?"orig":"quick"):"modes";
- else if(R.scr==="modes"){R.mo=k;R.scr=k==="o"?"orig":k==="p"?"rounds":"quick"}
+ if(k==="back")R.scr=R.scr==="ready"&&R.mo==="p"?"rounds":R.scr==="ready"?(R.mo==="q"&&(R.ty==="c"||R.ty==="k")?"quick":"dict"):R.scr==="dict"?(R.mo==="o"?"orig":R.mo==="g"?"gp":"quick"):"modes";
+ else if(R.scr==="modes"){R.mo=k;R.scr=k==="o"?"orig":k==="g"?"gp":k==="p"?"rounds":"quick"}
   else if(R.scr==="rounds"){R.nr=+k.slice(1)||5;R.ty="p";R.dl=null;R.scr="ready"}
- else if(R.scr==="orig"){R.ty=k;R.scr="dict"}
+ else if(R.scr==="orig"||R.scr==="gp"){R.ty=k;R.scr="dict"}
  else if(R.scr==="quick"){R.ty=k;if(k==="c"||k==="k"){R.dl=null;R.scr="ready"}else R.scr="dict"}
  else if(R.scr==="dict"){R.dl=k;R.scr="ready"}
  mpPush()};
 // déroulement de la partie (côté hôte)
-function mpLaunch(){const R=MP.R;if(!mpGuests())return;R.gid=Date.now().toString(36)+Math.random().toString(36).slice(2,8);R.st=R.mo==="o"?(R.ty==="n"?mkNS():mkQS()):R.mo==="p"?[]:[R.ty];R.i=0;
+function mpLaunch(){const R=MP.R;if(!mpGuests())return;R.gid=Date.now().toString(36)+Math.random().toString(36).slice(2,8);R.st=R.mo==="o"?(R.ty==="n"?mkNS():mkQS()):R.mo==="g"?(R.ty==="n"?mkGPN():mkGPQ()):R.mo==="p"?[]:[R.ty];R.i=0;
  for(const id in R.pl){if(id!==MID&&!R.pl[id].on)delete R.pl[id];else{R.pl[id].tot=0;R.pl[id].np=0}}if(R.mo==="p"){R.ph="pick";R.last=null;R.d=null;R.dl=null;MP.pk=null;return mpPush()}mpRound()}
 function mpRound(){const R=MP.R,g=R.st[R.i];R.last=null;R.bz=null;
+ if(R.mo==="g")return mpPlay(gpGen(g,R.dl));
  if(dfIs(g))return mpPlay(dfGen(g,R.dl));
  if(g==="l"){R.ph="draw";R.ld=[];R.nv=R.nc=0;R.d=null;return mpPush()}
  if(g==="c"){const P=sh(PL).slice(0,6);return mpPlay({g,P,tgt:genT(P)})}
@@ -1817,13 +1820,13 @@ function mpRound(){const R=MP.R,g=R.st[R.i];R.last=null;R.bz=null;
 function mpPick(ty){const R=MP.R;if(R.ph!=="draw"||R.ld.length>=10||(ty==="v"?R.nv:R.nc)>=8)return;R.ld.push(wp(WT[R.dl][ty]));ty==="v"?R.nv++:R.nc++;mpPush();
  if(R.ld.length===10){clearTimeout(MP.dtm);MP.dtm=setTimeout(()=>{if(MP&&MP.R.ph==="draw")mpPlay({g:"l",l:MP.R.ld.slice()})},900)}}
 function mpPlay(d){const R=MP.R;R.d=d;R.ph="play";R.rid++;R.ids=mpOnIds();R.ids.forEach(id=>R.pl[id].np=(R.pl[id].np||0)+1);MP.ans={};MP.pg=null;const rid=R.rid;
- clearTimeout(MP.dlt);if(dfIs(d.g))dfHStart();else MP.dlt=setTimeout(()=>{if(MP&&MP.R.ph==="play"&&MP.R.rid===rid)mpPublish()},MPDL[d.g]);mpPush()}
+ clearTimeout(MP.dlt);if(dfIs(d.g)&&R.mo!=="g")dfHStart();else MP.dlt=setTimeout(()=>{if(MP&&MP.R.ph==="play"&&MP.R.rid===rid)mpPublish()},R.mo==="g"?gpDL(d.g):MPDL[d.g]);mpPush()}
 const mpClean=a=>({p:Math.max(0,Math.min(999,a.p|0)),r:Math.max(0,Math.min(9999,a.r|0)),x:String(a.x||"").slice(0,20),t:Math.max(0,Math.min(999999,a.t|0))});
 function mpOnAns(p){const R=MP.R;if(!p||!p.a||R.ph!=="play"||p.rid!==R.rid||!R.ids.includes(p.id))return;if(!MP.ans[p.id])MP.ans[p.id]=mpClean(p.a);mpPgSend();mpCheckDone()}
 function mpPgSend(){const p={rid:MP.R.rid,d:Object.keys(MP.ans)};MP.pg=p;mpSend("pg",p);mpWaitRefresh()}
-function mpCheckDone(){const R=MP.R;if(R.ph!=="play"||(R.d&&dfIs(R.d.g)))return;if(R.ids.filter(id=>id===MID||(R.pl[id]&&R.pl[id].on)).every(id=>MP.ans[id]))mpPublish()}
+function mpCheckDone(){const R=MP.R;if(R.ph!=="play"||(R.d&&dfIs(R.d.g)&&R.mo!=="g"))return;if(R.ids.filter(id=>id===MID||(R.pl[id]&&R.pl[id].on)).every(id=>MP.ans[id]))mpPublish()}
 const mpInv=(g,x)=>x.m||(g==="c"?x.r>=9999:!x.r);
-function mpPublish(){const R=MP.R;if(R.ph!=="play")return;clearTimeout(MP.dlt);const g=R.d.g,q=R.mo==="q";
+function mpPublish(){const R=MP.R;if(R.ph!=="play")return;clearTimeout(MP.dlt);if(R.mo==="g")return gpPublish();const g=R.d.g,q=R.mo==="q";
  const rows=R.ids.filter(id=>R.pl[id]).map(id=>{const a=MP.ans[id];return a?{id,n:R.pl[id].n,...a}:{id,n:R.pl[id].n,p:0,r:g==="c"?9999:0,x:"",t:0,m:1}});
  const key=x=>{const v=mpInv(g,x);return q?[v?1:0,g==="c"?x.r:-x.r,v?0:x.t]:[x.m?1:0,-x.p,x.t]};
  rows.sort((a,b)=>{const A=key(a),B=key(b);for(let k=0;k<3;k++)if(A[k]!==B[k])return A[k]-B[k];return 0});
@@ -1840,18 +1843,18 @@ async function mpStartLocal(){const R=MP.R,rid=R.rid,g=R.d.g;MP.rid=rid;MP.playe
  if(dfIs(g))return startDf(g);if(g==="c")return startC();
  if(!D[dl]){mpr.ld=1;mpWaitShow()}dict=await preDict(dl);
  if(!mpr||mpr.rid!==rid||!MP||MP.R.rid!==rid||MP.R.ph!=="play")return;mpr.ld=0;mode=g;
- if(g==="w")startW();else{ld=R.d.l.slice();setStage();beginL()}}
+ if(g==="w"||g==="a"){mode="w";startW()}else{ld=R.d.l.slice();setStage();beginL()}}
 function mpAbortLocal(){if(!mpr)return;ctok++;sfxStop();dfStop();clearTimeout(tmo);clearTimeout(dtm);clearInterval(timer);pending=null;stopM();over=true;mpr=null;if(MP)clearInterval(MP.rs)}
 // fin de la manche pour ce joueur : envoi du résultat à l'hôte
 function mpEnd(why,html){over=true;clearInterval(timer);pending=null;stopM();closeModal();const g=mpr.g;let a;
- if(g==="l")a={p:score,r:best?best.length:0,x:best||"",t:best?Math.round(mpr.lt||30000):30000};
+ if(isGP())a=gpAns(g);else if(g==="l")a={p:score,r:best?best.length:0,x:best||"",t:best?Math.round(mpr.lt||30000):30000};
  else if(g==="c")a=bv===null?{p:0,r:9999,x:"",t:45000}:{p:score,r:Math.abs(tgt-bv),x:String(bv),t:Math.round(bt)};
  else{const n=rounds.filter(x=>x.done).length;a={p:score,r:n,x:n+"/8",t:n?Math.round(mpr.lt):120000}}
  mpr.done=1;MP.mine=a;MP.html[mpr.rid]={why,html};const rid=mpr.rid;
  if(MP.host){MP.ans[MID]=a;mpPgSend();mpWaitShow();mpCheckDone();return}
  const go=()=>{const R=MP&&MP.R;if(!R||R.rid!==rid||R.ph!=="play"||(MP.pg&&MP.pg.rid===rid&&MP.pg.d.includes(MID))){if(MP)clearInterval(MP.rs);return}mpSend("ans",{id:MID,rid,a})};
  clearInterval(MP.rs);go();MP.rs=setInterval(go,2500);mpWaitShow()}
-const mpVal=(g,a)=>MP.R.mo==="q"?rkVal(g,{result:a.r,detail:a.x},true):a.p+" "+t("pts");
+const mpVal=(g,a)=>MP.R.mo==="g"?(a.r?"✅ "+fmtT(a.t):"❌"):MP.R.mo==="q"?rkVal(g,{result:a.r,detail:a.x},true):a.p+" "+t("pts");
 function mpWaitShow(){const R=MP.R;if(!R||R.ph!=="play")return;const g=R.d.g,h=MP.host;show("mpWaitP");$("mwLeave").textContent=t(h?"mpStop":"mpLeave");
  if(mpr&&mpr.ld){$("mwT").textContent=t("m"+g.toUpperCase());$("mwS").textContent="";$("mwM").textContent=t("loading");return}
  if(MP.rid===R.rid&&R.ids.includes(MID)){$("mwT").textContent=(MP.html[R.rid]||{}).why||t("ended");$("mwS").textContent=MP.mine?mpVal(g,MP.mine):"";mpWaitRefresh()}
@@ -1862,6 +1865,7 @@ function mpWaitRefresh(){const R=MP&&MP.R;if(!R||R.ph!=="play"||$("mpWaitP").cla
 function mpStand(fin){const R=MP.R,a=Object.keys(R.pl).filter(id=>!fin||R.pl[id].np).map(id=>({id,...R.pl[id]})).sort((x,y)=>y.tot-x.tot);a.forEach((x,i)=>x.pos=i&&a[i-1].tot===x.tot?a[i-1].pos:i+1);return a}
 const andJ=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" "+t("and")+" "+a[a.length-1];
 function mpSol(){const R=MP.R,d=R.d;if(!d)return"";if(dfIs(d.g))return dfSolHTML(d);
+ if(d.g==="a")return dfTilesH(d.l)+'<p style="text-align:center">'+t("dfExp")+" <b>"+wdH(d.w,R.dl)+"</b></p>"+wdHint();
  if(d.g==="c")return'<div class="plates">'+d.P.map(v=>'<div class="plate" style="cursor:default">'+v+"</div>").join("")+'</div><p style="text-align:center">'+t("solution")+" ("+d.tgt+")</p>"+solHTML(solve(d.P,d.tgt));
  if(d.g==="w")return d.rounds.map(r=>'<div class="res"><span>'+r.l.join("").toUpperCase()+"</span>"+wdH(r.w,R.dl)+"</div>").join("")+wdHint();
  const b=D[R.dl]?bestWords(d.l,D[R.dl].list):[];return'<div class="tiles">'+d.l.map(c=>'<div class="tile" style="cursor:default">'+c.toUpperCase()+"</div>").join("")+"</div>"+(b.length?'<p style="text-align:center">'+t("bestOf")+" <b>"+b.map(w=>wdH(w,R.dl)).join(", ")+"</b> ("+b[0].length+")</p>"+wdHint():"")}
@@ -1870,12 +1874,12 @@ function mpResShow(){const R=MP.R,Z=R.last;if(!Z)return R.ph==="pick"?mpPickShow
  let w="";if(end){const top=q?Z.rows.filter(x=>x.pos===1&&!mpInv(g,x)):mpStand(1).filter(x=>x.pos===1&&x.tot>0),nm=andJ(top.map(x=>x.n));if(top.length)w=top.length>1?t("mpTie",nm):t(q?"mpWinQ":"mpWin",nm)}
  $("mrW").innerHTML=w?'<div class="win">'+esc(w)+"</div>":"";
  const own=MP.html[Z.rid],row=x=>'<div class="res'+(x.id===MID?" me":"")+'"><span class="rn"><b>'+x.pos+".</b>"+esc(x.n)+(on(x.id)?"":"<small> · "+t("mpOffl")+"</small>")+'</span><span class="rv"><b>'+(x.m?t("mpMiss"):rkVal(g,{result:x.r,detail:x.x},true))+"</b>"+(q?(mpInv(g,x)?"":" · "+fmtT(x.t)):" · +"+x.p+" "+t("pts"))+"</span></div>";
- let b=(own?'<h3 class="ct">'+esc(own.why)+"</h3>"+own.html:'<h3 class="ct">'+t("solT")+"</h3>"+mpSol())+"<h3>"+t("mpRoundRes")+"</h3>"+Z.rows.map(row).join("");
- if(!q){const s=mpStand(end);b+="<h3>"+t(end?"mpFinal":"mpProv")+"</h3>"+s.map(x=>'<div class="res'+(x.id===MID?" me":"")+'"><span class="rn"><b>'+x.pos+".</b>"+esc(x.n)+(x.on?"":"<small> · "+t("mpOffl")+"</small>")+'</span><span class="rv"><b>'+x.tot+" "+t("pts")+"</b></span></div>").join("")}
+ let b=(own?'<h3 class="ct">'+esc(own.why)+"</h3>"+own.html:'<h3 class="ct">'+t("solT")+"</h3>"+mpSol())+"<h3>"+t("mpRoundRes")+"</h3>"+Z.rows.map(R.mo==="g"?x=>gpRow(x,g):row).join("");
+ if(!q){const s=mpStand(end);b+="<h3>"+t(end?"mpFinal":"mpProv")+"</h3>"+s.map(x=>'<div class="res'+(x.id===MID?" me":"")+'"><span class="rn"><b>'+x.pos+".</b>"+(R.mo==="g"?gpMv(Z,x.id):"")+esc(x.n)+(x.on?"":"<small> · "+t("mpOffl")+"</small>")+'</span><span class="rv"><b>'+x.tot+" "+t("pts")+"</b></span></div>").join("")}
  if(end&&MP.played[R.gid])b+='<p class="dnote" id="mrSave" style="margin-top:10px">'+(ME?MP.saved[R.gid]==="ok"?"✓ "+t("mpSaved"):"":t("mpNoSave"))+"</p>";
  $("mrB").innerHTML=b;
  const nx=R.st[R.i+1];$("mrBtn").innerHTML=R.mo==="p"&&!end?(h?mpPickUI()+'<button class="btn mb" data-mr="endnow">'+t("cuEnd")+"</button>":'<p class="mpw">'+t("cuWait")+"</p>"):h?'<div class="row">'+(end?'<button class="btn p" data-mr="again">'+t("mpAgain")+'</button><button class="btn" data-mr="change">'+t("mpChange")+"</button>":'<button class="btn p" data-mr="next">'+t("mpNext",nx?t("m"+nx.toUpperCase()):"")+'</button><button class="btn" data-mr="quit">'+t("mpQuitG")+"</button>")+"</div>":'<p class="mpw">'+t("mpWaitH")+"</p>";
- if(R.mo==="o"&&!end&&nx&&dfIs(nx))$("mrBtn").insertAdjacentHTML("afterbegin",'<button class="btn mb dfrb" data-dfr="'+nx+'">'+t("dfRulesB",t("m"+nx.toUpperCase()))+"</button>");
+ if((R.mo==="o"||R.mo==="g")&&!end&&nx&&dfIs(nx))$("mrBtn").insertAdjacentHTML("afterbegin",'<button class="btn mb dfrb" data-dfr="'+nx+'">'+t("dfRulesB",t("m"+nx.toUpperCase()))+"</button>");
  $("mrInv").innerHTML="<h3>"+t("mpInv")+'</h3><p class="dnote">'+t(end?"mpInvE":"mpInvH")+'</p><div class="mpHead">'+mpHead()+"</div>";
  $("mrLeave").classList.toggle("hide",h&&!end);$("mrLeave").textContent=t(h?"mpClose":"mpLeave")}
 $("mrBtn").onclick=e=>{const b=e.target.closest("[data-mr]");if(!b||!MP||!MP.host)return;const k=b.dataset.mr,R=MP.R;if(/^(pk-|pd-)/.test(k)||k==="pkback"||k==="endnow")return mpPickAct(k);
@@ -1894,7 +1898,7 @@ async function renderMR(){const el=$("rMulti"),h="<h3>"+t("mpRec")+"</h3>",tok=+
  if(!ME){el.innerHTML=h+'<p class="dnote">'+t("mpRecG")+"</p>";return}el.innerHTML=h+'<p class="dnote">'+t("frLoad")+"</p>";let a=null;
  if(sb&&SESS){try{const r=await sb.rpc("my_multi");if(r.error)throw r.error;a=r.data||[]}catch(e){}}if(tok!==mrTok)return;
  if(!a){el.innerHTML=h+'<p class="dnote">'+t("mpRecErr")+"</p>";return}if(!a.length){el.innerHTML=h+'<p class="dnote">'+t("mpRecNone")+"</p>";return}
- el.innerHTML=h+a.map(x=>{const md=["🥇","🥈","🥉"][x.rank-1]||"",nm=x.mode==="p"?t("mpP")+(x.detail?" · "+t("cuN",x.detail):""):x.mode==="o"?t("mpO")+" · "+t(x.game==="n"?"pN":"pQ"):t("m"+String(x.game).toUpperCase()),v=x.mode!=="q"?x.points+" "+t("pts"):x.detail?esc(x.game==="l"?String(x.detail).toUpperCase():x.detail):"—";
+ el.innerHTML=h+a.map(x=>{const md=["🥇","🥈","🥉"][x.rank-1]||"",nm=x.mode==="p"?t("mpP")+(x.detail?" · "+t("cuN",x.detail):""):x.mode==="g"?t("gpT")+" · "+t(x.game==="n"?"pN":"pQ"):x.mode==="o"?t("mpO")+" · "+t(x.game==="n"?"pN":"pQ"):t("m"+String(x.game).toUpperCase()),v=x.mode!=="q"?x.points+" "+t("pts"):x.detail?esc(x.game==="l"?String(x.detail).toUpperCase():x.detail):"—";
   return'<div class="res"><span>'+md+x.rank+"/"+x.players+" · "+nm+'</span><span class="rv"><b>'+v+"</b> · "+new Date(x.created_at).toLocaleDateString(L==="fr"?"fr-FR":"en-GB")+"</span></div>"}).join("")}
 // ===== défi par lien (multijoueur en différé, sans base de données) =====
 // Le lien contient le tirage, le résultat du lanceur et la chronologie de sa manche (pour le fantôme).
@@ -2199,8 +2203,8 @@ function dfStop(){clearInterval(dft);dft=null;if(dfx){clearInterval(dfx.bzI);cle
 function startDf(g){clearTimeout(tmo);clearTimeout(dtm);stopM();clearInterval(timer);sfxStop();dfStop();chl=null;mode=g;
  const d=mpr?MP.R.d:tbx?tbx.d:dfGen(g,dl);
  dfx={g,d,p0:performance.now(),pre:g==="s"&&!mpr?8000:DFPRE[g],r0:0,sent:0,end:0,ready:false,shown:0,spk:0,num:"",wd:"",ai:0,st:null,wk:0,fin:0,bzS:0};
- score=0;over=false;setStage();dfDraw();show("dfP");dft=setInterval(dfTick,100);dfTick();if(mpr)dfSync()}
-function dfDraw(){const x=dfx,d=x.d,mp=!!mpr;msg("","","dfmsg");
+ score=0;over=false;setStage();dfDraw();show("dfP");dft=setInterval(dfTick,100);dfTick();if(dfBzM())dfSync()}
+function dfDraw(){const x=dfx,d=x.d,mp=dfBzM();msg("","","dfmsg");
  $("dfTh").textContent=x.g==="t"?t("dfTheme",dfTitle(d)):t("m"+x.g.toUpperCase());
  $("dfHint").textContent=t({t:"dfFindH",k:"dfCalcH",u:"dfUH",s:"dfSH"}[x.g]);
  const bz=mp?'<button class="btn bzb" id="dfBz">'+t("dfBuzz")+"</button>":"",
@@ -2246,27 +2250,27 @@ function dfCtl(){const x=dfx;if(!x)return;let inp,line="",bz=false;const pre=x.r
   const B=$("dfBz");if(B){B.disabled=!bz;B.classList.toggle("hide",b.st!=="run"||out)}}
  else{inp=!x.end&&!over&&x.ready;line=pre}
  x.inp=inp;
- if(x.g==="t"||x.g==="u"){["dfA0","dfA1","dfDel","dfOk"].forEach(id=>{const e=$(id);if(e)e.disabled=!inp});$("dfShuf").disabled=!!(!x.ready||x.end||over||(mpr&&MP.R.bz.st==="done"));if(inp&&mpr&&document.activeElement!==$("dfA1"))setTimeout(()=>{if(dfx===x&&x.inp)$("dfA"+x.ai).focus()},30)}
+ if(x.g==="t"||x.g==="u"){["dfA0","dfA1","dfDel","dfOk"].forEach(id=>{const e=$(id);if(e)e.disabled=!inp});$("dfShuf").disabled=!!(!x.ready||x.end||over||(mpr&&MP.R.bz&&MP.R.bz.st==="done"));if(inp&&mpr&&document.activeElement!==$("dfA1"))setTimeout(()=>{if(dfx===x&&x.inp)$("dfA"+x.ai).focus()},30)}
  else if(x.g==="k")all("[data-kp]").forEach(b=>b.disabled=!inp);
  else all("[data-kb]").forEach(b=>b.disabled=!inp);
  $("dfBzL").innerHTML=line;$("dfBzL").classList.toggle("hide",!line)}
 function dfTick(){const x=dfx;if(!x||over||$("dfP").classList.contains("hide"))return;const now=performance.now();let rem,ar=null;
- if(mpr){const b=MP&&MP.R&&MP.R.bz;if(!b)return;
+ if(dfBzM()){const b=MP&&MP.R&&MP.R.bz;if(!b)return;
   if(b.st==="pre"){dfReveal(DFPRE[x.g]-(b.prem-(now-MP.rt)));rem=DFMS}
   else{if(!x.ready)dfReady();rem=b.st==="run"?b.rem-(now-MP.rt):b.rem;if(b.st==="ans")ar=b.arem-(now-MP.rt)}
   if(b.st==="ans"&&music===A.defis&&!music.paused)music.pause()}
  else{const el=now-x.p0;if(!x.ready){dfReveal(el);if(el>=x.pre)dfReady()}rem=x.ready?DFMS-(now-x.r0):DFMS}
  rem=Math.max(0,rem);$("dftime").textContent=fmt(Math.ceil(rem/1000));$("dftime").classList.toggle("low",x.ready&&rem<=10000);
  if(ar!==null&&MP.R.bz.who===MID&&!x.sent){$("dfBzL").innerHTML=t("dfBzMe",Math.max(0,Math.ceil(ar/1000)));if(ar<=0)dfSubmit(true)}
- if(!mpr&&x.ready&&rem<=0&&!x.end)dfTimeUp()}
+ if(!dfBzM()&&x.ready&&rem<=0&&!x.end)dfTimeUp()}
 function dfTimeUp(){const x=dfx;x.end=1;dfCtl();msg(t("timeUp"),"ko","dfmsg");afterMusic(()=>results(t("timeUp"),dfSolHTML(x.d,null,false)))}
 function dfAns(){const x=dfx;return x.g==="k"?x.num:x.g==="s"?x.wd:[0,1].map(i=>dfN($("dfA"+i).value)).join(" ").trim()}
 function dfSubmit(auto){const x=dfx;if(!x||over||x.sent||x.end||(!auto&&!x.inp))return;const a=dfAns();
  if(!auto){if(x.g==="t"){const w=a.split(" ");if(w.length<2)return msg(t("dfTwo"),"ko","dfmsg");if(key(w.join(""))!==key(x.d.l.join("")))return msg(t("dfUse10"),"ko","dfmsg")}
   else if(x.g==="u"){const w0=dfN($("dfA0").value),w1=dfN($("dfA1").value);if(w0.length!==10)return msg(t("dfU10"),"ko","dfmsg");if(!w1)return msg(t("dfUCE"),"ko","dfmsg")}
   else if(!a)return msg(t(x.g==="s"?"dfSE":"dfNumE"),"ko","dfmsg")}
- x.sent=1;if(mpr){dfSendAns(a);dfCtl();return}
- const ok=dfCheck(x.d,a);x.end=1;dfStop();if(ok){score=7;ding()}stopM();results(t(ok?"dfOk":"dfKo"),dfSolHTML(x.d,a,ok))}
+ x.sent=1;if(dfBzM()){dfSendAns(a);dfCtl();return}
+ const ok=dfCheck(x.d,a);x.end=1;x.ok=ok;x.a=a;x.t=performance.now()-x.r0;dfStop();if(ok){score=7;ding()}stopM();results(t(ok?"dfOk":"dfKo"),dfSolHTML(x.d,a,ok))}
 // saisie
 document.addEventListener("click",e=>{if(!dfx||$("dfP").classList.contains("hide"))return;const x=dfx;
  const ti=e.target.closest("[data-ti]");if(ti){if(!x.inp||ti.dataset.u)return;const el=$("dfA"+x.ai),mx=x.g==="u"?(x.ai?9:10):7;if(el.value.length<mx){el.value+=x.l[+ti.dataset.ti];dfRT()}return}
@@ -2288,7 +2292,7 @@ all(".dfOpen").forEach(b=>b.onclick=()=>{dfFrom=b.dataset.from;show("dfMenu")});
 $("dfBack").onclick=()=>{dfNav=false;show(dfFrom||"freeP")};
 all("[data-df]").forEach(b=>b.onclick=()=>{const g=b.dataset.df;party=null;trn=null;daily=null;chl=null;chNav=false;dfNav=true;dur={l:30,c:45};mode=g;if(g==="k")startDf("k");else{$("dst").textContent="";show("dictP")}});
 // fenêtre « règles du défi » avant un défi du Jeu original en multijoueur
-document.addEventListener("click",e=>{const b=e.target.closest("[data-dfr]");if(!b)return;const g=b.dataset.dfr.toUpperCase();modal(t("m"+g),t("i"+g)+t("dfProc"),[{l:t("close"),c:"p",f:closeModal}])});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-dfr]");if(!b)return;const g=b.dataset.dfr.toUpperCase();modal(t("m"+g),t("i"+g)+t(isGP()?"gpProc":"dfProc"),[{l:t("close"),c:"p",f:closeModal}])});
 // ----- multijoueur : buzzer (l'hôte fait foi) -----
 function dfSync(){const x=dfx,R=MP&&MP.R;if(!x||!R||!R.bz||!mpr||mpr.rid!==R.rid)return;const b=R.bz;
  if(b.st!=="pre"&&!x.ready)dfReady();
@@ -2568,7 +2572,7 @@ function renderMpSt(){let h="";const W=t("wdl").split("|"),M=ME&&MST&&MST.id===M
  if(ME){if(!M)h+='<p class="dnote">'+t("frLoad")+"</p>";else if(M.err)h+='<p class="dnote">'+t("mpRecErr")+"</p>";else{const r=M.rows,mu=r.filter(x=>x.players>1),wn=mu.filter(x=>x.rank===1).length;
   h+="<h3>"+t("mLive")+"</h3>"+sg([tile(r.length,t("mGames")),tile(wn,t("mWins"),pc(wn,mu.length)),tile(mu.filter(x=>x.rank<=3).length,t("sPod")),
    tile(r.length?nf(avg(r.map(x=>x.rank))):"—",t("mAvgRk"),r.length?t("mAvgPl",nf(avg(r.map(x=>x.players)))):"")]);
-  const md=[[t("pN"),x=>x.mode==="o"&&x.game==="n"],[t("pQ"),x=>x.mode==="o"&&x.game==="q"],[t("pF"),x=>x.mode==="q"],[t("mpP"),x=>x.mode==="p"]];
+  const md=[[t("pN"),x=>x.mode==="o"&&x.game==="n"],[t("pQ"),x=>x.mode==="o"&&x.game==="q"],[t("pF"),x=>x.mode==="q"],[t("mpP"),x=>x.mode==="p"],[t("gpT"),x=>x.mode==="g"]];
   h+=stb([t("sByMode"),t("mGames"),t("mWins")],md.map(([l,f])=>{const x=r.filter(f);return[l,x.length,x.filter(y=>y.rank===1&&y.players>1).length]}));
   const bz=r.filter(x=>x.buzz!=null),bn=bz.reduce((s,x)=>s+(x.buzz||0),0),bo=bz.reduce((s,x)=>s+(x.buzz_ok||0),0),bm=bz.map(x=>x.buzz_ms).filter(v=>v!=null);
   h+="<h3>"+t("mBz")+"</h3>"+sg([tile(bn,t("mBzN")),tile(bo,t("mBzOk"),pc(bo,bn)),tile(bm.length?fmtT(Math.min(...bm)):"—",t("mBzMs"))],"s3")}}
@@ -2947,6 +2951,54 @@ Object.assign(T.en,{chT:"⚔️ Duels",chS:"by link or with friends · everyone 
  rcHl:T.en.rcHl.replace("Link duel","Duels"),rcHc:T.en.rcHc.replace("Link duel","Duels"),mRivH:T.en.mRivH.replace("link duels","duels (by link or with friends)")});
 tbReady=true;
 
+// ===== v17 : Grand Prix (multijoueur en direct, barème de la Formule 1) =====
+// Chacun joue le même tirage en même temps, une seule proposition ; les bonnes réponses sont classées au temps.
+// Points : 25, 18, 15, 12, 10, 8, 6, 4, 2, 1 du 1er au 10e ; 0 au-delà, en cas d'erreur ou sans réponse.
+// Manches : c = Le compte est bon (compte exact), a = Le mot mélangé (5 à 10 lettres), défis sans buzzer.
+const GPP=[25,18,15,12,10,8,6,4,2,1];
+const isGP=()=>!!(MP&&MP.R&&MP.R.mo==="g"),dfBzM=()=>!!mpr&&!isGP();
+const mkGPN=()=>{const d=sh(DF4);return["c","a","a","c","a","a",d[0],d[1],"c","a","a","c","a","a",d[2],d[3]]};
+const mkGPQ=()=>{const d=sh(DF4);return["c","a",d[0],"c","a",d[1]]};
+const gpDL=g=>g==="a"?52000:g==="c"?75000:DFPRE[g]+DFMS+20000;
+// tirage d'une manche (côté hôte)
+function gpGen(g,lg){if(dfIs(g))return dfGen(g,lg);
+ if(g==="c"){for(let k=0;k<40;k++){const P=sh(PL).slice(0,6),tg=genT(P),s=solve(P,tg);if(s&&s.v===tg)return{g,P,tgt:tg}}const P=sh(PL).slice(0,6);return{g,P,tgt:genT(P)}}
+ const S=lg==="en"?W:F,n=5+Math.floor(Math.random()*6),a=S[n],w=a[Math.floor(Math.random()*a.length)];return{g:"a",w,l:scr(w)}}
+// mot mélangé : un mot refusé met fin à la manche (une seule proposition)
+function gpBadW(a){if(!mpr||over)return;mpr.bad=a;lock(true);clearInterval(timer);stopM();pending=null;
+ results(t("gpBad"),'<p style="text-align:center">'+t("dfYour")+' <b class="ko">'+esc(a.toUpperCase())+"</b></p>"+xW())}
+// réponse envoyée à l'hôte : r = 1 si juste, t = temps en ms
+function gpAns(g){if(g==="a"){const r=rounds&&rounds[0],ok=!!(r&&r.done);return{p:0,r:ok?1:0,x:String(ok?(mpr.wd||r.w):(mpr.bad||"")).slice(0,20),t:ok?Math.round(mpr.lt||30000):30000}}
+ if(g==="c"){const ok=bv!==null&&bv===tgt;return{p:0,r:ok?1:0,x:bv===null?"":String(bv),t:ok?Math.round(bt):45000}}
+ const x=dfx||{};return{p:0,r:x.ok?1:0,x:String(x.a||"").slice(0,20),t:x.ok?Math.round(x.t):DFMS}}
+// classement de la manche, points F1 et évolution du championnat (côté hôte)
+function gpPublish(){const R=MP.R,g=R.d.g,ok=x=>!x.m&&x.r===1;
+ const rows=R.ids.filter(id=>R.pl[id]).map(id=>{const a=MP.ans[id];return a?{id,n:R.pl[id].n,...a}:{id,n:R.pl[id].n,p:0,r:0,x:"",t:0,m:1}});
+ rows.sort((a,b)=>(ok(b)-ok(a))||(ok(a)&&ok(b)?a.t-b.t:(a.m?1:0)-(b.m?1:0)));
+ let pv=null;rows.forEach((x,i)=>{if(ok(x)){x.pos=pv&&ok(pv)&&pv.t===x.t?pv.pos:i+1;x.p=GPP[x.pos-1]||0}else{x.pos=0;x.p=0}pv=x});
+ const before={};mpStand().forEach(s=>before[s.id]=s.pos);
+ rows.forEach(x=>{if(R.pl[x.id])R.pl[x.id].tot+=x.p});
+ const mv={};if(R.i>0)mpStand().forEach(s=>{if(before[s.id])mv[s.id]=before[s.id]-s.pos});
+ R.last={g,i:R.i,rid:R.rid,rows,mv};R.ph=R.i>=mpN()-1?"end":"res";mpPush()}
+function gpRow(x,g){const R=MP.R,on=R.pl[x.id]&&R.pl[x.id].on,ok=!x.m&&x.r===1,A=s=>esc(String(s||"").toUpperCase());
+ const df=dfIs(g),v=x.m||!x.x?t("mpMiss"):ok?(df?"✅":A(x.x))+" · "+fmtT(x.t):"❌ "+(df?t("gpWrong"):A(x.x));
+ return'<div class="res'+(x.id===MID?" me":"")+'"><span class="rn"><b>'+(ok?x.pos+".":"–")+"</b>"+esc(x.n)+(on?"":"<small> · "+t("mpOffl")+"</small>")+'</span><span class="rv"><b>'+v+"</b>"+(ok?' · <span class="ok">+'+x.p+" "+t("pts")+"</span>":"")+"</span></div>"}
+function gpMv(Z,id){const d=Z&&Z.mv?Z.mv[id]|0:0;return d>0?'<span class="gpUp">▲'+d+"</span>":d<0?'<span class="gpDn">▼'+(-d)+"</span>":""}
+Object.assign(IT,{G:"gpT",GN:"pN",GQ:"pQ"});
+Object.assign(T.fr,{mA:"Le mot mélangé",gpT:"🏁 Grand Prix",gpS:"le plus rapide marque le plus de points",gpDn:"16 manches · environ 15 minutes",gpDq:"6 manches · environ 5 minutes",
+ gpGood:"Mot trouvé !",gpBad:"Mot refusé",gpWrong:"mauvaise réponse",
+ gpProc:"<h3>Le déroulement en Grand Prix</h3><p>Pas de buzzer : chacun répond de son côté, quand il veut, avec <b>une seule proposition</b>. Les bonnes réponses sont classées de la plus rapide à la plus lente.</p>",
+ iG:"<p>Une course de vitesse : à chaque manche, tout le monde joue le même tirage en même temps, et les bonnes réponses sont classées de la plus rapide à la plus lente.</p><p><b>Points comme en Formule 1</b> : 25, 18, 15, 12, 10, 8, 6, 4, 2 et 1 point du 1er au 10e. Au-delà de la 10e place, en cas d'erreur ou sans réponse : 0 point.</p><p><b>Une seule proposition par manche</b> : réponds vite… mais pas trop vite !</p><p>🔢 <b>Le compte est bon</b> (45 s) : seul le compte exact rapporte des points ; ta manche s'arrête dès que tu l'as trouvé.<br>🔤 <b>Le mot mélangé</b> (30 s) : un mot de 5 à 10 lettres à remettre dans l'ordre. Tout mot du dictionnaire qui utilise toutes les lettres est accepté.<br>🎯 <b>Les défis</b> (30 s) : sans buzzer, chacun répond de son côté.</p><p>Si tout le monde a répondu avant la fin du temps, on passe directement aux résultats. Après chaque manche, le classement du championnat montre les places gagnées ▲ et perdues ▼.</p>",
+ iGN:"<p>Partie complète en 16 manches : chiffres, mot mélangé, mot mélangé, deux fois de suite ; puis deux défis ; puis encore deux fois chiffres et deux mots mélangés ; et pour finir, les deux derniers défis.</p><p>Les quatre défis (thème, calcul mental, l'un dans l'autre, orthographe) passent chacun une fois, dans un ordre tiré au hasard.</p>",
+ iGQ:"<p>Partie courte en 6 manches : chiffres, mot mélangé, un défi, chiffres, mot mélangé, puis un autre défi.</p>",
+ rM:T.fr.rM+"<p><b>🏁 Grand Prix</b> (partie complète ou courte) : une course de vitesse. Les bonnes réponses de chaque manche sont classées au temps et marquent des points comme en Formule 1 (25, 18, 15… jusqu'à 1 point pour le 10e). Une seule proposition par manche.</p>"});
+Object.assign(T.en,{mA:"Scrambled word",gpT:"🏁 Grand Prix",gpS:"the fastest scores the most points",gpDn:"16 rounds · about 15 minutes",gpDq:"6 rounds · about 5 minutes",
+ gpGood:"Word found!",gpBad:"Word refused",gpWrong:"wrong answer",
+ gpProc:"<h3>How it works in the Grand Prix</h3><p>No buzzer: everyone answers on their own, whenever they like, with <b>a single attempt</b>. Correct answers are ranked from fastest to slowest.</p>",
+ iG:"<p>A speed race: in each round, everyone plays the same draw at the same time, and correct answers are ranked from fastest to slowest.</p><p><b>Formula 1 points</b>: 25, 18, 15, 12, 10, 8, 6, 4, 2 and 1 point from 1st to 10th. Beyond 10th place, for a wrong answer or no answer: 0 points.</p><p><b>A single attempt per round</b>: be quick… but not too quick!</p><p>🔢 <b>Countdown Numbers</b> (45 s): only the exact target scores; your round stops as soon as you reach it.<br>🔤 <b>Scrambled word</b> (30 s): a 5- to 10-letter word to unscramble. Any dictionary word using all the letters is accepted.<br>🎯 <b>Challenges</b> (30 s): no buzzer, everyone answers on their own.</p><p>If everyone has answered before time is up, results are shown straight away. After each round, the championship standings show places gained ▲ and lost ▼.</p>",
+ iGN:"<p>A full game in 16 rounds: numbers, scrambled word, scrambled word, twice; then two challenges; then numbers and two scrambled words twice more; and to finish, the last two challenges.</p><p>The four challenges (theme, mental maths, one inside the other, spelling) each come up once, in random order.</p>",
+ iGQ:"<p>A short game in 6 rounds: numbers, scrambled word, a challenge, numbers, scrambled word, then another challenge.</p>",
+ rM:T.en.rM+"<p><b>🏁 Grand Prix</b> (full or short game): a speed race. Correct answers in each round are ranked by time and score Formula 1 points (25, 18, 15… down to 1 point for 10th). A single attempt per round.</p>"});
 // ===== v16 : jouable hors connexion =====
 // Liste des fichiers gardés sur le téléphone : [fichier, empreinte, taille].
 // IMPORTANT pour les prochaines versions : si un fichier de assets/ est ajouté ou modifié,
