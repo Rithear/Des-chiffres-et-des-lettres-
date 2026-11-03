@@ -143,7 +143,7 @@ h3.mph{margin:16px 0 8px;text-align:left}
 .tbe .res .rv{white-space:normal}
 .tbk{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 6px}.tbk .btn{padding:12px 6px}.tbk .btn small{display:block;font-weight:400;font-size:12px;opacity:.8;margin-top:3px}
 .tbk .btn.on{background:var(--ac);color:#14233f;outline:0}
-#tbFrL .fr{cursor:pointer}#tbFrL .fr.on{outline:2px solid var(--ac)}#tbFrL .fr.on span::after{content:" ✓";color:var(--ac)}
+#daL .fr{cursor:pointer}#daL .fr.on{outline:2px solid var(--ac)}#daL .fr.on span::after{content:" ✓";color:var(--ac)}#daL .fr.off{opacity:.5;cursor:default}.daS{margin:6px 0 2px}#tbFrL .fr{cursor:pointer}#tbFrL .fr.on{outline:2px solid var(--ac)}#tbFrL .fr.on span::after{content:" ✓";color:var(--ac)}
 .tbe .res .rn{flex:0 0 auto;margin-right:10px}.tbe .res .rv{text-align:right}
 </style></head><body>
 <section id="vidP" class="pg hide"><video id="vid" src="assets/generique.mp4" playsinline preload="auto"></video><button class="btn" id="vskip" data-t="skip"></button></section>
@@ -243,7 +243,7 @@ h3.mph{margin:16px 0 8px;text-align:left}
 <section id="mpMenu" class="pg hide"><h2 data-t="pM"></h2><h3 class="mph" data-t="mpLiveH"></h3><p class="dnote" data-t="mpLive"></p>
 <button class="btn p mb" id="mpNew"><span data-t="mpNew"></span><small class="sub" data-t="mpNewS"></small></button>
 <div class="mrow"><button class="btn p mb" id="mpJoin"><span data-t="mpJoin"></span><small class="sub" data-t="mpJoinS"></small></button><button class="info" id="mpInfo">?</button></div>
-<h3 class="mph" data-t="mpAsyH"></h3><button class="btn p mb" id="chGo"><span data-t="chT"></span><small class="sub" data-t="chS"></small></button><div class="mrow"><button class="btn p mb" id="tbGo"><span data-t="tbT"></span><span class="bdg hide" id="tbB1"></span><small class="sub" data-t="tbS"></small></button><button class="info" id="tbInfo">?</button></div>
+<h3 class="mph" data-t="mpAsyH"></h3><button class="btn p mb" id="chGo"><span data-t="chT"></span><span class="bdg hide" id="daB1"></span><small class="sub" data-t="chS"></small></button><div class="mrow"><button class="btn p mb" id="tbGo"><span data-t="tbT"></span><span class="bdg hide" id="tbB1"></span><small class="sub" data-t="tbS"></small></button><button class="info" id="tbInfo">?</button></div>
 <p class="dnote" id="mpNote"></p><button class="btn mb" id="mpWho" style="font-size:16px;padding:12px"></button><button class="btn mb" data-back data-t="back"></button></section>
 <section id="mpJoinP" class="pg hide"><h2 data-t="mpJoin"></h2><p class="dnote" data-t="mpCodeH"></p>
 <input class="fi" id="mjCode" inputmode="numeric" autocomplete="off" maxlength="7" data-ph="mpCodePh" data-go="mjGo">
@@ -263,6 +263,7 @@ h3.mph{margin:16px 0 8px;text-align:left}
 <h3 data-t="chHist"></h3><div id="chL"></div>
 <button class="btn mb" id="chBack" data-t="back" style="margin-top:12px"></button></section>
 <section id="chP" class="pg hide"><h2 id="chTi"></h2><div id="chB"></div><div id="chBtn" style="margin-top:14px"></div></section>
+<section id="daP" class="pg hide"><h2 data-t="daT"></h2><div id="daS"></div><h3 data-t="daFrH"></h3><button class="btn mb" id="daAll" style="font-size:16px;padding:10px"></button><div id="daL"></div><p class="dnote" data-t="daNote" style="margin-top:10px"></p><div class="amsg" id="daMsg"></div><button class="btn p mb" id="daGo"></button><button class="btn mb" id="daBack" data-t="back"></button></section>
 <section id="dfMenu" class="pg hide"><h2 data-t="pX"></h2><p class="dnote" data-t="dfH"></p>
 <div class="mrow"><button class="btn p mb" data-df="t"><span data-t="mT"></span><small class="sub" data-t="s30"></small></button><button class="info" data-info="T">?</button></div>
 <div class="mrow"><button class="btn p mb" data-df="k"><span data-t="mK"></span><small class="sub" data-t="s30"></small></button><button class="info" data-info="K">?</button></div>
@@ -1892,7 +1893,7 @@ let chl=null,chNav=false,chCur=null,chOwn=false,chIn0=null;
 const CHK="dcdl-defi",CHH="fwduels";
 function chEnc(o){const b=new TextEncoder().encode(JSON.stringify(o));let s="";b.forEach((x,i)=>s+=String.fromCharCode(x^CHK.charCodeAt(i%CHK.length)));return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
 function chDec(p){try{p=String(p).replace(/-/g,"+").replace(/_/g,"/");while(p.length%4)p+="=";const s=atob(p),b=new Uint8Array(s.length);for(let i=0;i<s.length;i++)b[i]=s.charCodeAt(i)^CHK.charCodeAt(i%CHK.length);const o=JSON.parse(new TextDecoder().decode(b));return chOk(o)?o:null}catch(e){return null}}
-const isI=(v,a,b)=>Number.isInteger(v)&&v>=a&&v<=b,okN=n=>typeof n==="string"&&n.length<=12&&cleanPs(n).length>0;
+const isI=(v,a,b)=>Number.isInteger(v)&&v>=a&&v<=b,okN=n=>typeof n==="string"&&n.length<=40&&[...n].length<=12&&cleanPs(n).length>0;
 function chRv(g,x){if(!x||!isI(x.s,0,99)||!isI(x.t,0,200000)||typeof x.x!=="string"||x.x.length>20)return false;
  if(g==="l")return isI(x.r,0,10)&&(x.r?/^[a-z]{2,10}$/.test(x.x)&&x.x.length===x.r:x.x==="");
  if(g==="c")return isI(x.r,0,9999)&&(x.r===9999?x.x==="":/^\d{1,7}$/.test(x.x));
@@ -1909,7 +1910,8 @@ function chOk(o){if(!o||o.v!==1||!/^[a-z0-9]{6,16}$/.test(o.i||"")||!okN(o.n)||!
 (()=>{try{const u=new URLSearchParams(location.search);if(!u.has("defi"))return;chIn0=chDec(u.get("defi")||"")||"bad";u.delete("defi");const q=u.toString();history.replaceState(null,"",location.pathname+(q?"?"+q:"")+location.hash)}catch(e){}})();
 // historique des duels (sur cet appareil)
 function chGet(){try{const a=JSON.parse(localStorage.getItem(CHH)||"[]");return Array.isArray(a)?a.filter(e=>e&&e.o&&chOk(e.o)):[]}catch(e){return[]}}
-function chPut(a){a.sort((x,y)=>y.at-x.at);try{localStorage.setItem(CHH,JSON.stringify(a.slice(0,30)))}catch(e){}}
+function chPut(a){a.sort((x,y)=>y.at-x.at);try{localStorage.setItem(CHH,JSON.stringify(a.slice(0,40)))}catch(e){}}
+function chDel(i){chPut(chGet().filter(x=>x.i!==i))}
 const chFind=i=>chGet().find(x=>x.i===i);
 function chSave(e){const a=chGet().filter(x=>x.i!==e.i);a.push(e);chPut(a)}
 // manche en cours : défi reçu (opp) ou manche enregistrée pour pouvoir défier quelqu'un
@@ -1958,20 +1960,28 @@ const chBtns=a=>a.map(([k,l,c])=>'<button class="btn '+c+' mb" data-ch="'+k+'">'
 // fin de manche : duel (défi reçu) ou bouton pour défier quelqu'un
 function chAfter(){const b=$("chBox");b.innerHTML="";if(!chl||party||daily||mpr||trn)return;const r=chRes();chl.res=r;
  if(chl.opp){const o=chl.opp,e=chFind(o.i)||{i:o.i,role:"in",o};e.st="done";e.me=r;e.at=Date.now();chSave(e);chl.fin=1;plDuel("i",o.g,o.n,chCmp(o.g,r,o),"yi"+o.i);$("again").classList.add("hide");
+  if(e.fid){daPend(e.fid,{n:mpNm(),s:r.s,r:r.r,x:r.x,t:r.t});b.innerHTML=chDuelH(o.g,{...r,n:t("chYou")},o,true)+'<p class="dnote" id="daSt">'+esc(daSentS(chFind(o.i)||e))+'</p><div style="margin-top:12px">'+chBtns([["rev",t("chRev"),"p"]])+"</div>";return}
   b.innerHTML=chDuelH(o.g,{...r,n:t("chYou")},o,true)+'<div style="margin-top:12px">'+chBtns([["reply",t("chReply",o.n),"p"],["rev",t("chRev"),""]])+"</div>";return}
- const o=chBuild();if(chOk({...o,n:o.n||"?"}))b.innerHTML='<button class="btn p mb" data-ch="send"><span>'+t("chSend")+'</span><small class="sub">'+t("chSendS")+"</small></button>"}
+ const o=chBuild();if(chOk({...o,n:o.n||"?"}))b.innerHTML=ME?'<h3 class="ct">'+t("chSend")+'</h3><p class="dnote">'+t("chSendS")+"</p>"+chBtns([["friends",t("daFrB"),"p"],["send",t("daLinkB"),""]]):'<button class="btn p mb" data-ch="send"><span>'+t("chSend")+'</span><small class="sub">'+t("chSendS")+"</small></button>"}
 // partage
-async function shareLink(txt,url){if(navigator.share){try{await navigator.share({title:"Des chiffres et des lettres",text:txt,url});return}catch(e){if(e&&e.name==="AbortError")return}}
- try{await navigator.clipboard.writeText(txt+"\n"+url);toast(t("chCopied"))}catch(e){modal(t("mpShare"),"<p>"+esc(txt)+'</p><p style="word-break:break-all">'+esc(url)+"</p>",[{l:t("close"),c:"p",f:closeModal}])}}
+async function shareLink(txt,url){if(navigator.share){try{await navigator.share({title:"Des chiffres et des lettres",text:txt,url});return true}catch(e){if(e&&e.name==="AbortError")return false}}
+ try{await navigator.clipboard.writeText(txt+"\n"+url);toast(t("chCopied"))}catch(e){modal(t("mpShare"),"<p>"+esc(txt)+'</p><p style="word-break:break-all">'+esc(url)+"</p>",[{l:t("close"),c:"p",f:closeModal}])}return true}
 const chUrl=o=>RED+"?defi="+chEnc(o);
 function chAskName(then){modal(t("mpNameT"),"<p>"+t("chNameH")+"</p>"+mIn("mA","text",t("mpNamePh"),mpNm())+mMsg,[{l:t("cancel"),f:closeModal},{l:t("ok"),c:"p",f:()=>{const v=cleanPs($("mA").value);if(!v||v.length>12)return am("mMsg",t("mpNameE"));try{localStorage.setItem("fwmname",v)}catch(e){}closeModal();chWho();if(then)then()}}]);$("mA").maxLength=12}
-function chShareOut(o){shareLink(t("chShareT",t("m"+o.g.toUpperCase()),o.s+" "+t("pts")),chUrl(o))}
-function chSendNow(){if(!chl||!chl.res||chl.opp)return;if(!mpNm())return chAskName(chSendNow);const o=chBuild();
- const e=chFind(o.i)||{i:o.i,role:"out",ans:[],st:"wait"};e.o=o;e.at=Date.now();chSave(e);plDuel("s",o.g,"",null,"ys"+o.i);chShareOut(o)}
+function chShareOut(o){return shareLink(t("chShareT",t("m"+o.g.toUpperCase()),o.s+" "+t("pts")),chUrl(o))}
+// le duel n'est rangé dans « Mes duels » que s'il a vraiment été partagé (menu de partage pas annulé)
+async function chSendNow(){if(!chl||!chl.res||chl.opp)return;if(!mpNm())return chAskName(chSendNow);const o=chBuild();
+ if(!await chShareOut(o))return;chRecOut(o)}
+function chRecOut(o){const e=chFind(o.i)||{i:o.i,role:"out",ans:[],st:"wait"};e.o=o;e.at=Date.now();if(ME&&!e.fu)e.fu=ME.id;chSave(e);plDuel("s",o.g,"",null,"ys"+o.i);return e}
 function chReply(e){if(!e||!e.me)return;if(!mpNm())return chAskName(()=>chReply(chFind(e.i)||e));const a={n:mpNm(),s:e.me.s,r:e.me.r,x:e.me.x,t:e.me.t};
  shareLink(t("chReplyT",t("m"+e.o.g.toUpperCase()),a.s+" "+t("pts")),chUrl({...e.o,a}))}
 // relever un défi reçu
 async function chAccept(e){if(!e||(chl&&chl.opp&&!chl.fin))return;const o=e.o;
+ if(e.fid){if(e.st==="exp"||e.st==="ext")return chView(e);if(!ME||ME.id!==e.fu)return modal(t("chT"),"<p>"+t("daAcc")+"</p>",[{l:t("ok"),c:"p",f:closeModal}]);
+  let s=null;if(sb&&SESS){try{const r=await sb.rpc("duel_begin",{p_id:e.fid});if(!r.error)s=r.data}catch(x){}}
+  if(s&&s!=="ok"){if(s==="cancel"){chDel(e.i);toast(t("daGone",o.n));return openChMenu()}
+   if(s==="expired"||s==="run"){e.st=s==="run"?"ext":"exp";chSave(e);return chView(e)}
+   await daLoad();return chOpenId(e.i)}}
  party=null;trn=null;daily=null;dur={l:30,c:45};mode=o.g;chNav=true;dfNav=false;e.st="run";e.me={s:0,...WORST[o.g]};e.at=Date.now();chSave(e);
  chl={opp:o,go:0,ev:[],t0:0,lt:0,g:o.g,dl:o.d||null};
  if(o.g==="c")return startC();
@@ -1982,18 +1992,22 @@ async function chRevanche(o){ctok++;sfxStop();clearTimeout(tmo);clearTimeout(dtm
  if(o.g==="c")return startC();dl=o.d;if(!D[dl])modal(t("m"+o.g.toUpperCase()),"<p>"+t("loading")+"</p>",[]);dict=await loadDict(dl);closeModal();o.g==="w"?startW():startL()}
 // écrans
 function chWho(){const n=mpNm();$("chWho").textContent=n?t("chWho",n):t("chWho0")}
-function chFix(e){if(e.role==="in"&&e.st==="run"&&!(chl&&chl.opp&&chl.opp.i===e.i&&!chl.fin)){e.st="done";if(!e.me)e.me={s:0,...WORST[e.o.g]};chSave(e)}return e}
-function chStat(e){if(e.role==="in"){if(e.st==="new"||!e.me)return["chStNew",""];const c=chCmp(e.o.g,e.me,e.o);return c>0?["chStWin","ok"]:c<0?["chStLose","ko"]:["chStTie",""]}
- const an=e.ans||[];if(an.length===1){const c=chCmp(e.o.g,e.o,an[0]);return[c>0?"chStWin":c<0?"chStLose":"chStTie",c>0?"ok":c<0?"ko":"",an[0].n]}return an.length?["chAns",""]:["chStWait",""]}
-function chList(){const a=chGet().map(chFix);$("chL").innerHTML=a.length?a.map(e=>{const[k,c]=chStat(e);
- const[,,who]=chStat(e);return'<button class="fr" data-cid="'+e.i+'"><span>'+esc(e.role==="in"?t("chVsS",e.o.n):who?t("chMineS")+" · "+t("chVsS",who):t("chMineS"))+" <small>· "+t("m"+e.o.g.toUpperCase())+'</small></span><small class="'+c+'">'+t(k,(e.ans||[]).length)+"</small></button>"}).join(""):'<p class="dnote">'+t("chNone")+"</p>"}
+function chFix(e){if(e.role==="in"&&e.st==="run"&&!(chl&&chl.opp&&chl.opp.i===e.i&&!chl.fin)){e.st="done";if(!e.me)e.me={s:0,...WORST[e.o.g]};chSave(e);if(e.fid&&ME&&ME.id===e.fu)daPend(e.fid,{n:mpNm(),s:e.me.s,r:e.me.r,x:e.me.x,t:e.me.t})}return e}
+function chStat(e){if(e.role==="in"){if(e.st==="exp")return["daStExp",""];if(e.st==="ext")return["daStExt",""];if(e.st==="new"||!e.me)return["chStNew",""];const c=chCmp(e.o.g,e.me,e.o);return c>0?["chStWin","ok"]:c<0?["chStLose","ko"]:["chStTie",""]}
+ const an=e.ans||[];if(an.length===1){const c=chCmp(e.o.g,e.o,an[0]);return[c>0?"chStWin":c<0?"chStLose":"chStTie",c>0?"ok":c<0?"ko":"",an[0].n]}const fr=e.fr||[];return an.length?["chAns",""]:fr.length&&fr.every(f=>f.st==="expired")?["daStExp",""]:["chStWait",""]}
+function chList(){const a=chGet().filter(daMine).map(chFix);$("chL").innerHTML=a.length?a.map(e=>{const[k,c]=chStat(e);
+ const[,,who]=chStat(e),fd=e.fid||(e.fr&&e.fr.length)?"👥 ":"";return'<button class="fr" data-cid="'+e.i+'"><span>'+fd+esc(e.role==="in"?t("chVsS",e.o.n):who?t("chMineS")+" · "+t("chVsS",who):t("chMineS"))+" <small>· "+t("m"+e.o.g.toUpperCase())+'</small></span><small class="'+c+'">'+t(k,(e.ans||[]).length)+"</small></button>"}).join(""):'<p class="dnote">'+t("chNone")+"</p>"}
 function openChMenu(){chNav=true;dfNav=false;chCur=null;chWho();chList();show("chMenu")}
 function chOpenId(i){const e=chFind(i);if(!e)return openChMenu();chView(chFix(e))}
 function chView(e,own){chNav=true;dfNav=false;chCur=e;chOwn=!!own;const o=e.o,g=o.g,card='<div class="pcard"><div class="pn">'+t("m"+g.toUpperCase())+'</div><div class="pm">'+(o.d?t("dic"+o.d)+" · ":"")+t(DUR[g])+"</div></div>";let h,b;
  $("chTi").textContent=e.role==="in"?t("chVs",o.n):t("chMine");
- if(e.role==="in"&&(e.st==="new"||!e.me)){h='<div class="win">'+esc(t("chFrom",o.n))+"</div>"+card+'<h3 class="ct">'+t("chBeat")+'</h3><div class="big" style="font-size:44px">'+o.s+" "+t("pts")+'</div><p class="dnote">'+esc(chSum(g,o))+'</p><p class="dnote">'+esc(t("chSame",o.n))+"</p>";b=[["go",t("chGoB"),"p"],["later",t("chLater"),""]]}
- else if(e.role==="in"){h=card+chDuelH(g,{...e.me,n:t("chYou")},o,true)+chRecap(o);b=[["reply",t("chReply",o.n),"p"],["rev",t("chRev"),""],["menu",t("back"),""]]}
- else{const A={...o,n:t("chYou")},an=e.ans||[];h=card+(own?'<p class="mpw">'+t("chOwn")+"</p>":"")+(an.length?an.map(a=>chDuelH(g,A,a,true)).join('<div style="height:10px"></div>'):'<p class="dnote">'+t("chWaitH")+"</p>"+chRow(g,A,true,false))+chRecap(o);b=[["reshare",t("chReshare"),"p"],["rev",t("chNew"),""],["menu",t("back"),""]]}
+ if(e.role==="in"&&(e.st==="exp"||e.st==="ext")){h='<div class="win">'+esc(t("chFrom",o.n))+"</div>"+card+'<p class="mpw">'+t(e.st==="exp"?"daExpH":"daExtH")+"</p>";b=[["menu",t("back"),"p"]]}
+ else if(e.role==="in"&&(e.st==="new"||!e.me)){h='<div class="win">'+esc(t("chFrom",o.n))+"</div>"+card+'<h3 class="ct">'+t("chBeat")+'</h3><div class="big" style="font-size:44px">'+o.s+" "+t("pts")+'</div><p class="dnote">'+esc(chSum(g,o))+'</p><p class="dnote">'+esc(t("chSame",o.n))+"</p>"+(e.fid&&e.ca?'<p class="dnote">'+esc(t("daUntil",daDay(e.ca+7*864e5)))+"</p>":"");b=[["go",t("chGoB"),"p"],["later",t("chLater"),""]]}
+ else if(e.role==="in"){h=card+chDuelH(g,{...e.me,n:t("chYou")},o,true)+(e.fid?'<p class="dnote">'+esc(daSentS(e))+"</p>":"")+chRecap(o);b=e.fid?[["rev",t("chRev"),"p"],["menu",t("back"),""]]:[["reply",t("chReply",o.n),"p"],["rev",t("chRev"),""],["menu",t("back"),""]]}
+ else{const A={...o,n:t("chYou")},an=e.ans||[],fr=(e.fr||[]).filter(f=>f.st!=="done"),del=!an.length&&!(e.fr||[]).some(f=>f.st==="done");
+  h=card+(own?'<p class="mpw">'+t("chOwn")+"</p>":"")+(an.length?an.map(a=>chDuelH(g,A,a,true)).join('<div style="height:10px"></div>'):'<p class="dnote">'+t(e.fr&&e.fr.length?"daWaitH":"chWaitH")+"</p>"+chRow(g,A,true,false))
+   +(fr.length?'<h3 class="ct daS">'+t("daFrT")+"</h3>"+fr.map(f=>'<div class="res"><span class="rn">'+esc(f.n)+'</span><span class="rv">'+t(f.st==="run"?"daFrR":f.st==="expired"?"daFrE":"daFrW")+"</span></div>").join(""):"")+chRecap(o);
+  b=(ME?[["friends",t("daFrB"),"p"],["reshare",t("daLinkB"),""]]:[["reshare",t("chReshare"),"p"]]).concat([["rev",t("chNew"),""]],del?[["del",t("daDelBtn"),"dng"]]:[],[["menu",t("back"),""]])}
  $("chB").innerHTML=h;$("chBtn").innerHTML=chBtns(b);show("chP")}
 // ouverture d'un lien reçu (défi ou résultat d'un adversaire)
 function chOpenLink(o){if(o==="bad")return modal(t("chT"),"<p>"+t("chBad")+"</p>",[{l:t("ok"),c:"p",f:closeModal}]);
@@ -2012,11 +2026,14 @@ $("chL").onclick=e=>{const b=e.target.closest("[data-cid]");if(b)chOpenId(b.data
 all("[data-cm]").forEach(b=>b.onclick=()=>{party=null;trn=null;daily=null;chl=null;chNav=true;dfNav=false;dur={l:30,c:45};mode=b.dataset.cm;if(mode==="c")startC();else{$("dst").textContent="";show("dictP")}});
 document.addEventListener("click",ev=>{const b=ev.target.closest("[data-ch]");if(!b)return;const k=b.dataset.ch;
  if(k==="send")return chSendNow();
+ if(k==="friends"&&$("chP").classList.contains("hide")){if(!chl||!chl.res||chl.opp||!ME)return;if(!mpNm())return;return daPick(chBuild(),"end")}
  if(k==="go")return chAccept(chCur&&(chFind(chCur.i)||chCur));
  if(k==="later"||k==="menu")return openChMenu();
  const onP=!$("chP").classList.contains("hide"),E=onP?chCur&&(chFind(chCur.i)||chCur):chl&&chl.opp?chFind(chl.opp.i):null;if(!E)return;
  if(k==="reply")return chReply(E);
  if(k==="reshare")return chShareOut(E.o);
+ if(k==="friends")return daPick(E.o,"view");
+ if(k==="del")return chDelAsk(E);
  if(k==="rev")return chRevanche(E.o)});
 
 // ===== partie personnalisée (salon) : nombre de manches choisi, jeu choisi avant chaque manche =====
@@ -2641,11 +2658,12 @@ function tbPlan(st,names){const c=st.split("").filter(g=>g==="c").length,l=st.sp
  if(d.length)p.push("🎯 "+(names?d.map(g=>t("m"+g.toUpperCase())).join(" + "):d.length>1?t("tbPlanDn",d.length):t("tbPlanD1")));
  if(st.includes("w"))p.push("🏁 "+t("tbPlanW"));return p.join(" + ")}
 // ----- bouton maison et pastille -----
-const HBP=new Set(["origP","trainP","dailyP","rankP","durP","freeP","rulesP","ruleT","statsP","recsP","recP","myStP","mpStP","dictP","profP","frP","mpMenu","mpJoinP","chMenu","chP","dfMenu","defP","tbMenu","tbNewP","tbP","tbRP"]);
+const HBP=new Set(["daP","origP","trainP","dailyP","rankP","durP","freeP","rulesP","ruleT","statsP","recsP","recP","myStP","mpStP","dictP","profP","frP","mpMenu","mpJoinP","chMenu","chP","dfMenu","defP","tbMenu","tbNewP","tbP","tbRP"]);
 function onShow(id){if(!tbReady)return;const b=$("homeB");if(b)b.classList.toggle("hide",!HBP.has(id)||!!MP);
+ if(ME&&(id==="chMenu"||(id==="home"||id==="mpMenu")&&(!DAL||DAL.id!==ME.id||Date.now()-DAL.at>20000)))daLoad();
  if((id==="home"||id==="mpMenu")&&ME&&(!TBL||TBL.id!==ME.id||Date.now()-TBL.at>20000))tbLoad();else tbBadge()}
 $("homeB").onclick=()=>{if(MP)return;closeModal();tbx=null;chNav=false;dfNav=false;chCur=null;party=null;trn=null;toHome()};
-function tbBadge(){const a=tbMine(),n=a?a.filter(x=>tbTurn(x)||tbInvIn(x)).length:0;["tbB0","tbB1"].forEach(i=>{const e=$(i);if(e){e.textContent=n;e.classList.toggle("hide",!n)}})}
+function tbBadge(){const a=tbMine(),n=a?a.filter(x=>tbTurn(x)||tbInvIn(x)).length:0,d=daN(),B=(i,v)=>{const e=$(i);if(e){e.textContent=v;e.classList.toggle("hide",!v)}};B("tbB0",n+d);B("tbB1",n);B("daB1",d)}
 // ----- échanges avec Supabase -----
 async function tbLoad(){if(!ME||!sb||!SESS){tbBadge();return null}const id=ME.id,tok=++tbTok;
  try{try{await tbFlush()}catch(e){}const r=await sb.rpc("tb_list");if(r.error)throw r.error;if(tok!==tbTok||!ME||ME.id!==id)return TBL;TBL={id,rows:r.data||[],at:Date.now(),err:0}}
@@ -2809,6 +2827,115 @@ function tbStatsH(){if(!ME)return"";let h="<h3>"+t("tbStT")+"</h3>";const a=tbMi
  h+="<h3>"+t("tbStLast")+"</h3>"+d.slice(0,20).map(x=>'<div class="res"><span class="rn"><b>'+(x.result==="win"?"🏆":x.result==="draw"?"🤝":"❌")+"</b><span>"+esc(x.opp_name)+" <small>· "+t(x.kind==="n"?"pN":"pQ")+(x.reason==="forfeit"?" · "+t("tbByF").replace(" · ",""):x.reason==="abandon"?" · "+(x.result==="loss"?t("tbByAm"):t("tbByAo",x.opp_name)).replace(" · ",""):"")+'</small></span></span><span class="rv"><b>'+x.my_score+" – "+x.opp_score+"</b> · "+fmtD(x.ended_at||x.created_at)+"</span></div>").join("");
  return h}
 Object.assign(T.fr,{dM:"en direct ou à ton rythme",tbByAm:" · tu as abandonné",tbByAo:" · {n} a abandonné",tbStAvgO:"Score moyen de l'adversaire",tbNxDf:"Défi"});Object.assign(T.en,{dM:"live or at your own pace",tbByAm:" · you gave up",tbByAo:" · {n} gave up",tbStAvgO:"Opponent's average score",tbNxDf:"Challenge"});
+
+// ===== duels entre amis (v15) : le même duel que par lien, rangé dans Supabase =====
+// Chaque ami défié a 7 jours pour relever le duel ; son résultat revient tout seul.
+let DAL=null,daTok=0,daO=null,daFrom="end",daFrs=null,daSel=new Set();
+const DAPK="fwdapend",DASK="fwdaseen",pgOn=id=>{const e=$(id);return!!e&&!e.classList.contains("hide")};
+const daMine=e=>!e.fid||(ME&&ME.id===e.fu);
+function daN(){return ME?chGet().filter(e=>e.fid&&e.fu===ME.id&&e.role==="in"&&e.st==="new").length:0}
+const daDay=ms=>new Date(ms).toLocaleDateString(L==="fr"?"fr-FR":"en-GB",{weekday:"long",day:"numeric",month:"long"});
+function daSentS(e){const n=e.o.n;return e.srv==="expired"?t("daSrvExp"):e.srv==="cancel"?t("daSrvCan",n):e.sent?t("daSentOk",n):t("daSending",n)}
+const daAnsOk=(g,a)=>!!a&&typeof a==="object"&&okN(a.n)&&chRv(g,a);
+// résultats à envoyer (gardés sur l'appareil tant que l'envoi n'a pas réussi)
+function daPendGet(){try{const a=JSON.parse(localStorage.getItem(DAPK)||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
+function daPendPut(a){try{localStorage.setItem(DAPK,JSON.stringify(a.slice(-30)))}catch(e){}}
+function daPend(fid,a){if(!ME)return;daPendPut(daPendGet().filter(x=>x.id!==fid).concat([{u:ME.id,id:fid,a}]));return daFlush().catch(()=>toast(t("daNet")))}
+async function daFlush(){if(!ME||!sb||!SESS)return;for(const p of daPendGet().filter(x=>x.u===ME.id)){
+ const r=await sb.rpc("duel_answer",{p_id:p.id,p_ans:p.a});if(r.error)throw r.error;daPendPut(daPendGet().filter(x=>x.id!==p.id));
+ const e=chGet().find(z=>z.fid===p.id);if(e){if(r.data==="ok"||r.data==="done")e.sent=1;else e.srv=r.data;chSave(e)}
+ const s=$("daSt");if(s&&e&&pgOn("end"))s.textContent=daSentS(e)}}
+// lecture des duels sur Supabase et mise à jour de « Mes duels »
+function daSeen(){try{const a=JSON.parse(localStorage.getItem(DASK)||"[]");return new Set(Array.isArray(a)?a:[])}catch(e){return new Set()}}
+async function daLoad(){if(!ME||!sb||!SESS){tbBadge();return null}const id=ME.id,tok=++daTok;
+ try{try{await daFlush()}catch(e){}const r=await sb.rpc("duel_list");if(r.error)throw r.error;if(tok!==daTok||!ME||ME.id!==id)return DAL;
+  const rows=r.data||[];await daSync(rows,id);if(tok!==daTok)return DAL;DAL={id,rows,at:Date.now(),err:0}}
+ catch(e){if(tok===daTok&&ME&&ME.id===id)DAL={id,rows:DAL&&DAL.id===id?DAL.rows:null,at:Date.now(),err:1}}
+ tbBadge();daUI();return DAL}
+async function daSync(rows,uid){const seen=daSeen(),key=x=>x.id+":"+x.status,now=Date.now(),pick={},need=[];
+ let a=chGet();const byI={};a.forEach(e=>byI[e.i]=e);
+ rows.forEach(x=>{if(byI[x.duel]||seen.has(key(x))||(!x.mine&&x.status==="expired"))return;if(!pick[x.duel]){pick[x.duel]=x.id;need.push(x.id)}});
+ const pl={};if(need.length){try{const r=await sb.rpc("duel_get",{p_ids:need.slice(0,50)});if(r.error)throw r.error;(r.data||[]).forEach(z=>pl[z.id]=z.payload)}catch(e){}}
+ a=chGet();a.forEach(e=>byI[e.i]=e);let ch=false;
+ rows.forEach(x=>{let e=byI[x.duel];const k=key(x),ca=Date.parse(x.created_at)||now;
+  if(!e){if(seen.has(k)||(!x.mine&&x.status==="expired")){seen.add(k);return}const p=pl[pick[x.duel]];if(!p)return;
+   if(!chOk(p)||p.g!==x.game||p.i!==x.duel){seen.add(k);return}
+   if(!x.mine&&okN(x.opp_name))p.n=x.opp_name;
+   e=x.mine?{i:x.duel,role:"out",o:p,ans:[],st:"wait",at:ca,fu:uid,fr:[]}:{i:x.duel,role:"in",o:p,st:"new",at:ca,fid:x.id,fu:uid,ca};
+   byI[x.duel]=e;a.push(e);ch=true}
+  if(!x.mine&&e.role==="in"){if(!e.fid){e.fid=x.id;e.fu=uid;e.ca=ca;ch=true}if(e.fid!==x.id)return;
+   if(x.status==="done"){if((e.st!=="done"||!e.me)&&daAnsOk(x.game,x.answer)){const z=x.answer;e.me={s:z.s,r:z.r,x:z.x,t:z.t};e.st="done";ch=true}if(!e.sent){e.sent=1;ch=true}}
+   else if(x.status==="run"&&e.st==="new"&&!(chl&&chl.opp&&chl.opp.i===e.i&&!chl.fin)){e.st="ext";ch=true}
+   else if(x.status==="expired"&&(e.st==="new"||e.st==="ext")){e.st="exp";ch=true}}
+  else if(x.mine&&e.role==="out"){e.fr=e.fr||[];let f=e.fr.find(z=>z.u===x.opp);if(!f){f={u:x.opp};e.fr.push(f);ch=true}
+   if(f.n!==x.opp_name||f.st!==x.status){f.n=x.opp_name;f.st=x.status;ch=true}
+   if(x.status==="done"&&daAnsOk(x.game,x.answer)){const z=x.answer,A={n:okN(x.opp_name)?x.opp_name:z.n,s:z.s,r:z.r,x:z.x,t:z.t};e.ans=e.ans||[];
+    if(!e.ans.some(y=>y.n===A.n&&y.s===A.s&&y.r===A.r&&y.x===A.x&&y.t===A.t)){e.ans=e.ans.concat([A]).slice(-10);e.st="done";e.at=Math.max(e.at||0,Date.parse(x.answered_at)||now);
+     plDuel("o",x.game,A.n,chCmp(x.game,e.o,A),"yo"+e.o.i+plH(A.n));ch=true}}}
+  seen.add(k)});
+ // duels reçus que l'ami a supprimés avant qu'on les joue
+ const ids=new Set(rows.map(x=>x.id)),n0=a.length;a=a.filter(e=>!(e.role==="in"&&e.fid&&e.fu===uid&&e.st!=="done"&&e.st!=="run"&&!ids.has(e.fid)&&(e.ca||0)>now-55*864e5&&!(chl&&chl.opp&&chl.opp.i===e.i&&!chl.fin)));if(a.length!==n0)ch=true;
+ if(ch)chPut(a);try{localStorage.setItem(DASK,JSON.stringify([...seen].slice(-500)))}catch(e){}}
+function daUI(){if(pgOn("chMenu"))chList();else if(pgOn("chP")&&chCur){const e=chFind(chCur.i);if(e)chView(chFix(e),chOwn)}else if(pgOn("daP")&&daO)daDraw()}
+setInterval(()=>{if(document.visibilityState!=="visible"||!ME||(chl&&chl.opp&&!chl.fin))return;if(["home","mpMenu","chMenu","chP"].some(pgOn))daLoad()},60000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&ME&&["home","mpMenu","chMenu","chP"].some(pgOn))daLoad()});
+// choix des amis
+async function daPick(o,from){if(!ME||!needSb())return;daO=o;daFrom=from;daSel=new Set();daFrs=null;am("daMsg","");daDraw();show("daP");
+ try{const r=await sb.rpc("friend_list");if(r.error)throw r.error;daFrs=(r.data||[]).filter(x=>x.state==="friend")}catch(e){daFrs=[];am("daMsg",errT(e))}if(pgOn("daP"))daDraw()}
+function daWas(){const e=daO&&chFind(daO.i);return new Set((e&&e.fr||[]).map(x=>x.u))}
+function daDraw(){const o=daO,f=daFrs,dn=daWas(),av=f?f.filter(x=>!dn.has(x.id)):[];
+ $("daS").innerHTML='<div class="pcard"><div class="pn">'+t("m"+o.g.toUpperCase())+'</div><div class="pm">'+(o.d?t("dic"+o.d)+" · ":"")+o.s+" "+t("pts")+" · "+esc(chSum(o.g,o))+"</div></div>";
+ $("daL").innerHTML=!f?'<p class="dnote">'+t("frLoad")+"</p>":f.length?f.map(x=>{const w=dn.has(x.id);return'<div class="fr'+(w?" off":daSel.has(x.id)?" on":"")+'" data-da="'+x.id+'"><span>'+esc(x.pseudo)+"</span>"+(w?"<small>"+t("daWas")+"</small>":"")+"</div>"}).join(""):'<p class="dnote">'+t("tbFrNone")+'</p><button class="btn mb" id="daFrGo">'+esc(t("frSee"))+"</button>";
+ $("daAll").classList.toggle("hide",av.length<2);$("daAll").textContent=t(av.length&&av.every(x=>daSel.has(x.id))?"daNone":"daAll");
+ $("daGo").textContent=daSel.size>1?t("daGoN",daSel.size):t("daGo");$("daGo").disabled=!daSel.size}
+$("daL").onclick=e=>{if(e.target.closest("#daFrGo")){profFrom="mpMenu";return openFr()}const b=e.target.closest("[data-da]");if(!b||b.classList.contains("off"))return;
+ const id=b.dataset.da;if(daSel.has(id))daSel.delete(id);else daSel.add(id);am("daMsg","");daDraw()};
+$("daAll").onclick=()=>{const dn=daWas(),av=(daFrs||[]).filter(x=>!dn.has(x.id));if(av.length&&av.every(x=>daSel.has(x.id)))daSel.clear();else av.forEach(x=>daSel.add(x.id));daDraw()};
+$("daBack").onclick=()=>{if(daFrom==="end")return show("end");const e=daO&&chFind(daO.i);if(e)chView(e);else openChMenu()};
+$("daGo").onclick=()=>busy("daGo",async()=>{if(!daSel.size)return am("daMsg",t("tbPickFr"));if(!ME||!needSb())return;const o=daO,ids=[...daSel];
+ const r=await sb.rpc("duel_send",{p_duel:o.i,p_game:o.g,p_payload:o,p_friends:ids});if(r.error)throw r.error;const rows=r.data||[];
+ if(rows.some(x=>x.status==="auth"))return am("daMsg",t("eAuth"));if(!rows.length||rows.some(x=>x.status==="bad"))return am("daMsg",t("eGen"));
+ const nm=id=>{const x=(daFrs||[]).find(z=>z.id===id);return x?x.pseudo:"?"},ok=rows.filter(x=>x.status==="ok"||x.status==="already"),ko=rows.filter(x=>x.status!=="ok"&&x.status!=="already");
+ if(ok.length){const e=chRecOut(o);e.fr=e.fr||[];ok.forEach(x=>{if(!e.fr.some(z=>z.u===x.friend))e.fr.push({u:x.friend,n:nm(x.friend),st:"wait"})});chSave(e)}
+ if(ko.length){daSel=new Set(ko.map(x=>x.friend));daDraw();return am("daMsg",(ok.length?t(ok.length>1?"daSentN":"daSent1",ok.length>1?ok.length:nm(ok[0].friend))+" ":"")+ko.map(x=>t(x.status==="fullfr"?"daFull":"tbNotFr",nm(x.friend))).join(" "))}
+ toast(ok.length>1?t("daSentN",ok.length):t("daSent1",nm(ok[0].friend)));DAL=null;chView(chFind(o.i));daLoad()});
+// supprimer un de ses duels tant que personne n'a répondu
+function chDelAsk(e){if(!e||e.role!=="out"||(e.ans||[]).length||(e.fr||[]).some(f=>f.st==="done"))return;const pend=(e.fr||[]).some(f=>f.st==="wait"||f.st==="run");
+ modal(t("daDelT"),"<p>"+t("daDelQ")+(pend?" "+t("daDelQF"):"")+"</p>",[{l:t("cancel"),f:closeModal},{l:t("daDelB"),c:"dng",f:async()=>{
+  if(e.fr&&e.fr.length){if(!ME||!sb||!SESS){closeModal();return needSb()}
+   try{const r=await sb.rpc("duel_cancel",{p_duel:e.i});if(r.error)throw r.error;if(r.data==="answered"){closeModal();await daLoad();return chOpenId(e.i)}}
+   catch(x){return modal(t("oops"),"<p>"+esc(errT(x))+"</p>",[{l:t("ok"),c:"p",f:closeModal}])}}
+  closeModal();chDel(e.i);toast(t("daDeleted"));openChMenu()}}])}
+Object.assign(T.fr,{chT:"⚔️ Duels",chS:"par lien ou entre amis · chacun joue quand il veut",dM:"en direct ou à ton rythme",
+ chH:"Joue une manche, puis défie tes amis ou envoie le lien à qui tu veux. Ton adversaire joue exactement le même tirage quand il le souhaite, avec ton fantôme qui lui montre où tu en étais au même moment.",
+ chSend:"⚔️ Défier sur ce tirage",chSendS:"ton adversaire jouera exactement le même tirage",daFrB:"👥 Défier des amis",daLinkB:"📤 Envoyer un lien",
+ daT:"👥 Défier des amis",daFrH:"Choisis un ou plusieurs amis",daAll:"Tout sélectionner",daNone:"Tout désélectionner",daWas:"déjà défié",
+ daNote:"Ils ont 7 jours pour relever le duel. Leur résultat t'arrivera tout seul, sans lien à renvoyer.",daGo:"⚔️ Envoyer le duel",daGoN:"⚔️ Envoyer le duel à {n} amis",
+ daSent1:"Duel envoyé à {n} !",daSentN:"Duel envoyé à {n} amis !",daFull:"{n} a déjà trop de duels en attente.",daNet:"Pas de réseau : ton résultat sera envoyé dès que possible.",
+ daAcc:"Ce duel a été envoyé à ton compte : connecte-toi pour le relever.",daGone:"{n} a supprimé ce duel.",daStExp:"délai dépassé",daStExt:"en cours",
+ daExpH:"⌛ Le délai de 7 jours est dépassé : ce duel ne peut plus être relevé.",daExtH:"🎮 Ce duel a été commencé sur un autre appareil : le résultat s'affichera ici.",
+ daUntil:"📅 À relever avant {n}.",daSentOk:"📨 Ton résultat a été envoyé à {n}.",daSending:"⏳ Ton résultat sera envoyé à {n} dès que tu auras du réseau.",
+ daSrvExp:"⚠️ Le délai était dépassé : ton résultat n'a pas pu être envoyé.",daSrvCan:"⚠️ {n} a supprimé ce duel : ton résultat n'a pas pu être envoyé.",
+ daWaitH:"Tes amis ont 7 jours pour relever le duel : leur résultat s'affichera ici tout seul.",daFrT:"👥 Amis défiés",daFrW:"⏳ pas encore joué",daFrR:"🎮 en train de jouer",daFrE:"⌛ délai dépassé",
+ daDelBtn:"🗑️ Supprimer ce duel",daDelB:"🗑️ Supprimer",daDelT:"Supprimer ce duel ?",daDelQ:"Il disparaîtra de ta liste.",daDelQF:"Tes amis ne pourront plus le relever.",daDeleted:"Duel supprimé.",
+ rM:T.fr.rM.replace("<b>Duel par lien</b> : joue","<b>Duels</b> : joue").replace("puis envoie le lien à qui tu veux.","puis défie un ou plusieurs amis (avec un compte) ou envoie le lien à qui tu veux.").replace("À la fin, il te renvoie son résultat par un lien : ouvre-le pour voir qui a gagné.","Un ami a 7 jours pour relever le duel et son résultat te revient tout seul ; par lien, il te renvoie son résultat par un lien : ouvre-le pour voir qui a gagné. Tant que personne n'a répondu, tu peux supprimer un duel.").replace("Multijoueur › Duel par lien › Mes duels","Multijoueur › Duels › Mes duels"),
+ mDuel:"⚔️ Duels",mpNacc:"Le buzzer et les duels sont comptés depuis la mise à jour des statistiques.",
+ rcHl:T.fr.rcHl.replace("Duel par lien","Duels"),rcHc:T.fr.rcHc.replace("Duel par lien","Duels"),mRivH:T.fr.mRivH.replace("duels par lien","duels (par lien ou entre amis)")});
+Object.assign(T.en,{chT:"⚔️ Duels",chS:"by link or with friends · everyone plays when they like",dM:"live or at your own pace",
+ chH:"Play a round, then challenge your friends or send the link to anyone you like. Your opponent plays exactly the same draw whenever they want, with your ghost showing where you were at the same moment.",
+ chSend:"⚔️ Challenge on this draw",chSendS:"your opponent will play exactly the same draw",daFrB:"👥 Challenge friends",daLinkB:"📤 Send a link",
+ daT:"👥 Challenge friends",daFrH:"Choose one or more friends",daAll:"Select all",daNone:"Deselect all",daWas:"already challenged",
+ daNote:"They have 7 days to take up the duel. Their result will come back to you on its own, no link to send back.",daGo:"⚔️ Send the duel",daGoN:"⚔️ Send the duel to {n} friends",
+ daSent1:"Duel sent to {n}!",daSentN:"Duel sent to {n} friends!",daFull:"{n} already has too many duels waiting.",daNet:"No network: your result will be sent as soon as possible.",
+ daAcc:"This duel was sent to your account: log in to take it up.",daGone:"{n} deleted this duel.",daStExp:"expired",daStExt:"in progress",
+ daExpH:"⌛ The 7-day limit has passed: this duel can no longer be played.",daExtH:"🎮 This duel was started on another device: the result will show up here.",
+ daUntil:"📅 To play before {n}.",daSentOk:"📨 Your result was sent to {n}.",daSending:"⏳ Your result will be sent to {n} as soon as you have a network.",
+ daSrvExp:"⚠️ The time limit had passed: your result couldn't be sent.",daSrvCan:"⚠️ {n} deleted this duel: your result couldn't be sent.",
+ daWaitH:"Your friends have 7 days to take up the duel: their result will show up here on its own.",daFrT:"👥 Friends challenged",daFrW:"⏳ not played yet",daFrR:"🎮 playing now",daFrE:"⌛ time's up",
+ daDelBtn:"🗑️ Delete this duel",daDelB:"🗑️ Delete",daDelT:"Delete this duel?",daDelQ:"It will disappear from your list.",daDelQF:"Your friends won't be able to play it any more.",daDeleted:"Duel deleted.",
+ rM:T.en.rM.replace("<b>Link duel</b>: play","<b>Duels</b>: play").replace("then send the link to anyone you like.","then challenge one or more friends (with an account) or send the link to anyone you like.").replace("Afterwards they send their result back as a link: open it to see who won.","A friend has 7 days to take up the duel and their result comes back to you on its own; by link, they send their result back as a link: open it to see who won. As long as nobody has replied, you can delete a duel.").replace("Multiplayer › Link duel › My duels","Multiplayer › Duels › My duels"),
+ mDuel:"⚔️ Duels",mpNacc:"Buzzer and duels are counted since the statistics update.",
+ rcHl:T.en.rcHl.replace("Link duel","Duels"),rcHc:T.en.rcHc.replace("Link duel","Duels"),mRivH:T.en.mRivH.replace("link duels","duels (by link or with friends)")});
 tbReady=true;
 
 applyLang();loadSB();
