@@ -155,6 +155,15 @@ h3.mph{margin:16px 0 8px;text-align:left}
 body.nonet [data-net],body.nonet #recSc [data-rs="all"],body.nonet #recSc [data-rs="fr"]{opacity:.4}
 .netS{text-align:center;color:var(--mut);font-size:14px;line-height:1.5;margin:-10px 0 14px}
 .foot{text-align:center;color:var(--mut);font-size:12px;line-height:1.5;margin:26px 0 0}.foot p{margin:2px 0}.foot .lnk{font-size:13px;margin:8px auto 0}
+.admCh{display:flex;align-items:flex-end;gap:2px;height:120px;background:var(--card);border-radius:10px;padding:10px 8px 0;margin:6px 0 0}
+.admCh button{flex:1;height:100%;display:flex;align-items:flex-end;background:none;border:0;padding:0;cursor:pointer;min-width:0}
+.admCh i{display:block;width:100%;background:var(--ac);border-radius:4px 4px 0 0;min-height:2px}.admCh i.z{opacity:.25}.admCh button.on i{background:#fff}
+.admAx{display:flex;justify-content:space-between;color:var(--mut);font-size:12px;padding:3px 8px 0}
+.admCp{text-align:center;color:var(--tx);font-size:14px;margin:4px 0 10px;min-height:20px}
+.admR{background:var(--card);border-radius:8px;padding:8px 12px;margin:4px 0;line-height:1.35;font-size:15px}
+.admR small{display:block;color:var(--mut);font-size:13px}.admR b{color:var(--ac)}
+button.admR{display:block;width:100%;text-align:left;border:0;color:var(--tx);font:inherit;font-size:15px;cursor:pointer}
+#admTabs .btn{font-size:14px;padding:10px 4px}
 </style></head><body>
 <section id="vidP" class="pg hide"><video id="vid" src="assets/generique.mp4" playsinline preload="auto"></video><button class="btn" id="vskip" data-t="skip"></button></section>
 <button id="homeB" class="hide" aria-label="Menu">🏠</button><button id="topBk" class="hide" aria-label="Retour">↩&#xFE0E;</button><div id="toast" class="hide"></div><div id="mpWarn" class="hide" data-t="mpWarn"></div>
@@ -191,7 +200,7 @@ body.nonet [data-net],body.nonet #recSc [data-rs="all"],body.nonet #recSc [data-
 <button class="btn p mb" id="train" data-t="pT"></button>
 <button class="btn bl mb" id="dicB" data-t="pDic" data-net></button>
 <div class="row"><button class="btn" id="rules" data-t="rules"></button><button class="btn" id="records" data-t="stats"></button></div>
-<button class="btn mb" id="prof" style="margin-top:12px;font-size:16px;padding:12px" data-net></button><button class="btn mb lang" style="font-size:16px;padding:12px"></button>
+<button class="btn mb" id="prof" style="margin-top:12px;font-size:16px;padding:12px" data-net></button><button class="btn mb hide" id="admB" style="font-size:16px;padding:12px" data-net data-t="admT"></button><button class="btn mb lang" style="font-size:16px;padding:12px"></button>
 <div class="foot"><p id="ofS" class="hide"></p><p data-t="copy"></p><button class="lnk" id="rldB" data-t="reload" data-net></button></div></section>
 <section id="origP" class="pg hide"><h2 data-t="pO"></h2>
 <div class="mrow"><button class="btn p mb" data-p="n"><span data-t="pN"></span><small class="sub" data-t="d15"></small></button><button class="info" data-info="N">?</button></div>
@@ -249,6 +258,10 @@ body.nonet [data-net],body.nonet #recSc [data-rs="all"],body.nonet #recSc [data-
 <section id="end" class="pg hide"><h2 id="why"></h2><div class="big" id="final"></div><div class="ptot hide" id="ptot"></div><div id="chBox"></div><div id="extra"></div>
 <div id="saveBox" class="recN hide"></div><button class="btn mb hide" id="wRul"></button>
 <div class="row"><button class="btn p hide" id="next" data-t="next"></button><button class="btn p hide" id="drk" data-t="seeRank" data-net></button><button class="btn p" id="again" data-t="again"></button><button class="btn" id="tomenu" data-t="menu"></button></div></section>
+<section id="admP" class="pg hide"><h2 data-t="admT"></h2>
+<div class="row tabs" id="admTabs"><button class="btn" data-ad="ov" data-t="admOv"></button><button class="btn" data-ad="pl" data-t="admPl"></button><button class="btn" data-ad="fd" data-t="admFd"></button><button class="btn" data-ad="mu" data-t="admMu"></button></div>
+<div id="admC"></div><button class="lnk" id="admRf" data-t="admRf"></button><button class="btn mb" data-back data-t="back"></button></section>
+<section id="admUP" class="pg hide"><h2 data-t="admT"></h2><div id="admU"></div><button class="btn mb" id="admUBack" data-t="back" style="margin-top:12px"></button></section>
 <section id="profP" class="pg hide"><h2 data-t="prof"></h2>
 <div id="pAcc"><div class="pcard"><div class="pn" id="pName"></div><div class="pm" id="pMail"></div><div class="pm" id="pCode"></div></div><div class="amsg" id="pMsg"></div>
 <button class="btn p mb" id="pFr"></button><button class="btn mb" id="pPs" data-t="chPs"></button><button class="btn mb" id="pPw" data-t="chPw"></button><button class="btn mb" id="pMl" data-t="chMl"></button><button class="btn mb" id="pOut" data-t="logout"></button><button class="btn mb dng" id="pDel" data-t="delAcc"></button></div>
@@ -652,7 +665,7 @@ async function syncAcc(){plSync();if(!ME||!sb||!SESS||syncing)return;syncing=tru
   putD(o2);if(!$("dailyP").classList.contains("hide"))renderD()}catch(e){}finally{syncing=false}}
 // affichage
 function renderIntro(){const a=ACC;$("invN").classList.toggle("hide",!mpJoin0&&!chIn0&&!frIn0);if(frIn0&&!mpJoin0&&!chIn0)$("invN").textContent=t("frLinkInv",fmtCode(frIn0));else if(mpJoin0)$("invN").textContent=t("mpInvite",fmtCode(mpJoin0));else if(chIn0)$("invN").textContent=chIn0==="bad"?t("chBad"):chIn0.a?t("chInvR",chIn0.a.n):t("chInv",chIn0.n);$("accIn").classList.toggle("hide",!a);if(a)$("meName").textContent="▶ "+a.pseudo;$("goLogin").classList.toggle("hide",!!a);$("goSignup").classList.toggle("p",!a);$("goGuest").classList.toggle("p",!a)}
-function renderProfB(){const b=$("prof");if(!b)return;b.innerHTML=ME?esc("👤 "+ME.pseudo+" · "+t("prof"))+(ME.pending?'<span class="bdg">'+ME.pending+"</span>":""):esc("👤 "+t("prof")+" · "+t("guestN"))}
+function renderProfB(){admUI();const b=$("prof");if(!b)return;b.innerHTML=ME?esc("👤 "+ME.pseudo+" · "+t("prof"))+(ME.pending?'<span class="bdg">'+ME.pending+"</span>":""):esc("👤 "+t("prof")+" · "+t("guestN"))}
 function am(id,s,ok){const e=$(id);if(!e)return;e.textContent=s||"";e.className="amsg"+(ok?" ok":"")}
 const okMail=s=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s),cleanPs=s=>s.trim().replace(/\s+/g," ");
 const isCode=(e,c,re)=>!!e&&(e.code===c||re.test(String(e.message||"").toLowerCase()));
@@ -2731,7 +2744,7 @@ new MutationObserver(bkUpd).observe(document.body,{subtree:true,childList:true,a
 $("topBk").onclick=()=>{const b=bkFind();if(b)b.click()};
 // ----- bouton maison et pastille -----
 const HBP=new Set(["daP","origP","trainP","dailyP","rankP","durP","freeP","rulesP","ruleT","statsP","recsP","recP","myStP","mpStP","dictP","profP","frP","mpMenu","mpJoinP","chMenu","chP","dfMenu","defP","tbMenu","tbNewP","tbP","tbRP"]);
-function onShow(id){netUI();bkUpd();if(id==="home"&&NET&&ME&&SESS&&netPend())plSync().then(netUI);if(!tbReady)return;const b=$("homeB");if(b)b.classList.toggle("hide",!HBP.has(id)||!!MP);
+function onShow(id){admHook(id);netUI();bkUpd();if(id==="home"&&NET&&ME&&SESS&&netPend())plSync().then(netUI);if(!tbReady)return;const b=$("homeB");if(b)b.classList.toggle("hide",!HBP.has(id)||!!MP);
  if(ME&&(id==="chMenu"||(id==="home"||id==="mpMenu")&&(!DAL||DAL.id!==ME.id||Date.now()-DAL.at>20000)))daLoad();
  if((id==="home"||id==="mpMenu")&&ME&&(!TBL||TBL.id!==ME.id||Date.now()-TBL.at>20000))tbLoad();else tbBadge()}
 $("homeB").onclick=()=>{if(MP)return;closeModal();tbx=null;chNav=false;dfNav=false;chCur=null;party=null;trn=null;toHome()};
@@ -3101,6 +3114,151 @@ if("serviceWorker"in navigator&&(location.protocol==="https:"||location.hostname
 $("rldB").onclick=()=>modal(t("reload").replace("🔄 ",""),t("reloadQ"),[{l:t("cancel"),f:closeModal},{l:t("reloadGo"),c:"p",f:async()=>{closeModal();
  try{const r=await navigator.serviceWorker.getRegistration();if(r){const sc=r.scope;await r.unregister();for(const k of await caches.keys())if(k.endsWith("|"+sc))await caches.delete(k)}}catch(e){}location.reload()}}]);
 netOn=true;netProbe();
+
+// ===================== ÉCRAN ADMIN (visible seulement pour l'administrateur) =====================
+// La touche n'est qu'un raccourci : les données passent par des fonctions Supabase
+// qui refusent tout compte absent de la table « admins ».
+Object.assign(T.fr,{admT:"🛡️ Admin",admOv:"Vue d'ensemble",admPl:"Joueurs",admFd:"Activité",admMu:"Multi",admRf:"🔄 Actualiser",
+ admLd:"Chargement…",admErr:"Impossible de charger les données. Vérifie ta connexion, et que le script supabase-admin.sql a bien été lancé dans Supabase.",
+ admAcc:"comptes",admNew:"+{n} cette semaine",admA1:"joueurs actifs aujourd'hui",admA7:"actifs sur 7 jours",admA30:"actifs sur 30 jours",
+ admE1:"parties aujourd'hui",admE7:"parties sur 7 jours",admDly:"ont joué La partie du jour aujourd'hui",
+ admCh:"Parties par jour (30 derniers jours)",admChH:"Touche une barre pour voir le détail du jour.",admDay:"{n} : {m}",admGm:"{n} parties",admGm1:"{n} partie",admPj:"{n} joueurs",admPj1:"{n} joueur",
+ admTop:"Jeux les plus joués en solo (30 jours)",admModes:"Modes de jeu en solo (30 jours)",admNone:"Rien pour l'instant.",
+ admGst:"Les invités n'apparaissent pas : leurs parties restent sur leur téléphone.",
+ admNPl:"{n} comptes · du plus récemment actif au moins actif",admLast:"dernière partie {n}",admNever:"aucune partie",admW7:"{n} cette semaine",admTot:"{n} au total",
+ admSince:"Inscrit le {n}",admLogin:"Dernière connexion {n}",admFr:"Amis : {n}",admNoFr:"Aucun ami",
+ admSolo:"parties solo",admDays:"jours de Partie du jour",admMP:"parties multi",admWins:"{n} victoires",admWins1:"{n} victoire",admDS:"duels envoyés",admDG:"duels relevés",admDGof:"sur {n} reçus",admDGof1:"sur {n} reçu",
+ admTB:"matchs tour par tour",admTBr:"{n} en cours · {m} gagnés",admBy:"Parties solo par jeu",admAvg:"moy. pts",admNb:"parties",admRec:"Dernières activités",
+ admMore:"Voir plus",admLive:"Parties en direct",admTBT:"Matchs au tour par tour",admDuel:"Duels entre amis",
+ admNoW:"aucun mot",admRef:"{n} refusé",admNoA:"pas de réponse",admExact:"compte exact",admGap:"à {n} près",admOk:"réussi ✅",admKo:"raté ❌",
+ admDs:"a envoyé un duel à {n}",admDa:"a relevé le duel de {n}",admTn:"a lancé un match contre {n}",admTb:"a joué le tour {n} contre {m}",
+ admRk:"{n} sur {m}",admWin:"🏆 {n}",admSt_invite:"invitation envoyée",admSt_run:"tour {n}",admSt_done:"terminé",admSt_declined:"refusé",admSt_expired:"expiré",admSt_cancel:"annulé",
+ admFf:"forfait",admAb:"abandon",admDw_wait:"en attente",admDw_run:"en cours",admDw_done:"relevé",
+ admNow:"à l'instant",admMin:"il y a {n} min",admH:"il y a {n} h",admD:"il y a {n} j",admOn:"le {n}"});
+Object.assign(T.en,{admT:"🛡️ Admin",admOv:"Overview",admPl:"Players",admFd:"Activity",admMu:"Multi",admRf:"🔄 Refresh",
+ admLd:"Loading…",admErr:"Unable to load the data. Check your connection, and that the supabase-admin.sql script has been run in Supabase.",
+ admAcc:"accounts",admNew:"+{n} this week",admA1:"active players today",admA7:"active over 7 days",admA30:"active over 30 days",
+ admE1:"games today",admE7:"games over 7 days",admDly:"played the Daily game today",
+ admCh:"Games per day (last 30 days)",admChH:"Tap a bar to see that day's details.",admDay:"{n}: {m}",admGm:"{n} games",admGm1:"{n} game",admPj:"{n} players",admPj1:"{n} player",
+ admTop:"Most played solo games (30 days)",admModes:"Solo game modes (30 days)",admNone:"Nothing yet.",
+ admGst:"Guests don't appear: their games stay on their phone.",
+ admNPl:"{n} accounts · most recently active first",admLast:"last game {n}",admNever:"no games",admW7:"{n} this week",admTot:"{n} in total",
+ admSince:"Joined {n}",admLogin:"Last login {n}",admFr:"Friends: {n}",admNoFr:"No friends",
+ admSolo:"solo games",admDays:"Daily game days",admMP:"multiplayer games",admWins:"{n} wins",admWins1:"{n} win",admDS:"duels sent",admDG:"duels played",admDGof:"out of {n} received",admDGof1:"out of {n} received",
+ admTB:"turn-based matches",admTBr:"{n} running · {m} won",admBy:"Solo games by game",admAvg:"avg pts",admNb:"games",admRec:"Latest activity",
+ admMore:"Show more",admLive:"Live games",admTBT:"Turn-based matches",admDuel:"Duels between friends",
+ admNoW:"no word",admRef:"{n} rejected",admNoA:"no answer",admExact:"exact",admGap:"{n} away",admOk:"success ✅",admKo:"failed ❌",
+ admDs:"sent a duel to {n}",admDa:"played {n}'s duel",admTn:"started a match against {n}",admTb:"played round {n} against {m}",
+ admRk:"{n} of {m}",admWin:"🏆 {n}",admSt_invite:"invitation sent",admSt_run:"round {n}",admSt_done:"finished",admSt_declined:"declined",admSt_expired:"expired",admSt_cancel:"cancelled",
+ admFf:"forfeit",admAb:"abandoned",admDw_wait:"waiting",admDw_run:"in progress",admDw_done:"played",
+ admNow:"just now",admMin:"{n} min ago",admH:"{n} h ago",admD:"{n} d ago",admOn:"on {n}"});
+var ADMID=null,ADMK=null,ADT="ov",ADTOK=0,ADFEED=null,ADDAYS=null,ADSEL=-1;
+try{ADMID=localStorage.getItem("fwadm")}catch(e){}
+HBP.add("admP");HBP.add("admUP");
+const admP=(k,n)=>t(n===1?k+"1":k,n);
+function admIs(){return !!(ME&&ADMID&&ADMID===ME.id)}
+function admUI(){const b=$("admB");if(b)b.classList.toggle("hide",!admIs())}
+function admHook(id){if(id!=="home")return;admUI();if(ME&&sb&&SESS&&NET&&ADMK!==ME.id)admCheck()}
+async function admCheck(){const id=ME.id;ADMK=id;
+ try{const r=await sb.rpc("is_admin");if(r.error)throw r.error;if(!ME||ME.id!==id)return;
+  if(r.data===true){ADMID=id;try{localStorage.setItem("fwadm",id)}catch(e){}}
+  else if(ADMID===id){ADMID=null;try{localStorage.removeItem("fwadm")}catch(e){}}}
+ catch(e){ADMK=null}
+ admUI()}
+// ----- mise en forme -----
+const admG=g=>({n:"pN",q:"pQ",l:"mL",c:"mC",w:"mW",t:"mT",k:"mK",u:"mU",s:"mS",y:"chT",p:"mpP"}[g]?t({n:"pN",q:"pQ",l:"mL",c:"mC",w:"mW",t:"mT",k:"mK",u:"mU",s:"mS",y:"chT",p:"mpP"}[g]):String(g||"?"));
+const admM=m=>({o:"pO",f:"pF",e:"pT",d:"pD",x:"chT"}[m]?t({o:"pO",f:"pF",e:"pT",d:"pD",x:"chT"}[m]):String(m||"?"));
+const admMM=m=>t({o:"mpO",q:"mpQ",p:"mpP",g:"gpT"}[m]||"pM");
+const admFl=d=>d&&FLAG[d]?" "+FLAG[d]:"";
+function admAgo(a){if(!a)return"—";const d=(Date.now()-new Date(a).getTime())/60000;if(d<1)return t("admNow");if(d<60)return t("admMin",Math.floor(d));
+ if(d<1440)return t("admH",Math.floor(d/60));if(d<10080)return t("admD",Math.floor(d/1440));return t("admOn",fmtD(a))}
+function admDesc(e){const P=x=>(x==null?0:x)+" "+t("pts");
+ if(e.k==="p"){const g=e.g;let r;
+  if(g==="n"||g==="q")return"🎮 "+esc(admG(g))+" · "+P(e.pts);
+  if(g==="l")r=e.val>0?esc(String(e.detail||"").toUpperCase())+" ("+t("nLetters",e.val)+")":e.detail?t("admRef",esc(String(e.detail).toUpperCase())):t("admNoW");
+  else if(g==="c")r=(e.val==null?t("admNoA"):e.val===0?t("admExact"):t("admGap",e.val))+" · "+P(e.pts);
+  else if(g==="w")r=(e.val||0)+"/8 · "+P(e.pts);
+  else r=e.val>0?t("admOk"):t("admKo");
+  return"🎮 "+esc(admG(g))+admFl(e.dict)+" · "+esc(admM(e.m))+" · "+r}
+ if(e.k==="m"){const sub=e.m==="p"?(e.detail?t("cuN",esc(e.detail)):""):admG(e.g);
+  return"👥 "+esc(admMM(e.m))+(sub?" · "+esc(sub):"")+admFl(e.dict)+" · "+t("admRk",ordN(e.val),e.oth||"?")+" · "+P(e.pts)}
+ if(e.k==="ds")return"⚔️ "+t("admDs",esc(e.oth||"?"))+" · "+esc(admG(e.g));
+ if(e.k==="da")return"⚔️ "+t("admDa",esc(e.oth||"?"))+" · "+esc(admG(e.g));
+ if(e.k==="tn")return"🎲 "+t("admTn",esc(e.oth||"?"))+" · "+esc(admG(e.g))+admFl(e.dict);
+ if(e.k==="tb")return"🎲 "+t("admTb",e.val,esc(e.oth||"?"))+" · "+P(e.pts);
+ return esc(e.k)}
+function admBusy(el){el.innerHTML='<p class="dnote">'+t("admLd")+"</p>"}
+function admFail(el){el.innerHTML='<p class="dnote">'+t("admErr")+"</p>"}
+async function admRpc(fn,args){const r=await sb.rpc(fn,args||{});if(r.error)throw r.error;return r.data}
+// ----- navigation -----
+function openAdm(){if(!admIs()||!sb)return;show("admP");admTab(ADT)}
+function admTab(k){ADT=k;all("#admTabs .btn").forEach(b=>b.classList.toggle("on",b.dataset.ad===k));
+ ({ov:admOv,pl:admPl,fd:admFd,mu:admMu}[k]||admOv)()}
+$("admB").onclick=openAdm;
+all("#admTabs .btn").forEach(b=>b.onclick=()=>admTab(b.dataset.ad));
+$("admRf").onclick=()=>admTab(ADT);
+$("admUBack").onclick=()=>{show("admP");admTab(ADT)};
+$("admC").addEventListener("click",ev=>{const u=ev.target.closest("[data-au]");if(u){admUser(u.dataset.au);return}
+ const b=ev.target.closest("[data-di]");if(b){ADSEL=+b.dataset.di;admDaySel();return}
+ if(ev.target.closest("#admMore"))admFdMore()});
+$("admU").addEventListener("click",ev=>{const u=ev.target.closest("[data-au]");if(u)admUser(u.dataset.au)});
+// ----- vue d'ensemble -----
+async function admOv(){const el=$("admC"),k=++ADTOK;admBusy(el);let o;
+ try{o=await admRpc("admin_overview")}catch(e){if(k===ADTOK)admFail(el);return}if(k!==ADTOK)return;
+ let h=sg([tile(o.accounts,t("admAcc"),o.new7?t("admNew",o.new7):""),tile(o.act1,t("admA1")),tile(o.act7,t("admA7")),tile(o.act30,t("admA30")),
+  tile(o.ev1,t("admE1")),tile(o.ev7,t("admE7")),tile(o.daily,t("admDly"),"",1)]);
+ ADDAYS=o.days||[];const mx=Math.max(1,...ADDAYS.map(d=>d.n));ADSEL=ADDAYS.length-1;
+ h+="<h3>"+t("admCh")+'</h3><div class="admCh">'+ADDAYS.map((d,i)=>'<button data-di="'+i+'" aria-label="'+esc(d.d)+'"><i'+(d.n?"":' class="z"')+' style="height:'+Math.max(2,Math.round(100*d.n/mx))+'%"></i></button>').join("")+"</div>"
+  +'<div class="admAx"><span>'+(ADDAYS[0]?admDd(ADDAYS[0].d):"")+"</span><span>"+mx+" max</span><span>"+(ADDAYS.length?admDd(ADDAYS[ADDAYS.length-1].d):"")+'</span></div><div class="admCp" id="admCp"></div><p class="wdh">'+t("admChH")+"</p>";
+ const G=o.games||[],M=o.modes||[];
+ h+="<h3>"+t("admTop")+"</h3>"+(G.length?stb(null,G.map(x=>[esc(admG(x.g)),x.n])):'<p class="dnote">'+t("admNone")+"</p>");
+ h+="<h3>"+t("admModes")+"</h3>"+(M.length?stb(null,M.map(x=>[esc(admM(x.m)),x.n])):'<p class="dnote">'+t("admNone")+"</p>");
+ h+='<p class="dnote" style="margin-top:10px">'+t("admGst")+"</p>";
+ el.innerHTML=h;admDaySel()}
+function admDd(d){const x=new Date(d+"T12:00:00");return x.toLocaleDateString(L==="fr"?"fr-FR":"en-GB",{day:"2-digit",month:"2-digit"})}
+function admDaySel(){const c=$("admCp");if(!c||!ADDAYS)return;const d=ADDAYS[ADSEL];
+ all(".admCh button").forEach(b=>b.classList.toggle("on",+b.dataset.di===ADSEL));
+ if(!d){c.textContent="";return}const x=new Date(d.d+"T12:00:00");
+ c.innerHTML=t("admDay",esc(x.toLocaleDateString(L==="fr"?"fr-FR":"en-GB",{weekday:"short",day:"2-digit",month:"2-digit"})),"<b>"+admP("admGm",d.n)+" · "+admP("admPj",d.u)+"</b>")}
+// ----- joueurs -----
+async function admPl(){const el=$("admC"),k=++ADTOK;admBusy(el);let a;
+ try{a=await admRpc("admin_players")}catch(e){if(k===ADTOK)admFail(el);return}if(k!==ADTOK)return;a=a||[];
+ el.innerHTML='<p class="dnote">'+t("admNPl",a.length)+"</p>"+(a.length?a.map(p=>'<button class="admR" data-au="'+esc(p.id)+'"><b>'+esc(p.pseudo)+"</b>"
+  +"<small>"+(p.last_play?t("admLast",admAgo(p.last_play)):t("admNever"))+(p.nall?" · "+t("admW7",p.n7)+" · "+t("admTot",p.nall):"")+"</small>"
+  +"<small>"+t("admSince",fmtD(p.created_at))+(p.fav?" · ⭐ "+esc(admG(p.fav)):"")+" · 👥 "+p.friends+"</small></button>").join(""):'<p class="dnote">'+t("admNone")+"</p>")}
+async function admUser(id){const el=$("admU"),k=++ADTOK;show("admUP");admBusy(el);let u;
+ try{u=await admRpc("admin_player",{p_id:id})}catch(e){if(k===ADTOK)admFail(el);return}if(k!==ADTOK)return;
+ if(!u){el.innerHTML='<p class="dnote">'+t("admNone")+"</p>";return}
+ const fr=u.friends||[],so=u.solo||[],nSolo=so.reduce((s,x)=>s+x.n,0),mu=u.multi||{},du=u.duels||{},tb=u.tb||{};
+ let h='<div class="pcard"><div class="pn">'+esc(u.pseudo)+'</div><div class="pm">'+t("admSince",fmtD(u.created_at))+'</div><div class="pm">'+t("admLogin",admAgo(u.last_login))+"</div>"
+  +'<div class="pm">'+(fr.length?t("admFr",fr.map(esc).join(", ")):t("admNoFr"))+"</div></div>";
+ h+=sg([tile(nSolo,t("admSolo")),tile(u.daily||0,t("admDays")),tile(mu.n||0,t("admMP"),mu.n?admP("admWins",mu.wins||0):""),tile(tb.n||0,t("admTB"),tb.n?t("admTBr",tb.run||0,tb.wins||0):""),
+  tile(du.sent||0,t("admDS")),tile(du.done||0,t("admDG"),du.got?admP("admDGof",du.got):"")]);
+ if(so.length)h+="<h3>"+t("admBy")+"</h3>"+stb(["",t("admNb"),t("admAvg")],so.map(x=>[esc(admG(x.g)),x.n,x.avg==null?"—":nf(x.avg)]));
+ const R=u.recent||[];
+ h+="<h3>"+t("admRec")+"</h3>"+(R.length?R.map(e=>'<div class="admR">'+admDesc(e)+"<small>"+admAgo(e.at)+"</small></div>").join(""):'<p class="dnote">'+t("admNone")+"</p>");
+ el.innerHTML=h}
+// ----- fil d'activité -----
+function admFdRow(e){return'<div class="admR"><button class="lnk" data-au="'+esc(e.uid)+'" style="display:inline;margin:0;padding:0;color:var(--ac);font-weight:700;text-decoration:none">'+esc(e.pseudo||"?")+"</button> · "+admDesc(e)+"<small>"+admAgo(e.at)+"</small></div>"}
+function admFdDraw(){const el=$("admC"),a=ADFEED.rows;
+ el.innerHTML=(a.length?a.map(admFdRow).join(""):'<p class="dnote">'+t("admNone")+"</p>")+(ADFEED.more?'<button class="btn mb" id="admMore" style="margin-top:8px">'+t("admMore")+"</button>":"")}
+async function admFd(){const el=$("admC"),k=++ADTOK;admBusy(el);let a;
+ try{a=await admRpc("admin_feed",{p_before:null,p_limit:60})}catch(e){if(k===ADTOK)admFail(el);return}if(k!==ADTOK)return;
+ ADFEED={rows:a||[],more:(a||[]).length===60};admFdDraw()}
+async function admFdMore(){if(!ADFEED||!ADFEED.rows.length)return;const k=ADTOK,b=$("admMore");if(b)b.disabled=true;let a;
+ try{a=await admRpc("admin_feed",{p_before:ADFEED.rows[ADFEED.rows.length-1].at,p_limit:60})}catch(e){if(b)b.disabled=false;toast(t("admErr"));return}
+ if(k!==ADTOK||ADT!=="fd")return;ADFEED.rows=ADFEED.rows.concat(a||[]);ADFEED.more=(a||[]).length===60;admFdDraw()}
+// ----- multijoueur -----
+async function admMu(){const el=$("admC"),k=++ADTOK;admBusy(el);let o;
+ try{o=await admRpc("admin_multi")}catch(e){if(k===ADTOK)admFail(el);return}if(k!==ADTOK)return;
+ const N='<p class="dnote">'+t("admNone")+"</p>",LV=o.live||[],TB=o.tb||[],DU=o.duels||[];
+ let h="<h3>"+t("admLive")+"</h3>"+(LV.length?LV.map(x=>'<div class="admR"><b>'+esc(admMM(x.mode))+"</b>"+(x.mode==="p"?"":" · "+esc(admG(x.game)))+admFl(x.dict)
+  +"<small>👥 "+esc(x.who||"")+(x.win?" · "+t("admWin",esc(x.win)):"")+"</small><small>"+admAgo(x.at)+"</small></div>").join(""):N);
+ h+="<h3>"+t("admTBT")+"</h3>"+(TB.length?TB.map(x=>{const st=x.status==="run"?t("admSt_run",x.tour):t("admSt_"+x.status)||x.status,
+   fin=x.status==="done"?(x.win?" · "+t("admWin",esc(x.win)):"")+(x.reason==="forfeit"?" ("+t("admFf")+")":x.reason==="abandon"?" ("+t("admAb")+")":""):"";
+  return'<div class="admR"><b>'+esc(x.p1||"?")+"</b> "+x.s1+" – "+x.s2+" <b>"+esc(x.p2||"?")+"</b><small>"+esc(admG(x.kind))+admFl(x.dict)+" · "+st+fin+"</small><small>"+admAgo(x.at)+"</small></div>"}).join(""):N);
+ h+="<h3>"+t("admDuel")+"</h3>"+(DU.length?DU.map(x=>'<div class="admR"><b>'+esc(x.fr||"?")+"</b> ⚔️ <b>"+esc(x.tt||"?")+"</b><small>"+esc(admG(x.game))+" · "+(T[L]["admDw_"+x.status]?t("admDw_"+x.status):esc(x.status))+"</small><small>"+admAgo(x.at)+"</small></div>").join(""):N);
+ el.innerHTML=h}
 
 applyLang();loadSB();
 </script></body></html>
