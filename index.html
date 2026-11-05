@@ -435,6 +435,12 @@ $("again").onclick=replay;$("next").onclick=()=>{if(tbx)return tbGoNext();if(cmx
 const DU={fr:"https://cdn.jsdelivr.net/npm/an-array-of-french-words@2/index.json",en:"https://cdn.jsdelivr.net/npm/an-array-of-english-words@2/index.json"};
 const ALL=new Set(Object.values(W).flat()),D={};
 async function loadDict(l){if(D[l])return D[l];let ok=true,set=new Set(l==="fr"?Object.values(F).flat():ALL);
+ // français (v20) : la liste du jeu (assets/dict-fr.txt) ne contient plus les verbes conjugués, comme dans l'émission ;
+ // la grande liste en ligne ne sert plus qu'à retrouver les accents des mots
+ if(l==="fr"){const big=fetch(DU.fr).then(r=>{if(!r.ok)throw 0;return r.json()}).then(a=>{splB(a);return a}).catch(()=>null);
+  try{const r=await fetch("assets/dict-fr.txt");if(!r.ok)throw 0;const a=(await r.text()).split("\n");const z=new Set();for(const w of a){const n=norm(w.trim());if(/^[a-z]{2,10}$/.test(n))z.add(n)}if(z.size<1000)throw 0;set=z;big.catch(()=>{})}
+  catch(e){const a=await big;if(a){set=new Set();for(const w of a){const n=norm(w);if(/^[a-z]{2,10}$/.test(n))set.add(n)}}else ok=false}
+  const d={set,list:[...set],ok};if(ok)D[l]=d;return d}
  try{const r=await fetch(DU[l]);if(!r.ok)throw 0;const a=await r.json();set=new Set();for(const w of a){const n=norm(w);if(/^[a-z]{2,10}$/.test(n))set.add(n)}if(l==="fr")splB(a)}catch(e){ok=false;try{const r=await fetch("assets/dict-"+l+".txt");if(!r.ok)throw 0;const a=(await r.text()).split("\n");const z=new Set();for(const w of a){const n=norm(w.trim());if(/^[a-z]{2,10}$/.test(n))z.add(n)}if(z.size>1000){set=z;ok=true}}catch(e2){}}
  const d={set,list:[...set],ok};if(ok)D[l]=d;return d}
 async function goDict(l){dl=l;if(dfIs(mode)&&!party)return startDf(mode);$("dst").textContent=t("loading");all("[data-d]").forEach(b=>b.disabled=true);dict=await loadDict(l);all("[data-d]").forEach(b=>b.disabled=false);party?runStep():mode==="w"?startW():startL()}
@@ -467,8 +473,16 @@ const key=w=>w.split("").sort().join("");
 function timeUp(){if(mode==="l"){const a=$("ans").value.trim();if(a)tryL(a)}lock(true);msg(t("timeUp"),"ko");afterMusic(()=>results(t("timeUp"),mode==="w"?xW():xL()))}
 const xW=()=>rounds.map(r=>'<div class="res '+(r.done?"ok":"")+'"><span>'+r.l.join("").toUpperCase()+"</span>"+wdH(r.w,dl)+"</div>").join("")+wdHint();
 function bestWords(l,list){const c={};l.forEach(x=>c[x]=(c[x]||0)+1);let m=0,out=[];for(const w of list){if(w.length<m)continue;const k={...c};let ok=true;for(const ch of w){if(!k[ch]){ok=false;break}k[ch]--}if(ok){if(w.length>m){m=w.length;out=[w]}else if(out.length<5)out.push(w)}}return out}
-function xL(){const b=bestWords(rounds[0].l,dict.list),f=a=>a.map(w=>wdH(w,dl)).join(", ");
- return'<p style="text-align:center">'+(tried?t("yourW")+" <b>"+wdH(tried,dl)+'</b><br><span class="'+(best?"ok":"ko")+'">'+(best?t("wOk",best.length):t("wKo"))+"</span>":t("yourBest")+" <b>"+t("none")+"</b>")+'</p><p style="text-align:center">'+t("bestOf")+" <b>"+(b.length?f(b):t("none"))+"</b> ("+(b[0]?b[0].length:0)+")</p>"+wdHint()}
+// résultats du Mot le plus long (v20) : meilleur(s) mot(s) puis 3 exemples par nombre de lettres, jusqu'à 5 lettres
+function exL(l,list,lg){const c={};l.forEach(x=>c[x]=(c[x]||0)+1);const by={};
+ for(const w of list){if(w.length<5)continue;const k={...c};let ok=true;for(const ch of w){if(!k[ch]){ok=false;break}k[ch]--}if(ok)(by[w.length]=by[w.length]||[]).push(w)}
+ const CM=CMN[lg]||(CMN[lg]=new Set(Object.values(lg==="fr"?F:W).flat())),pick=n=>(by[n]||[]).sort((a,b)=>(CM.has(b)-CM.has(a))||a.localeCompare(b));
+ let m=0;for(const n in by)m=Math.max(m,+n);if(!m)return{b:[],h:""};const b=pick(m).slice(0,5);
+ let h='<p style="text-align:center">'+t("bestOf")+" <b>"+b.map(w=>wdH(w,lg)).join(", ")+"</b> ("+m+")</p>";
+ for(let n=m-1;n>=5;n--){const a=pick(n).slice(0,3);if(a.length)h+='<p style="text-align:center;margin:2px 0">'+t("lets",n)+" : "+a.map(w=>wdH(w,lg)).join(", ")+"</p>"}
+ return{b,h}}
+function xL(){const E=exL(rounds[0].l,dict.list,dl);
+ return'<p style="text-align:center">'+(tried?t("yourW")+" <b>"+wdH(tried,dl)+'</b><br><span class="'+(best?"ok":"ko")+'">'+(best?t("wOk",best.length):t("wKo"))+"</span>":t("yourBest")+" <b>"+t("none")+"</b>")+"</p>"+(E.b.length?E.h:'<p style="text-align:center">'+t("bestOf")+" <b>"+t("none")+"</b></p>")+wdHint()}
 // mots de la fin
 function startW(){if(!mpr&&!cmx&&!wSeen())return wIntro(startW);clearTimeout(tmo);clearTimeout(dtm);chArm();const P=dl==="fr"?F:W,pk={};[5,6,7,8].forEach(n=>pk[n]=sh(P[n]).slice(0,2));rounds=[];
  if(cmx)rounds=[{w:cmx.d.w,l:cmx.d.l.slice(),done:0}];else if(mpr&&mpr.g==="a")rounds=[{w:MP.R.d.w,l:MP.R.d.l.slice(),done:0}];else if(mpr)rounds=MP.R.d.rounds.map(r=>({w:r.w,l:r.l.slice(),done:0}));else if(tbx)rounds=tbx.d.rounds.map(r=>({w:r.w,l:r.l.slice(),done:0}));else if(daily)rounds=genDaily(daily.day,daily.g).rounds;else if(chl&&chl.opp)rounds=chScr(chl.opp.W);else{const ws=[];[0,1].forEach(k=>[5,6,7,8].forEach(n=>ws.push(pk[n][k])));rounds=chScr(ws);if(chl)chl.W=ws}
@@ -595,7 +609,7 @@ async function startD(g){chl=null;chNav=false;dfNav=false;const day=pToday();if(
  dl=DGL[g];$("mb").innerHTML="<p>"+t("loading")+"</p>";$("mbtn").innerHTML="";dict=await loadDict(dl);if(!daily||daily.g!==g)return;closeModal();m==="w"?startW():startDL()}
 function startDL(){clearTimeout(tmo);clearTimeout(dtm);stopM();clearInterval(timer);over=true;best="";tried="";const tok=++ctok,d=genDaily(daily.day,daily.g);ld=[];nv=nc=10;
  $("vcRow").classList.add("hide");setStage();rdS();$("drawH").textContent=t("dDraw");$("dmsg").textContent="";show("drawP");
- (async()=>{for(const c of d.l){await wait(ld.length?380:700);if(tok!==ctok)return;sfx(A.clic);ld.push(c);rdS()}await wait(900);if(tok!==ctok)return;beginL()})()}
+ (async()=>{for(const c of d.l){await wait(ld.length?600:700);if(tok!==ctok)return;sfx(A.clic);ld.push(c);rdS()}await wait(900);if(tok!==ctok)return;beginL()})()}
 $("drk").onclick=()=>{const g=daily&&daily.g;quitGame();if(g)rank(g,0)};
 // classement
 const rkNo=(m,x)=>m==="c"?x.result>=9999:!x.result;
@@ -1906,7 +1920,7 @@ function mpSol(){const R=MP.R,d=R.d;if(!d)return"";if(dfIs(d.g))return dfSolHTML
  if(d.g==="a")return dfTilesH(d.l)+'<p style="text-align:center">'+t("dfExp")+" <b>"+wdH(d.w,R.dl)+"</b></p>"+wdHint();
  if(d.g==="c")return'<div class="plates">'+d.P.map(v=>'<div class="plate" style="cursor:default">'+v+"</div>").join("")+'</div><p style="text-align:center">'+t("solution")+" ("+d.tgt+")</p>"+solHTML(solve(d.P,d.tgt));
  if(d.g==="w")return d.rounds.map(r=>'<div class="res"><span>'+r.l.join("").toUpperCase()+"</span>"+wdH(r.w,R.dl)+"</div>").join("")+wdHint();
- const b=D[R.dl]?bestWords(d.l,D[R.dl].list):[];return'<div class="tiles">'+d.l.map(c=>'<div class="tile" style="cursor:default">'+c.toUpperCase()+"</div>").join("")+"</div>"+(b.length?'<p style="text-align:center">'+t("bestOf")+" <b>"+b.map(w=>wdH(w,R.dl)).join(", ")+"</b> ("+b[0].length+")</p>"+wdHint():"")}
+ const E=D[R.dl]?exL(d.l,D[R.dl].list,R.dl):{b:[]};return'<div class="tiles">'+d.l.map(c=>'<div class="tile" style="cursor:default">'+c.toUpperCase()+"</div>").join("")+"</div>"+(E.b.length?E.h+wdHint():"")}
 function mpResShow(){const R=MP.R,Z=R.last;if(!Z)return R.ph==="pick"?mpPickShow():mpSetup();const g=Z.g,q=R.mo==="q",end=R.ph==="end",h=MP.host,on=id=>R.pl[id]&&R.pl[id].on;show("mpResP");
  $("mrT").textContent=q?t("mpQ")+" · "+t("m"+g.toUpperCase()):(end?t("partyEnd")+" · ":"")+t("round",Z.i+1,mpN())+" · "+t("m"+g.toUpperCase());
  let w="";if(end){const top=q?Z.rows.filter(x=>x.pos===1&&!mpInv(g,x)):mpStand(1).filter(x=>x.pos===1&&x.tot>0),nm=andJ(top.map(x=>x.n));if(top.length)w=top.length>1?t("mpTie",nm):t(q?"mpWinQ":"mpWin",nm)}
@@ -1999,7 +2013,7 @@ function chArm(){if(chl&&chl.opp&&!chl.go){chl.go=1;return}chl=!party&&!daily&&!
 function chScr(ws){const r=rngOf("dcdl-defi|"+ws.join(","));return ws.map(w=>({w,l:scr(w,r),done:0}))}
 function startChL(){clearTimeout(tmo);clearTimeout(dtm);stopM();clearInterval(timer);over=true;best="";tried="";const tok=++ctok,L0=chl.opp.l.split("");ld=[];nv=nc=10;
  $("vcRow").classList.add("hide");setStage();rdS();$("drawH").textContent=t("chDraw",chl.opp.n);$("dmsg").textContent="";show("drawP");
- (async()=>{for(const c of L0){await wait(ld.length?380:700);if(tok!==ctok)return;sfx(A.clic);ld.push(c);rdS()}await wait(900);if(tok!==ctok)return;beginL()})()}
+ (async()=>{for(const c of L0){await wait(ld.length?600:700);if(tok!==ctok)return;sfx(A.clic);ld.push(c);rdS()}await wait(900);if(tok!==ctok)return;beginL()})()}
 function chRes(){const g=chl.g;
  if(dfIs(g)){const x=dfx,ok=!!(x&&x.ok);return{s:ok?7:0,r:ok?1:0,x:String(x&&x.sent&&x.a||"").slice(0,30),t:x&&x.sent&&x.t!=null?Math.round(Math.min(x.t,30000)):30000}}
  if(g==="l")return best?{s:score,r:best.length,x:best,t:Math.round(chl.lt||30000)}:{s:0,...WORST.l};
@@ -2222,6 +2236,8 @@ const DFG=["t","k","u","s"],dfIs=g=>DFG.includes(g),DFMS=30000,DFANS={t:10000,k:
 // u = définition du nom propre, définition du nom commun (3 s après), puis 10 lettres (3 s après) ; s = le mot prononcé
 const DFTM={t:Array.from({length:10},(_,i)=>1200+i*550),k:Array.from({length:6},(_,i)=>700+i*1500),u:[300,3300].concat(Array.from({length:10},(_,i)=>6300+i*550)),s:[600]};
 const DFPRE={t:6850,k:9000,u:11950,s:4000};
+// présentation plus lente (v20) : match au tour par tour et duel reçu par lien
+const DFTM_S={t:Array.from({length:10},(_,i)=>1200+i*800),u:[300,3300].concat(Array.from({length:10},(_,i)=>6300+i*800))},DFPRE_S={t:9100,u:14200};
 let dfx=null,dft=null,dfNav=false,dfFrom="freeP";
 const dfN=s=>norm(String(s||"")).replace(/[^a-z]/g,"");
 const dfUp=s=>esc(String(s||"").toUpperCase().replace(" "," + "));
@@ -2277,7 +2293,8 @@ document.addEventListener("pointerdown",function f(){document.removeEventListene
 function dfStop(){clearInterval(dft);dft=null;if(dfx){clearInterval(dfx.bzI);clearInterval(dfx.baI)}try{if(window.speechSynthesis)speechSynthesis.cancel()}catch(e){}}
 function startDf(g){clearTimeout(tmo);clearTimeout(dtm);stopM();clearInterval(timer);sfxStop();dfStop();mode=g;chArm();
  const d=mpr?MP.R.d:tbx?tbx.d:cmx?cmx.d:chl&&chl.opp?chl.opp.D:dfGen(g,dl);if(chl&&!chl.opp)chl.D=d;
- dfx={g,d,p0:performance.now(),pre:g==="s"&&!mpr?8000:DFPRE[g],r0:0,sent:0,end:0,ready:false,shown:0,spk:0,num:"",wd:"",ai:0,st:null,wk:0,fin:0,bzS:0};
+ const dsl=!mpr&&!cmx&&!!(tbx||chl&&chl.opp)&&!!DFPRE_S[g];
+ dfx={g,d,sl:dsl,p0:performance.now(),pre:dsl?DFPRE_S[g]:g==="s"&&!mpr?8000:DFPRE[g],r0:0,sent:0,end:0,ready:false,shown:0,spk:0,num:"",wd:"",ai:0,st:null,wk:0,fin:0,bzS:0};
  score=0;over=false;setStage();dfDraw();show("dfP");ghOn();dft=setInterval(dfTick,100);dfTick();if(dfBzM())dfSync()}
 function dfDraw(){const x=dfx,d=x.d,mp=dfBzM();msg("","","dfmsg");
  $("dfTh").textContent=x.g==="t"?t("dfTheme",dfTitle(d)):t("m"+x.g.toUpperCase());
@@ -2298,7 +2315,7 @@ function dfDraw(){const x=dfx,d=x.d,mp=dfBzM();msg("","","dfmsg");
   $("dfIn").innerHTML=bz+'<div id="dfNum" class="dfsw"></div><div class="kb">'+R.map((r,j)=>"<div>"+r.split("").map(c=>'<button class="btn" data-kb="'+c+'">'+c.toUpperCase()+"</button>").join("")+(j===2?'<button class="btn w" data-kb="⌫">⌫</button>':"")+"</div>").join("")+'</div><div class="row"><button class="btn p" data-kb="✓">'+t("submit")+"</button></div>"}
  dfReveal(-1,1);dfCtl()}
 // dévoilement progressif (lettres, calculs, définitions, voix), avec le petit son du tirage
-function dfReveal(el,f){const x=dfx;if(!x)return;const T=DFTM[x.g],n=el===Infinity?T.length:T.filter(v=>v<=el).length,old=x.shown;
+function dfReveal(el,f){const x=dfx;if(!x)return;const T=(x.sl?DFTM_S:DFTM)[x.g],n=el===Infinity?T.length:T.filter(v=>v<=el).length,old=x.shown;
  if(n<old||(n===old&&!f))return;x.shown=n;const d=x.d;
  if(n>old){if(x.g==="s"){if(!x.spk){x.spk=1;$("dfSp").classList.add("on");$("dfDef").classList.remove("hid");const y=x;
    dfSpeak(dfS(d)[0],d.lg,ok=>{if(dfx!==y)return;$("dfSp").classList.remove("on");if(!ok)msg(t("dfNoVoice"),"ko","dfmsg");if(!mpr&&!y.ready)y.pre=Math.min(y.pre,performance.now()-y.p0+500)})}}
@@ -2852,7 +2869,7 @@ function tbVal(g,e,lg){if(!e)return t("tbNotYet");if(e.z)return t("tbQuit0");if(
 function tbDrawH(d,lg,g){if(!d)return"";if(TBDF.includes(g))return dfSolHTML(d);
  if(g==="c")return'<div class="plates">'+d.P.map(v=>'<div class="plate" style="cursor:default">'+v+'</div>').join("")+'</div><div class="tgt">'+String(d.tgt).split("").map(x=>"<b>"+x+"</b>").join("")+'</div><p style="text-align:center;color:var(--mut)">'+t("solution")+"</p>"+solHTML(solve(d.P,d.tgt));
  if(g==="w")return'<div class="wl">'+d.rounds.map(r=>wdH(r.w,lg,"c")).join("")+"</div>";
- const bw=D[lg]?bestWords(d.l,D[lg].list):[];return dfTilesH(d.l)+(bw.length?'<p style="text-align:center">'+t("bestOf")+" <b>"+bw.map(w=>wdH(w,lg)).join(", ")+"</b> ("+bw[0].length+")</p>":"")}
+ const E=D[lg]?exL(d.l,D[lg].list,lg):{b:[]};return dfTilesH(d.l)+(E.b.length?E.h:"")}
 function openTbR(k){const m=tbRow(tbCur),x=tbDet&&tbDet.tours[k-1];if(!m||!x)return;const st=tbSt(m)[k-1],lg=m.dict,me=x.me&&x.me.res||[],op=x.rv&&x.opp?x.opp.res||[]:null,P=tbPts(st,me,op),dr={};(x.draws||[]).forEach(z=>dr[z.i]=z.d);
  $("tbRT").textContent=t("tbRT",k);let h='<p class="tbm">'+esc(t("tbVs",m.opp_name))+" · "+tbKindS(m)+"</p>";
  if(!x.rv)h+='<p class="mpw">'+esc(t("tbWaitRes",m.opp_name))+"</p>";
@@ -2890,7 +2907,7 @@ async function tbBegin(m,i){if(!sb||!SESS)return modal(t("oops"),"<p>"+t("eAuth"
  if(g==="c")return startC();if(TBDF.includes(g))return startDf(g);g==="w"?startW():startL()}
 function tbStartL(){clearTimeout(tmo);clearTimeout(dtm);stopM();clearInterval(timer);over=true;best="";tried="";const tok=++ctok,L0=tbx.d.l.slice();ld=[];nv=nc=10;
  $("vcRow").classList.add("hide");setStage();rdS();$("drawH").textContent=t("tbDrawH");$("dmsg").textContent="";show("drawP");
- (async()=>{for(const c of L0){await wait(ld.length?380:700);if(tok!==ctok)return;sfx(A.clic);ld.push(c);rdS()}await wait(900);if(tok!==ctok)return;beginL()})()}
+ (async()=>{for(const c of L0){await wait(ld.length?600:700);if(tok!==ctok)return;sfx(A.clic);ld.push(c);rdS()}await wait(900);if(tok!==ctok)return;beginL()})()}
 // fin d'une épreuve : résultat envoyé, puis épreuve suivante ou retour au match
 function tbEnd(why,html){const x=tbx;over=true;clearInterval(timer);pending=null;stopM();closeModal();const g=x.g;let r;
  if(g==="l")r={p:score,r:best?best.length:0,x:best||"",t:best?Math.round(x.lt||30000):30000};
@@ -3090,7 +3107,7 @@ Object.assign(T.en,{mA:"Scrambled word",gpT:"🏁 Grand Prix",gpS:"the fastest s
 // IMPORTANT pour les prochaines versions : si un fichier de assets/ est ajouté ou modifié,
 // mettre à jour sa ligne ici (empreinte = 8 premiers caractères du sha1 du fichier).
 // sw.js, lui, n'a pas besoin d'être modifié.
-const OFFL=[["assets/chiffres-90.mp3","43a4b3b7",2209704],["assets/chiffres-infini.mp3","e2609dba",3365160],["assets/ding.mp3","042cd37c",15459],["assets/lettres-60.mp3","6768dc8a",1496040],["assets/lettres-infini.mp3","d84d612d",1362984],["assets/musique-chiffres.mp3","bc7e7489",753381],["assets/musique-defis.mp3","dce57112",725411],["assets/musique-lettres.mp3","81cab832",510965],["assets/theme.mp3","fe1caafd",1266516],["assets/tirage-cible.mp3","12f647fd",73187],["assets/tirage-clic.mp3","66d4ca86",8404],["assets/generique.mp4","7ea6ec59",2365868],["assets/dict-en.txt","0dc5d07b",1705245],["assets/dict-fr.txt","71786084",1709124]];
+const OFFL=[["assets/chiffres-90.mp3","43a4b3b7",2209704],["assets/chiffres-infini.mp3","e2609dba",3365160],["assets/ding.mp3","042cd37c",15459],["assets/lettres-60.mp3","6768dc8a",1496040],["assets/lettres-infini.mp3","d84d612d",1362984],["assets/musique-chiffres.mp3","bc7e7489",753381],["assets/musique-defis.mp3","fac0f7db",725412],["assets/musique-lettres.mp3","81cab832",510965],["assets/theme.mp3","62395e2b",1512848],["assets/tirage-cible.mp3","12f647fd",73187],["assets/tirage-clic.mp3","66d4ca86",8404],["assets/generique.mp4","7ea6ec59",2365868],["assets/dict-en.txt","0dc5d07b",1705245],["assets/dict-fr.txt","f2f93a55",741722]];
 const OFFX=["https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"];
 Object.assign(T.fr,{offNet:"📴 Connexion internet requise",netOff:"📴 Hors connexion : les modes solo restent jouables.",netQ1:"⏳ 1 partie en attente d'envoi",netQn:"⏳ {n} parties en attente d'envoi",netQh:"(envoi automatique au retour d'internet)",netSent:"✅ Parties hors connexion envoyées",
  ofProg:"⬇️ Préparation du mode hors connexion… {n} %",ofOk:"✅ Jouable hors connexion",ofKo:"⚠️ Mode hors connexion incomplet (nouvel essai à la prochaine ouverture)",copy:"© 2026 Rithear – Tous droits réservés",reload:"🔄 Recharger le jeu",reloadGo:"Recharger",
