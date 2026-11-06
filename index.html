@@ -165,6 +165,11 @@ body.nonet [data-net],body.nonet #recSc [data-rs="all"],body.nonet #recSc [data-
 .admR small{display:block;color:var(--mut);font-size:13px}.admR b{color:var(--ac)}
 button.admR{display:block;width:100%;text-align:left;border:0;color:var(--tx);font:inherit;font-size:15px;cursor:pointer}
 #admTabs .btn{font-size:14px;padding:10px 4px}
+/* v21 : menu Solo / Multijoueur, bandeau de la partie du jour, réglages */
+.ban{display:flex;align-items:center;gap:12px;width:100%;background:#0e1a30;border:2px solid var(--ac);border-radius:12px;padding:10px 14px;margin:-8px 0 16px;color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+.ban .bi{font-size:26px;line-height:1}.ban>span:nth-child(2){flex:1;min-width:0}.ban b{display:block;font-size:17px;color:var(--ac)}.ban small{display:block;color:var(--mut);font-size:13px;margin-top:2px}
+.ban .ba{color:var(--ac);font-size:18px;font-weight:800}.ban.done{border-color:var(--card)}.ban.done b{color:var(--tx)}.ban.done .ba{color:var(--mut)}
+#setLgR .btn{background:var(--card)}#setLgR .btn.on{background:var(--ac);color:#14233f}
 /* v19 : contre-la-montre */
 #cmRkNav .rkA{flex:0 0 52px;font-size:26px;padding:6px 0}#cmRkSel{flex:1;min-width:0;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23ffd24a' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center;color:var(--tx);border:0;border-radius:10px;padding:12px 28px 12px 12px;font-size:15px;font-weight:700;font-family:inherit;text-align:center;text-align-last:center;-webkit-appearance:none;appearance:none;cursor:pointer}#cmRkSel option{background:var(--bg);color:var(--tx)}
 #cmLg .btn.on,#cmRkLg .btn.on,#cmRkTabs .btn.on{background:var(--ac);color:#14233f}#cmInfo{margin-bottom:10px}
@@ -198,16 +203,23 @@ button.admR{display:block;width:100%;text-align:left;border:0;color:var(--tx);fo
 <div class="pw"><input class="fi" id="npPw" type="password" autocomplete="new-password" data-ph="pw6" data-go="npGo"><button class="eye" data-eye="npPw">👁</button></div>
 <div class="amsg" id="npMsg"></div><button class="btn p mb" id="npGo" data-t="submit"></button></section>
 <section id="home" class="pg hide"><h1>Des chiffres et des lettres</h1><p class="netS hide"></p>
-<button class="btn p mb" id="daily" data-net><span data-t="pD"></span><small class="sub" data-t="dD"></small></button>
-<div class="mrow"><button class="btn p mb" id="cmHome" data-net><span data-t="cmT"></span><small class="sub" data-t="cmS"></small></button><button class="info" data-info="CM">?</button></div>
-<button class="btn p mb" id="orig"><span data-t="pO"></span><small class="sub" data-t="dO"></small></button>
-<button class="btn p mb" id="free"><span data-t="pF"></span><small class="sub" data-t="dF"></small></button>
+<button class="ban" id="daily" data-net><span class="bi" id="banI">📅</span><span><b data-t="pD"></b><small id="banS"></small></span><span class="ba">▶</span></button>
+<button class="btn p mb" id="soloB"><span data-t="pSolo"></span><small class="sub" data-t="dSolo"></small></button>
 <button class="btn p mb" id="multi" data-net><span data-t="pM"></span><span class="bdg hide" id="tbB0"></span><small class="sub" data-t="dM"></small></button>
-<button class="btn p mb" id="train" data-t="pT"></button>
 <button class="btn bl mb" id="dicB" data-t="pDic" data-net></button>
 <div class="row"><button class="btn" id="rules" data-t="rules"></button><button class="btn" id="records" data-t="stats"></button></div>
-<button class="btn mb" id="prof" style="margin-top:12px;font-size:16px;padding:12px" data-net></button><button class="btn mb hide" id="admB" style="font-size:16px;padding:12px" data-net data-t="admT"></button><button class="btn mb lang" style="font-size:16px;padding:12px"></button>
+<button class="btn mb" id="prof" style="margin-top:12px;font-size:16px;padding:12px" data-net></button><button class="btn mb hide" id="admB" style="font-size:16px;padding:12px" data-net data-t="admT"></button><button class="btn mb" id="setB" style="font-size:16px;padding:12px" data-t="setT"></button>
 <div class="foot"><p id="ofS" class="hide"></p><p data-t="copy"></p><button class="lnk" id="rldB" data-t="reload" data-net></button></div></section>
+<section id="soloP" class="pg hide"><h2 data-t="pSolo"></h2>
+<button class="btn p mb" id="dailyS" data-net><span data-t="pD"></span><small class="sub" id="dSoloS"></small></button>
+<div class="mrow"><button class="btn p mb" id="cmHome" data-net><span data-t="cmT"></span><small class="sub"><span data-t="cmS"></span><br><span id="cmSoloS"></span></small></button><button class="info" data-info="CM">?</button></div>
+<button class="btn p mb" id="orig"><span data-t="pO"></span><small class="sub" data-t="dO"></small></button>
+<button class="btn p mb" id="free"><span data-t="pF"></span><small class="sub" data-t="dF"></small></button>
+<button class="btn p mb" id="train"><span data-t="pT"></span><small class="sub" data-t="dTr"></small></button>
+<button class="btn mb" data-back data-t="back"></button></section>
+<section id="setP" class="pg hide"><h2 data-t="setT"></h2>
+<h3 data-t="setLg"></h3><div class="row" id="setLgR"><button class="btn" data-setl="fr">🇫🇷 Français</button><button class="btn" data-setl="en">🇬🇧 English</button></div>
+<button class="btn mb" data-back data-t="back" style="margin-top:20px"></button></section>
 <section id="origP" class="pg hide"><h2 data-t="pO"></h2>
 <div class="mrow"><button class="btn p mb" data-p="n"><span data-t="pN"></span><small class="sub" data-t="d15"></small></button><button class="info" data-info="N">?</button></div>
 <button class="btn mb hide" id="resn"></button>
@@ -397,7 +409,7 @@ all("[data-info]").forEach(b=>b.onclick=()=>{const k=b.dataset.info;modal(t(IT[k
 function setStage(){if(MP&&MP.R&&(mpr||MP.R.ph==="draw")){const R=MP.R,g=mpr?mpr.g:"l",s=[t("mpS")];if(R.mo!=="q")s.push(t("round",R.i+1,mpN()));s.push(t("m"+g.toUpperCase()));if(g!=="c"&&g!=="k"&&R.dl)s.push('<span class="dic">'+t("dic"+R.dl)+"</span>");if(R.mo!=="q"&&R.pl[MID])s.push(t("total")+" "+R.pl[MID].tot+" "+t("pts"));all(".stg").forEach(e=>{e.innerHTML=s.join(" · ");e.classList.remove("hide")});return}
  const m=party?party.steps[party.i]:mode,dc=(m==="l"||m==="w"||m==="t"||m==="u"||m==="s"||m==="v")&&dl?'<span class="dic">'+t((m==="v"?"dvs":"dic")+dl)+"</span>":"";let s=cmx?[esc(t("cmT")),t("cmEp",cmx.idx+1,10),esc(cmLbl(cmx.idx,cmx.g==="a"||cmx.g==="c"?null:cmx.g))]:tbx?[esc(t("tbStg",tbx.opp)),t("tbStg2",tbx.tour,tbx.nt),t("m"+m.toUpperCase())]:party?[t("round",party.i+1,party.steps.length),t("m"+m.toUpperCase())]:daily?[t("pD"),t("m"+m.toUpperCase())]:chl&&chl.opp?[esc(t("chStg",chl.opp.n)),t("m"+m.toUpperCase())]:dc?[t("m"+m.toUpperCase())]:[];if(dc)s.push(dc);if(party)s.push(t("total")+" "+party.total+" "+t("pts"));s=s.join(" · ");all(".stg").forEach(e=>{e.innerHTML=s;e.classList.toggle("hide",!s)})}
 // langue
-function applyLang(){rsv();document.documentElement.lang=L;all("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));all("[data-ph]").forEach(e=>e.placeholder=t(e.dataset.ph));all(".lang").forEach(e=>e.textContent=L==="fr"?"🇬🇧 English":"🇫🇷 Français");renderIntro();renderProfB();if(!$("profP").classList.contains("hide"))renderProf();if(!$("frP").classList.contains("hide"))drawFr();
+function applyLang(){rsv();menuLang();document.documentElement.lang=L;all("[data-t]").forEach(e=>e.textContent=t(e.dataset.t));all("[data-ph]").forEach(e=>e.placeholder=t(e.dataset.ph));all(".lang").forEach(e=>e.textContent=L==="fr"?"🇬🇧 English":"🇫🇷 Français");renderIntro();renderProfB();if(!$("profP").classList.contains("hide"))renderProf();if(!$("frP").classList.contains("hide"))drawFr();
  if(!$("ruleT").classList.contains("hide"))showRule(rk);stLang();if(!$("dailyP").classList.contains("hide"))renderD();if(!$("rankP").classList.contains("hide"))rank(rkG,rkO);if(!$("mpMenu").classList.contains("hide"))renderMpWho();if(MP&&MP.R&&!$("mpWaitP").classList.contains("hide"))mpWaitShow();else if(MP&&MP.R&&["setup","res","end"].includes(MP.R.ph))mpRender();chLang();tbLang();cmLang();setStage();netUI()}
 all(".lang").forEach(b=>b.onclick=()=>{L=L==="fr"?"en":"fr";try{localStorage.setItem("fwlang",L)}catch(e){}applyLang()});
 // intro
@@ -406,7 +418,8 @@ function unlockA(){Object.values(A).forEach(a=>{a.muted=true;a.play().then(()=>{
 function launch(acc){unlockA();setMe(acc?ACC:null);if(frIn0&&!chIn0&&!mpJoin0){renderIntro();toHome();acc?frFromLink():frNeedAcc();return}if(chIn0){const o=chIn0;chIn0=null;renderIntro();toHome();chOpenLink(o);return}if(mpJoin0){const c=mpJoin0;mpJoin0=null;renderIntro();toHome();mpOpenJoin(c);return}show("vidP");try{$("vid").currentTime=0}catch(e){}$("vid").play().catch(toHome)}
 $("vid").onended=toHome;$("vid").onerror=toHome;$("vskip").onclick=toHome;
 // navigation
-all("[data-back]").forEach(b=>b.onclick=()=>show("home"));
+const SOLOK=new Set(["origP","freeP","trainP","dailyP","cmP"]);let soloBk="soloP";
+all("[data-back]").forEach(b=>b.onclick=()=>{const p=b.closest(".pg");show(p&&SOLOK.has(p.id)?(p.id==="dailyP"?soloBk:"soloP"):"home")});
 $("dback").onclick=()=>(dfNav||chNav&&dfIs(mode))&&!party&&!trn?show("dfMenu"):chNav&&!party&&!trn?openChMenu():show(party?"origP":trn?"trainP":"freeP");
 $("orig").onclick=()=>{rsv();show("origP")};$("train").onclick=()=>show("trainP");
 $("free").onclick=()=>show("freeP");
@@ -427,7 +440,7 @@ function clrS(ty){const o=getS();delete o[ty];putS(o)}
 function rsv(){const o=getS();["n","q"].forEach(ty=>{const b=$("res"+ty),x=o[ty];b.classList.toggle("hide",!x);if(x)b.textContent=t("resume",x.i+1,(x.st||(ty==="n"?NS0:QS0)).length).replace("{p}",x.total)})}
 ["n","q"].forEach(ty=>$("res"+ty).onclick=()=>{const x=getS()[ty];if(!x)return;trn=null;dur={l:30,c:45};party={type:ty,steps:x.st||(ty==="n"?NS0:QS0),i:x.i,total:x.total,sec:x.sec||0};$("dst").textContent="";show("dictP");goDict(x.dl)});
 all("[data-d]").forEach(b=>b.onclick=()=>goDict(b.dataset.d));
-function quitGame(){if(tbx)return tbLeave();if(cmx)return cmLeave();if(daily&&!daily.done)dFinish();const wasD=daily,wc=chl&&chl.opp&&!chl.fin?chl.opp.i:null;if(wc){const e=chFind(wc);if(e){e.st="done";chSave(e)}}chl=null;ctok++;sfxStop();dfStop();clearTimeout(tmo);clearTimeout(dtm);clearInterval(timer);pending=null;stopM();over=true;party=null;daily=null;closeModal();setStage();if(wasD)openDaily();else if(wc)chOpenId(wc);else if(chNav)openChMenu();else if(dfNav)show("dfMenu");else show("home")}
+function quitGame(){if(tbx)return tbLeave();if(cmx)return cmLeave();if(daily&&!daily.done)dFinish();const wasD=daily,wc=chl&&chl.opp&&!chl.fin?chl.opp.i:null;if(wc){const e=chFind(wc);if(e){e.st="done";chSave(e)}}chl=null;ctok++;sfxStop();dfStop();clearTimeout(tmo);clearTimeout(dtm);clearInterval(timer);pending=null;stopM();over=true;party=null;daily=null;closeModal();setStage();if(wasD)openDaily();else if(wc)chOpenId(wc);else if(chNav)openChMenu();else if(dfNav)show("dfMenu");else show("soloP")}
 all("[data-quit]").forEach(b=>b.onclick=()=>tbx?tbQuitAsk():cmx?cmQuitAsk():MP?(MP.host?mpStopAsk():mpLeaveAsk()):chl&&chl.opp&&!chl.fin?modal(t("quit"),"<p>"+t("chQuitQ")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{closeModal();over?quitGame():chEndNow()}}]):daily&&!daily.done?modal(t("quit"),"<p>"+t("quitD")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{dFinish();quitGame()}}]):party?modal(t("quit"),"<p>"+t(party.i>0?"quitS":"quitQ")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:quitGame}]):quitGame());
 $("tomenu").onclick=quitGame;
 function runStep(){mode=party.steps[party.i];dfIs(mode)?startDf(mode):mode==="c"?startC():mode==="l"?startL():startW()}
@@ -2780,7 +2793,7 @@ new MutationObserver(bkUpd).observe(document.body,{subtree:true,childList:true,a
 $("topBk").onclick=()=>{const b=bkFind();if(b)b.click()};
 // ----- bouton maison et pastille -----
 const HBP=new Set(["daP","origP","trainP","dailyP","rankP","durP","freeP","rulesP","ruleT","statsP","recsP","recP","myStP","mpStP","dictP","profP","frP","mpMenu","mpJoinP","chMenu","chP","dfMenu","defP","tbMenu","tbNewP","tbP","tbRP"]);
-function onShow(id){if(id==="dictP")dvLbl();admHook(id);netUI();bkUpd();if(id==="home"&&NET&&ME&&SESS&&netPend())plSync().then(netUI);if(!tbReady)return;const b=$("homeB");if(b)b.classList.toggle("hide",!HBP.has(id)||!!MP);
+function onShow(id){menuHook(id);if(id==="dictP")dvLbl();admHook(id);netUI();bkUpd();if(id==="home"&&NET&&ME&&SESS&&netPend())plSync().then(netUI);if(!tbReady)return;const b=$("homeB");if(b)b.classList.toggle("hide",!HBP.has(id)||!!MP);
  if(ME&&(id==="chMenu"||(id==="home"||id==="mpMenu")&&(!DAL||DAL.id!==ME.id||Date.now()-DAL.at>20000)))daLoad();
  if((id==="home"||id==="mpMenu")&&ME&&(!TBL||TBL.id!==ME.id||Date.now()-TBL.at>20000))tbLoad();else tbBadge()}
 $("homeB").onclick=()=>{if(MP)return;closeModal();tbx=null;chNav=false;dfNav=false;chCur=null;party=null;trn=null;toHome()};
@@ -6388,12 +6401,12 @@ async function admMu(){const el=$("admC"),k=++ADTOK;admBusy(el);let o;
 // Le tirage de chaque épreuve est gardé dans Supabase (le premier joueur le crée, les suivants reçoivent le même) ;
 // les solutions ne sont montrées qu'à partir de la saison suivante.
 Object.assign(IT,{CM:"cmT"});
-Object.assign(T.fr,{cmT:"⏱ Contre-la-montre",mCM:"⏱ Contre-la-montre",cmS:"partie renouvelée toutes les 2 semaines",
+Object.assign(T.fr,{cmT:"⏱ La Saison",mCM:"⏱ La Saison",cmS:"épreuve chronométrée, le plus rapide remporte la saison",
  iCM:`<p>Une course contre la montre en 10 épreuves, renouvelée toutes les 2 semaines (une saison). Le tirage est le même pour tous les joueurs.</p><p>🔢 Chiffres · 🔤 Lettres (5 lettres) · 🔢 Chiffres · 🔤 Lettres (6 lettres) · 🎯 Défi · 🔢 Chiffres · 🔤 Lettres (7 lettres) · 🔢 Chiffres · 🔤 Lettres (8 lettres) · 🎯 un autre défi.</p><p>Seule la bonne réponse arrête le chrono : le compte exact pour les chiffres, le mot mélangé remis dans l'ordre pour les lettres (tout mot du dictionnaire qui utilise toutes les lettres est accepté), la bonne réponse pour les défis. Propositions illimitées. Sans bonne réponse, tu prends le temps maximum : 45 secondes pour les chiffres, 30 secondes pour les lettres et les défis.</p><p>Tu avances à ton rythme, une épreuve à la fois, mais chaque épreuve ne se joue qu'une seule fois : si tu quittes en cours de route, elle compte au temps maximum. Termine les 10 épreuves avant la fin de la saison pour valider ton temps total : le plus petit temps gagne.</p><p>Deux courses séparées, une en français et une en anglais, chacune avec son classement. Les solutions sont dévoilées à la saison suivante.</p><p>Un compte et une connexion internet sont nécessaires.</p>`,
  cmSeason:"Saison {n}",cmUntil:"jusqu'au {n} à 23 h 59",cmLeft:"plus que {n}",cmDH:"{n} j {m} h",cmHM:"{n} h {m} min",cmEndS:"Saison terminée",
  cmProg:"{n}/10 épreuves",cmTot:"Temps total",cmDoneT:"✅ Course terminée !",cmNext:"▶ Épreuve {n}/10 : {m}",cmRkB:"🏆 Classement",cmRul:"📖 Règles",
  cmA:"Lettres · {n} lettres",cmD:"Défi surprise 🎲",cmEp:"Épreuve {n}/{m}",cmPlay:"à jouer",cmMaxS:"{n} max",cmInt:"interrompue",
- cmGuest:"<p>Le contre-la-montre se joue avec un compte : ton temps est enregistré épreuve après épreuve, sur tous tes appareils.</p>",
+ cmGuest:"<p>La Saison se joue avec un compte : ton temps est enregistré épreuve après épreuve, sur tous tes appareils.</p>",
  cmNet:"Impossible de joindre le serveur. Vérifie ta connexion internet et réessaie.",cmNetQ:"⏳ Résultat en attente d'envoi : il partira tout seul dès que possible.",
  cmAc:"<p>Six plaques et un nombre à trouver : seul le compte exact arrête le chrono. Essais illimités (tu peux revenir en arrière ou recommencer).</p><p>⏱ 45 secondes maximum.</p>",
  cmAa:"<p>Un mot de {n} lettres mélangé à remettre dans l'ordre. Tout mot du dictionnaire qui utilise toutes les lettres est accepté. Propositions illimitées.</p><p>⏱ 30 secondes maximum.</p>",
@@ -6402,17 +6415,17 @@ Object.assign(T.fr,{cmT:"⏱ Contre-la-montre",mCM:"⏱ Contre-la-montre",cmS:"p
  cmAd:"<p>{n}</p><p>Le chrono démarre après la présentation. Propositions illimitées : en cas d'erreur, corrige et valide à nouveau.</p><p>⏱ 30 secondes maximum.</p>",
  cmWarn:"⚠️ Une fois lancée, l'épreuve ne peut pas être rejouée. Si tu quittes en cours de route, elle compte au temps maximum.",cmGo:"C'est parti ▶",
  cmOkT:"Trouvé !",cmKoT:"Temps maximum",cmSolL:"🔒 La solution sera dévoilée à la saison prochaine.",cmTotS:"Temps total : {n}",
- cmNextB:"Épreuve suivante : {n} ▶",cmSeeRk:"🏆 Voir le classement",cmBackB:"⏱ Retour au contre-la-montre",cmFinT:"🏁 Course terminée en {n} !",
+ cmNextB:"Épreuve suivante : {n} ▶",cmSeeRk:"🏆 Voir le classement",cmBackB:"⏱ Retour à la Saison",cmFinT:"🏁 Course terminée en {n} !",
  cmQuitQ:"Quitter ? L'épreuve comptera avec le temps maximum ({n}).",cmGiveQ:"Abandonner l'épreuve ? Tu prendras le temps maximum ({n}).",cmWrong:"✗ Mauvaise réponse : essaie encore !",
- cmRkT:"🏆 Contre-la-montre",cmFinN:"{n} joueurs ont terminé la course",cmFin1:"1 joueur a terminé la course",cmRun:"En cours",cmNoFin:"Course non terminée",cmNone:"Aucun joueur pour l'instant.",
+ cmRkT:"🏆 La Saison",cmFinN:"{n} joueurs ont terminé la course",cmFin1:"1 joueur a terminé la course",cmRun:"En cours",cmNoFin:"Course non terminée",cmNone:"Aucun joueur pour l'instant.",
  cmFr0:"Ajoute des amis pour comparer vos temps !",cmSolT:"Les solutions",cmSolLock:"🔒 Les solutions de cette saison seront dévoilées à la saison suivante.",cmCur:"en cours",
  cmWord:"Mot à retrouver :",cmMe:"Toi :",cmNoPl:"pas jouée",cmOver:"Cette saison est terminée : une nouvelle course commence !",cmSync:"Ta progression a été mise à jour.",cmRetry:"Réessayer"});
-Object.assign(T.en,{cmT:"⏱ Time Trial",mCM:"⏱ Time Trial",cmS:"new race every 2 weeks",
+Object.assign(T.en,{cmT:"⏱ The Season",mCM:"⏱ The Season",cmS:"a race against the clock, the fastest wins the season",
  iCM:`<p>A race against the clock in 10 rounds, renewed every 2 weeks (one season). The draw is the same for every player.</p><p>🔢 Numbers · 🔤 Letters (5 letters) · 🔢 Numbers · 🔤 Letters (6 letters) · 🎯 Challenge · 🔢 Numbers · 🔤 Letters (7 letters) · 🔢 Numbers · 🔤 Letters (8 letters) · 🎯 another challenge.</p><p>Only the right answer stops the clock: the exact target for numbers, the unscrambled word for letters (any dictionary word using all the letters is accepted), the right answer for challenges. Unlimited attempts. Without a right answer, you get the maximum time: 45 seconds for numbers, 30 seconds for letters and challenges.</p><p>Play at your own pace, one round at a time, but each round can be played only once: if you quit halfway, it counts at the maximum time. Finish all 10 rounds before the end of the season to validate your total time: the lowest time wins.</p><p>Two separate races, one in French and one in English, each with its own leaderboard. Solutions are revealed during the following season.</p><p>You need an account and an internet connection.</p>`,
  cmSeason:"Season {n}",cmUntil:"until {n} at 11:59 pm",cmLeft:"{n} left",cmDH:"{n}d {m}h",cmHM:"{n}h {m}min",cmEndS:"Season over",
  cmProg:"{n}/10 rounds",cmTot:"Total time",cmDoneT:"✅ Race finished!",cmNext:"▶ Round {n}/10: {m}",cmRkB:"🏆 Leaderboard",cmRul:"📖 Rules",
  cmA:"Letters · {n} letters",cmD:"Surprise challenge 🎲",cmEp:"Round {n}/{m}",cmPlay:"to play",cmMaxS:"{n} max",cmInt:"interrupted",
- cmGuest:"<p>The Time Trial is played with an account: your time is saved round after round, on all your devices.</p>",
+ cmGuest:"<p>The Season is played with an account: your time is saved round after round, on all your devices.</p>",
  cmNet:"Can't reach the server. Check your internet connection and try again.",cmNetQ:"⏳ Result waiting to be sent: it will go out on its own as soon as possible.",
  cmAc:"<p>Six tiles and a target: only the exact target stops the clock. Unlimited attempts (you can undo or start again).</p><p>⏱ 45 seconds maximum.</p>",
  cmAa:"<p>A scrambled {n}-letter word to put back in order. Any dictionary word using all the letters is accepted. Unlimited attempts.</p><p>⏱ 30 seconds maximum.</p>",
@@ -6421,9 +6434,9 @@ Object.assign(T.en,{cmT:"⏱ Time Trial",mCM:"⏱ Time Trial",cmS:"new race ever
  cmAd:"<p>{n}</p><p>The clock starts after the presentation. Unlimited attempts: if you're wrong, fix it and submit again.</p><p>⏱ 30 seconds maximum.</p>",
  cmWarn:"⚠️ Once started, the round can't be replayed. If you quit halfway, it counts at the maximum time.",cmGo:"Let's go ▶",
  cmOkT:"Found it!",cmKoT:"Maximum time",cmSolL:"🔒 The solution will be revealed next season.",cmTotS:"Total time: {n}",
- cmNextB:"Next round: {n} ▶",cmSeeRk:"🏆 See the leaderboard",cmBackB:"⏱ Back to the Time Trial",cmFinT:"🏁 Race finished in {n}!",
+ cmNextB:"Next round: {n} ▶",cmSeeRk:"🏆 See the leaderboard",cmBackB:"⏱ Back to the Season",cmFinT:"🏁 Race finished in {n}!",
  cmQuitQ:"Quit? This round will count at the maximum time ({n}).",cmGiveQ:"Give up this round? You'll get the maximum time ({n}).",cmWrong:"✗ Wrong answer: try again!",
- cmRkT:"🏆 Time Trial",cmFinN:"{n} players have finished the race",cmFin1:"1 player has finished the race",cmRun:"In progress",cmNoFin:"Race not finished",cmNone:"No players yet.",
+ cmRkT:"🏆 The Season",cmFinN:"{n} players have finished the race",cmFin1:"1 player has finished the race",cmRun:"In progress",cmNoFin:"Race not finished",cmNone:"No players yet.",
  cmFr0:"Add friends to compare your times!",cmSolT:"Solutions",cmSolLock:"🔒 This season's solutions will be revealed next season.",cmCur:"in progress",
  cmWord:"Word to find:",cmMe:"You:",cmNoPl:"not played",cmOver:"This season is over: a new race begins!",cmSync:"Your progress has been updated.",cmRetry:"Try again"});
 // ----- saisons et épreuves -----
@@ -6492,7 +6505,7 @@ $("cmHome").onclick=openCm;
 setInterval(()=>{if(!$("cmP").classList.contains("hide"))renderCm()},30000);
 // ----- annonce d'une épreuve -----
 function cmAnnShow(i){const s=CM.s||cmCur(),lg=cmLg(),k=CMST[i],g=k==="d"?cmDf(s,lg)[i===4?0:1]:null;
- $("cmAS").innerHTML=esc(t("cmT"))+" · "+t("cmSeason",s)+" · "+(lg==="fr"?"🇫🇷":"🇬🇧");
+ $("cmAS").innerHTML="⏱ "+t("cmSeason",s)+" · "+(lg==="fr"?"🇫🇷":"🇬🇧");
  $("cmAT").textContent=t("cmEp",i+1,10);$("cmAG").textContent=cmLbl(i,g);
  $("cmAH").innerHTML=k==="c"?t("cmAc"):k==="a"?t("cmAa",CML[i]):t("cmAd",esc(t("cmA"+g)));
  $("cmAGo").onclick=()=>cmBegin(i);show("cmAn")}
@@ -6561,11 +6574,11 @@ function cmLang(){if(!$("cmP").classList.contains("hide"))renderCm();else if(!$(
  if(cmx&&!$("end").classList.contains("hide")&&cmx.sent)$("tomenu").textContent=t("cmBackB")}
 ["cmP","cmRkP","cmAn"].forEach(id=>HBP.add(id));
 // ----- v19.1 : statistiques du contre-la-montre -----
-Object.assign(T.fr,{cmStS:"temps, réussite par épreuve, saisons",cmStN:"Statistiques du compte {n}, en français et en anglais.",cmStG:"Le contre-la-montre se joue avec un compte : connecte-toi pour voir tes statistiques.",
+Object.assign(T.fr,{cmStS:"temps, réussite par épreuve, saisons",cmStN:"Statistiques du compte {n}, en français et en anglais.",cmStG:"La Saison se joue avec un compte : connecte-toi pour voir tes statistiques.",
  cmSt0:"Aucune épreuve jouée pour l'instant. Lance-toi !",cmStRaces:"Courses",cmStSeas:"Saisons jouées",cmStFin:"Courses terminées",cmStEp:"Épreuves jouées",cmStOk:"Réussite",
  cmStBest:"Meilleur temps",cmStAvg:"Temps moyen",cmStPos:"Meilleure place",cmStWin:"Victoires",cmStPod:"Podiums",cmStPosN:"Places des saisons terminées.",
  cmStByEp:"Par épreuve",cmStByEpN:"Réussite, puis temps moyen des bonnes réponses.",cmStHist:"Saison par saison",cmStErr:"Statistiques indisponibles (vérifie ta connexion)."});
-Object.assign(T.en,{cmStS:"times, success per round, seasons",cmStN:"Stats for the account {n}, in French and in English.",cmStG:"The Time Trial is played with an account: log in to see your stats.",
+Object.assign(T.en,{cmStS:"times, success per round, seasons",cmStN:"Stats for the account {n}, in French and in English.",cmStG:"The Season is played with an account: log in to see your stats.",
  cmSt0:"No rounds played yet. Give it a go!",cmStRaces:"Races",cmStSeas:"Seasons played",cmStFin:"Races finished",cmStEp:"Rounds played",cmStOk:"Success",
  cmStBest:"Best time",cmStAvg:"Average time",cmStPos:"Best place",cmStWin:"Wins",cmStPod:"Podiums",cmStPosN:"Places in finished seasons.",
  cmStByEp:"By round",cmStByEpN:"Success rate, then average time of right answers.",cmStHist:"Season by season",cmStErr:"Stats unavailable (check your connection)."});
@@ -6604,6 +6617,27 @@ function renderCmSt(){const B=$("cmStS");$("cmStN").textContent=ME?t("cmStN",ME.
 function openCmSt(){renderCmSt();show("cmStP");if(ME)cmStLoad().then(()=>{if(!$("cmStP").classList.contains("hide"))renderCmSt()})}
 $("stCm").onclick=openCmSt;HBP.add("cmStP");
 
+
+// ===== v21 : menu Solo / Multijoueur, bandeau de la partie du jour, réglages =====
+Object.assign(T.fr,{pSolo:"Solo",dSolo:"partie du jour, saison, jeu original…",dTr:"durée au choix, jusqu'à l'infini",setT:"⚙️ Réglages",setLg:"Langue du jeu",
+ banAll:"{n} défis à jouer aujourd'hui",banN:"plus que {n} défis à jouer",ban1:"plus qu'un défi à jouer",banDone:"tout est joué · voir les classements"});
+Object.assign(T.en,{pSolo:"Solo",dSolo:"daily game, season, original game…",dTr:"any duration, even endless",setT:"⚙️ Settings",setLg:"Game language",
+ banAll:"{n} challenges to play today",banN:"{n} challenges left to play",ban1:"one challenge left to play",banDone:"all played · see the leaderboards"});
+const dLeft=()=>{const day=pToday();return DG.filter(g=>!myD(day,g)).length};
+const dStat=k=>k?t(k===DG.length?"banAll":k>1?"banN":"ban1",k):t("banDone");
+function renderBan(){const k=dLeft(),b=$("daily");b.classList.toggle("done",!k);$("banI").textContent=k?"📅":"✅";$("banS").textContent=dStat(k)}
+function renderSolo(){const k=dLeft(),b=$("dailyS");b.classList.toggle("p",!!k);b.classList.toggle("done",!k);
+ $("dSoloS").innerHTML=esc(t("dD"))+"<br>"+(k?esc(dStat(k)):'<span class="ok2">✅ '+esc(dStat(k))+"</span>");
+ let c="";try{const n=cmCur(),lf=cmLeftS(n);c=t("cmSeason",n)+(lf?" · "+t("cmLeft",lf):"")}catch(e){}$("cmSoloS").textContent=c}
+function renderSet(){all("[data-setl]").forEach(b=>b.classList.toggle("on",b.dataset.setl===L))}
+const vis=id=>{const e=$(id);return e&&!e.classList.contains("hide")};
+function menuHook(id){if(id==="home")renderBan();else if(id==="soloP")renderSolo();else if(id==="setP")renderSet()}
+function menuLang(){if(vis("home"))renderBan();if(vis("soloP"))renderSolo();if(vis("setP"))renderSet()}
+setInterval(()=>{if(vis("home"))renderBan();if(vis("soloP"))renderSolo()},30000);
+$("soloB").onclick=()=>show("soloP");$("setB").onclick=()=>show("setP");
+$("daily").onclick=()=>{soloBk="home";openDaily()};$("dailyS").onclick=()=>{soloBk="soloP";openDaily()};
+all("[data-setl]").forEach(b=>b.onclick=()=>{const v=b.dataset.setl;if(v!==L){L=v;try{localStorage.setItem("fwlang",L)}catch(e){}applyLang()}renderSet()});
+["soloP","setP"].forEach(id=>HBP.add(id));
 
 applyLang();loadSB();
 </script></body></html>
