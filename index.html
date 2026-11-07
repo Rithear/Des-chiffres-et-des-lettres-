@@ -170,6 +170,13 @@ button.admR{display:block;width:100%;text-align:left;border:0;color:var(--tx);fo
 .ban .bi{font-size:26px;line-height:1}.ban>span:nth-child(2){flex:1;min-width:0}.ban b{display:block;font-size:17px;color:var(--ac)}.ban small{display:block;color:var(--mut);font-size:13px;margin-top:2px}
 .ban .ba{color:var(--ac);font-size:18px;font-weight:800}.ban.done{border-color:var(--card)}.ban.done b{color:var(--tx)}.ban.done .ba{color:var(--mut)}
 #setLgR .btn{background:var(--card)}#setLgR .btn.on{background:var(--ac);color:#14233f}
+/* v21.1 : notifications */
+.nfT{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border:0;border-radius:10px;padding:10px 12px;margin:6px 0;color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+.nfT>span{flex:1;min-width:0;font-weight:700}.nfT small{display:block;color:var(--mut);font-size:13px;font-weight:400;margin-top:2px}
+.nfT i{flex:0 0 46px;height:28px;border-radius:14px;background:#0e1a30;position:relative;transition:background .2s}
+.nfT i::after{content:"";position:absolute;top:4px;left:4px;width:20px;height:20px;border-radius:50%;background:var(--mut);transition:left .2s,background .2s}
+.nfT.on i{background:var(--ok)}.nfT.on i::after{left:22px;background:#fff}.nfT:disabled{opacity:.6}
+#nfBox .pcard .pn{font-size:18px;color:var(--ok)}
 /* v19 : contre-la-montre */
 #cmRkNav .rkA{flex:0 0 52px;font-size:26px;padding:6px 0}#cmRkSel{flex:1;min-width:0;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23ffd24a' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center;color:var(--tx);border:0;border-radius:10px;padding:12px 28px 12px 12px;font-size:15px;font-weight:700;font-family:inherit;text-align:center;text-align-last:center;-webkit-appearance:none;appearance:none;cursor:pointer}#cmRkSel option{background:var(--bg);color:var(--tx)}
 #cmLg .btn.on,#cmRkLg .btn.on,#cmRkTabs .btn.on{background:var(--ac);color:#14233f}#cmInfo{margin-bottom:10px}
@@ -219,6 +226,7 @@ button.admR{display:block;width:100%;text-align:left;border:0;color:var(--tx);fo
 <button class="btn mb" data-back data-t="back"></button></section>
 <section id="setP" class="pg hide"><h2 data-t="setT"></h2>
 <h3 data-t="setLg"></h3><div class="row" id="setLgR"><button class="btn" data-setl="fr">🇫🇷 Français</button><button class="btn" data-setl="en">🇬🇧 English</button></div>
+<h3 data-t="nfH" style="margin-top:22px"></h3><div id="nfBox"></div>
 <button class="btn mb" data-back data-t="back" style="margin-top:20px"></button></section>
 <section id="origP" class="pg hide"><h2 data-t="pO"></h2>
 <div class="mrow"><button class="btn p mb" data-p="n"><span data-t="pN"></span><small class="sub" data-t="d15"></small></button><button class="info" data-info="N">?</button></div>
@@ -415,7 +423,7 @@ all(".lang").forEach(b=>b.onclick=()=>{L=L==="fr"?"en":"fr";try{localStorage.set
 // intro
 function toHome(){$("vid").pause();show("home");renderProfB();if(ME)refreshAcc()}
 function unlockA(){Object.values(A).forEach(a=>{a.muted=true;a.play().then(()=>{a.pause();a.currentTime=0;a.muted=false}).catch(()=>{a.muted=false})})}
-function launch(acc){unlockA();setMe(acc?ACC:null);if(frIn0&&!chIn0&&!mpJoin0){renderIntro();toHome();acc?frFromLink():frNeedAcc();return}if(chIn0){const o=chIn0;chIn0=null;renderIntro();toHome();chOpenLink(o);return}if(mpJoin0){const c=mpJoin0;mpJoin0=null;renderIntro();toHome();mpOpenJoin(c);return}show("vidP");try{$("vid").currentTime=0}catch(e){}$("vid").play().catch(toHome)}
+function launch(acc){unlockA();setMe(acc?ACC:null);if(nfIn0&&!chIn0&&!mpJoin0&&!frIn0){const o=nfIn0;nfIn0=null;renderIntro();toHome();if(acc)nfGo(o);return}if(frIn0&&!chIn0&&!mpJoin0){renderIntro();toHome();acc?frFromLink():frNeedAcc();return}if(chIn0){const o=chIn0;chIn0=null;renderIntro();toHome();chOpenLink(o);return}if(mpJoin0){const c=mpJoin0;mpJoin0=null;renderIntro();toHome();mpOpenJoin(c);return}show("vidP");try{$("vid").currentTime=0}catch(e){}$("vid").play().catch(toHome)}
 $("vid").onended=toHome;$("vid").onerror=toHome;$("vskip").onclick=toHome;
 // navigation
 const SOLOK=new Set(["origP","freeP","trainP","dailyP","cmP"]);let soloBk="soloP";
@@ -790,7 +798,7 @@ $("pMl").onclick=()=>{if(!needSb())return;modal(t("chMl"),t("mlH")+mIn("mA","ema
  const r=await sb.auth.updateUser({email:em},{emailRedirectTo:RED});if(r.error)return am("mMsg",errT(r.error));const u=r.data&&r.data.user;
  if(u&&String(u.email).toLowerCase()===em.toLowerCase()){ME.email=u.email;putAcc();renderProf();modal(t("chMl"),"<p>"+esc(t("mlDone",u.email))+"</p>",[{l:t("ok"),c:"p",f:closeModal}])}
  else modal(t("chMl"),t("mlOk",esc(em)),[{l:t("ok"),c:"p",f:closeModal}])})}])};
-async function doLogout(){bye=true;try{if(sb)await sb.auth.signOut({scope:"local"})}catch(e){}SESS=null;setMe(null);ACC=null;putAcc();try{localStorage.removeItem("fwauth")}catch(e){}bye=false;renderIntro();show("intro")}
+async function doLogout(){bye=true;await nfQuit();try{if(sb)await sb.auth.signOut({scope:"local"})}catch(e){}SESS=null;setMe(null);ACC=null;putAcc();try{localStorage.removeItem("fwauth")}catch(e){}bye=false;renderIntro();show("intro")}
 $("pOut").onclick=()=>modal(t("logout"),"<p>"+t("logoutQ")+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{closeModal();doLogout()}}]);
 $("pDel").onclick=()=>{if(!needSb())return;modal(t("delAcc"),t("delH")+mIn("mA","password",t("pw"))+mMsg,[{l:t("cancel"),f:closeModal},{l:t("delGo"),c:"p",f:mAct(async()=>{
  const pw=$("mA").value;if(!pw)return am("mMsg",t("eFill"));if(!await checkPw(pw))return;const id=ME.id,r=await sb.rpc("delete_my_account");if(r.error)return am("mMsg",errT(r.error));
@@ -812,7 +820,7 @@ $("frAdd").onclick=()=>busy("frAdd",async()=>{const v=cleanPs($("frIn").value);i
  const c=v.replace(/\s/g,"");let st,who=v;
  if(/^\d{6}$/.test(c)){const x=await frByCode(c);st=x.st;who=x.who||v;if(st==="notfound"){const r=await sb.rpc("friend_add",{p_pseudo:v});if(!r.error&&r.data!=="notfound"){st=r.data;who=v}else{st="notfound";who=fmtCode(c)}}if(st==="self")who="";}
  else{const r=await sb.rpc("friend_add",{p_pseudo:v});if(r.error)return am("frMsg",errT(r.error));st=r.data}
- const M=FRM[st]||["eGen",0];am("frMsg",t(st==="notfound"&&/^\d{6}$/.test(c)?"frNfC":M[0],who),!!M[1]);if(M[1])$("frIn").value="";loadFr()});
+ const M=FRM[st]||["eGen",0];if(st==="sent"||st==="accepted")nfAskSoon();am("frMsg",t(st==="notfound"&&/^\d{6}$/.test(c)?"frNfC":M[0],who),!!M[1]);if(M[1])$("frIn").value="";loadFr()});
 $("frCopy").onclick=async()=>{if(!ME||!ME.code)return;try{await navigator.clipboard.writeText(ME.code);toast(t("frCopied"))}catch(e){modal(t("frCodeT"),'<p class="qrc">'+fmtCode(ME.code)+"</p>",[{l:t("close"),c:"p",f:closeModal}])}};
 $("frInv").onclick=async()=>{if(!ME||!ME.code)return;const url=RED+"?ami="+ME.code,txt=t("frShareT",ME.pseudo,fmtCode(ME.code));
  if(navigator.share){try{await navigator.share({title:"Des chiffres et des lettres",text:txt,url});return}catch(e){if(e&&e.name==="AbortError")return}}
@@ -2844,7 +2852,7 @@ all("[data-tk]").forEach(b=>b.onclick=()=>{tbNw.k=b.dataset.tk;drawTbNew()});all
 $("tbSend").onclick=()=>busy("tbSend",async()=>{if(!tbNw.f)return am("tbNMsg",t("tbPickFr"));const fr=(tbFrs||[]).find(x=>x.id===tbNw.f),nm=fr?fr.pseudo:"?";
  const id=await tbCreate(tbNw.f,tbNw.k,tbNw.l,nm,"tbNMsg");if(id){await tbLoad();openTbM(id)}});
 async function tbCreate(f,k,l,nm,msgId){const r=await sb.rpc("tb_create",{p_friend:f,p_kind:k,p_dict:l});if(r.error)throw r.error;const x=(r.data||[])[0]||{};
- if(x.status==="ok"&&x.id){toast(t("tbSent",nm));return x.id}
+ if(x.status==="ok"&&x.id){toast(t("tbSent",nm));nfAskSoon();return x.id}
  const m=x.status==="full"?t("tbFull"):x.status==="fullfr"?t("tbFullFr",nm):x.status==="notfriend"?t("tbNotFr",nm):x.status==="auth"?t("eAuth"):t("eGen");
  if(msgId)am(msgId,m);else modal(t("tbT"),"<p>"+esc(m)+"</p>",[{l:t("ok"),c:"p",f:closeModal}]);return null}
 // ----- page d'un match -----
@@ -2871,7 +2879,7 @@ $("tbPB").onclick=e=>{const b=e.target.closest("[data-tbt]");if(b)openTbR(+b.dat
 $("tbPBtn").onclick=e=>{const b=e.target.closest("[data-tba]");if(!b)return;const k=b.dataset.tba,m=tbRow(tbCur);if(k==="back")return openTb();if(!m)return;
  const go=f=>busy2(b,f),nm=m.opp_name;
  if(k==="play")return tbPlay(m);
- if(k==="acc")return go(async()=>{const r=await sb.rpc("tb_answer",{p_match:m.id,p_ok:true});if(r.error)throw r.error;if(r.data==="full")modal(t("tbT"),"<p>"+t("tbFull")+"</p>",[{l:t("ok"),c:"p",f:closeModal}]);await tbLoad();openTbM(m.id)});
+ if(k==="acc")return go(async()=>{const r=await sb.rpc("tb_answer",{p_match:m.id,p_ok:true});if(r.error)throw r.error;if(r.data==="ok")nfAskSoon();if(r.data==="full")modal(t("tbT"),"<p>"+t("tbFull")+"</p>",[{l:t("ok"),c:"p",f:closeModal}]);await tbLoad();openTbM(m.id)});
  const ask=(q,f)=>modal(t("tbT"),"<p>"+esc(t(q,nm))+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{closeModal();go(f)}}]);
  const leave=async()=>{const r=await sb.rpc("tb_leave",{p_match:m.id});if(r.error)throw r.error;await tbLoad();openTbM(m.id)};
  if(k==="dec")return ask("tbDeclineQ",async()=>{const r=await sb.rpc("tb_answer",{p_match:m.id,p_ok:false});if(r.error)throw r.error;await tbLoad();openTb()});
@@ -3030,7 +3038,7 @@ $("daGo").onclick=()=>busy("daGo",async()=>{if(!daSel.size)return am("daMsg",t("
  const r=await sb.rpc("duel_send",{p_duel:o.i,p_game:o.g,p_payload:o,p_friends:ids});if(r.error)throw r.error;const rows=r.data||[];
  if(rows.some(x=>x.status==="auth"))return am("daMsg",t("eAuth"));if(!rows.length||rows.some(x=>x.status==="bad"))return am("daMsg",t("eGen"));
  const nm=id=>{const x=(daFrs||[]).find(z=>z.id===id);return x?x.pseudo:"?"},ok=rows.filter(x=>x.status==="ok"||x.status==="already"),ko=rows.filter(x=>x.status!=="ok"&&x.status!=="already");
- if(ok.length){const e=chRecOut(o);e.fr=e.fr||[];ok.forEach(x=>{if(!e.fr.some(z=>z.u===x.friend))e.fr.push({u:x.friend,n:nm(x.friend),st:"wait"})});chSave(e)}
+ if(ok.length){nfAskSoon();const e=chRecOut(o);e.fr=e.fr||[];ok.forEach(x=>{if(!e.fr.some(z=>z.u===x.friend))e.fr.push({u:x.friend,n:nm(x.friend),st:"wait"})});chSave(e)}
  if(ko.length){daSel=new Set(ko.map(x=>x.friend));daDraw();return am("daMsg",(ok.length?t(ok.length>1?"daSentN":"daSent1",ok.length>1?ok.length:nm(ok[0].friend))+" ":"")+ko.map(x=>t(x.status==="fullfr"?"daFull":"tbNotFr",nm(x.friend))).join(" "))}
  toast(ok.length>1?t("daSentN",ok.length):t("daSent1",nm(ok[0].friend)));DAL=null;chView(chFind(o.i));daLoad()});
 // supprimer un de ses duels tant que personne n'a répondu
@@ -6629,15 +6637,107 @@ function renderBan(){const k=dLeft(),b=$("daily");b.classList.toggle("done",!k);
 function renderSolo(){const k=dLeft(),b=$("dailyS");b.classList.toggle("p",!!k);b.classList.toggle("done",!k);
  $("dSoloS").innerHTML=esc(t("dD"))+"<br>"+(k?esc(dStat(k)):'<span class="ok2">✅ '+esc(dStat(k))+"</span>");
  let c="";try{const n=cmCur(),lf=cmLeftS(n);c=t("cmSeason",n)+(lf?" · "+t("cmLeft",lf):"")}catch(e){}$("cmSoloS").textContent=c}
-function renderSet(){all("[data-setl]").forEach(b=>b.classList.toggle("on",b.dataset.setl===L))}
+function renderSet(){all("[data-setl]").forEach(b=>b.classList.toggle("on",b.dataset.setl===L));renderNf()}
 const vis=id=>{const e=$(id);return e&&!e.classList.contains("hide")};
-function menuHook(id){if(id==="home")renderBan();else if(id==="soloP")renderSolo();else if(id==="setP")renderSet()}
-function menuLang(){if(vis("home"))renderBan();if(vis("soloP"))renderSolo();if(vis("setP"))renderSet()}
+function menuHook(id){if(id==="home"){renderBan();nfSync()}else if(id==="soloP")renderSolo();else if(id==="setP")renderSet()}
+function menuLang(){nfLang();if(vis("home"))renderBan();if(vis("soloP"))renderSolo();if(vis("setP"))renderSet()}
 setInterval(()=>{if(vis("home"))renderBan();if(vis("soloP"))renderSolo()},30000);
 $("soloB").onclick=()=>show("soloP");$("setB").onclick=()=>show("setP");
 $("daily").onclick=()=>{soloBk="home";openDaily()};$("dailyS").onclick=()=>{soloBk="soloP";openDaily()};
 all("[data-setl]").forEach(b=>b.onclick=()=>{const v=b.dataset.setl;if(v!==L){L=v;try{localStorage.setItem("fwlang",L)}catch(e){}applyLang()}renderSet()});
 ["soloP","setP"].forEach(id=>HBP.add(id));
+
+// ===== v21.1 : notifications sur le téléphone (Web Push) =====
+// Le téléphone s'enregistre dans Supabase (push_save) ; la base envoie les notifications
+// par la fonction « push ». sw.js les affiche et ouvre le bon écran quand on les touche.
+const VAPID="BKpXlUkaaqXwMR3SVnQ_t6SfYgTfbzjRigGSTubqkjxmDHcsrsEtICnv_lrA99lJ_me8j2CYLMb2OfzcSmHQWCU";
+Object.assign(T.fr,{nfH:"🔔 Notifications",nfGuest:"Les notifications sont réservées aux joueurs connectés avec un compte.",
+ nfIOS:"Sur iPhone, les notifications ne marchent que si le jeu est sur l'écran d'accueil : touche ⬆️ Partager, puis « Sur l'écran d'accueil », et ouvre le jeu depuis cette icône.",
+ nfNoSup:"Ce navigateur ne permet pas les notifications. Sur Android, utilise Chrome ou Samsung Internet.",
+ nfBlk:"Les notifications sont bloquées pour ce jeu. Pour les autoriser : touche le cadenas 🔒 (ou ⓘ) à gauche de l'adresse du site, puis Autorisations › Notifications, et reviens ici.",
+ nfOnB:"🔔 Activer les notifications",nfOnH:"Sois prévenu quand un ami t'ajoute, quand on te lance un défi et quand c'est ton tour au tour par tour. Le réglage vaut pour ce téléphone seulement.",
+ nfOnS:"✅ Activées sur ce téléphone",nfAmis:"👥 Amis",nfAmisS:"demandes d'ami reçues ou acceptées",nfDefis:"⚔️ Défis",nfDefisS:"duels reçus et invitations à un match",
+ nfTours:"🎲 Ton tour",nfToursS:"un nouveau tour t'attend au tour par tour",nfRap:"⏰ Rappels",nfRapS:"24 h et 48 h après le début d'un tour pas encore joué",
+ nfNight:"🌙 Rien entre 22 h et 8 h : les notifications de la nuit arrivent le matin.",nfTest:"Envoyer une notification de test",
+ nfTestOk:"C'est parti ! La notification arrive dans la minute (tu peux fermer le jeu pour la voir).",nfOff:"Désactiver sur ce téléphone",nfOffQ:"Ne plus recevoir de notifications sur ce téléphone ?",
+ nfOnT:"🔔 Notifications activées !",nfOffT:"Notifications désactivées sur ce téléphone.",nfDen:"Notifications refusées. Tu pourras les autoriser plus tard dans les réglages du navigateur.",
+ nfErr:"Impossible d'activer les notifications pour l'instant. Réessaie dans un moment.",nfAskT:"🔔 Être prévenu ?",
+ nfAskH:"<p>Reçois une notification quand c'est ton tour de jouer, quand un ami te lance un défi ou t'envoie une demande d'ami.</p><p>Tu pourras tout régler à tout moment dans ⚙️ Réglages.</p>",
+ nfLater:"Plus tard",nfYes:"Activer",nfInGame:"Notification reçue : tu la retrouveras dans le menu après ta partie."});
+Object.assign(T.en,{nfH:"🔔 Notifications",nfGuest:"Notifications are for players logged in with an account.",
+ nfIOS:"On iPhone, notifications only work when the game is on the home screen: tap ⬆️ Share, then “Add to Home Screen”, and open the game from that icon.",
+ nfNoSup:"This browser doesn't support notifications. On Android, use Chrome or Samsung Internet.",
+ nfBlk:"Notifications are blocked for this game. To allow them: tap the padlock 🔒 (or ⓘ) left of the site address, then Permissions › Notifications, and come back here.",
+ nfOnB:"🔔 Turn on notifications",nfOnH:"Get notified when a friend adds you, when someone challenges you and when it's your turn in a turn-based match. This setting is for this phone only.",
+ nfOnS:"✅ On for this phone",nfAmis:"👥 Friends",nfAmisS:"friend requests received or accepted",nfDefis:"⚔️ Challenges",nfDefisS:"duels received and match invitations",
+ nfTours:"🎲 Your turn",nfToursS:"a new round is waiting in a turn-based match",nfRap:"⏰ Reminders",nfRapS:"24 h and 48 h after a round starts if you haven't played it",
+ nfNight:"🌙 Nothing between 10 pm and 8 am: night-time notifications arrive in the morning.",nfTest:"Send a test notification",
+ nfTestOk:"Done! The notification arrives within a minute (you can close the game to see it).",nfOff:"Turn off on this phone",nfOffQ:"Stop receiving notifications on this phone?",
+ nfOnT:"🔔 Notifications on!",nfOffT:"Notifications turned off on this phone.",nfDen:"Notifications declined. You can allow them later in your browser settings.",
+ nfErr:"Notifications can't be turned on right now. Try again in a moment.",nfAskT:"🔔 Get notified?",
+ nfAskH:"<p>Get a notification when it's your turn to play, when a friend challenges you or sends you a friend request.</p><p>You can change this at any time in ⚙️ Settings.</p>",
+ nfLater:"Later",nfYes:"Turn on",nfInGame:"Notification received: you'll find it in the menu after your game."});
+const NFP=[["amis","nfAmis"],["defis","nfDefis"],["tours","nfTours"],["rappels","nfRap"]];
+let NF={uid:null,chk:false,ok:false,sub:null,pf:null,busy:false},nfSynced=null;
+var nfIn0=null;
+(()=>{try{const u=new URLSearchParams(location.search);if(!u.has("nf"))return;const k=u.get("nf")||"",m=u.get("m")||"";
+ if(/^(tb|fr|da)$/.test(k))nfIn0={k,m:/^[0-9a-f-]{36}$/.test(m)?m:""};u.delete("nf");u.delete("m");const q=u.toString();history.replaceState(null,"",location.pathname+(q?"?"+q:"")+location.hash)}catch(e){}})();
+const nfSup=()=>"serviceWorker"in navigator&&"PushManager"in window&&"Notification"in window&&window.isSecureContext;
+const nfIOS=()=>/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const nfU=()=>{try{return localStorage.getItem("fwnfu")||""}catch(e){return""}};
+function nfKey(){const s=VAPID.replace(/-/g,"+").replace(/_/g,"/"),b=atob(s+"===".slice((s.length+3)%4));return Uint8Array.from(b,c=>c.charCodeAt(0))}
+async function nfReg(){if(!nfSup())return null;try{return await Promise.race([navigator.serviceWorker.ready,wait(5000).then(()=>null)])}catch(e){return null}}
+async function nfState(){const id=ME?ME.id:null,r=await nfReg();let s=null;try{s=r?await r.pushManager.getSubscription():null}catch(e){}
+ NF.uid=id;NF.sub=s;NF.ok=!!(s&&id&&nfU()===id&&Notification.permission==="granted");NF.chk=true;if(NF.ok&&!NF.pf)await nfPrefs();return NF.ok}
+async function nfPrefs(){try{const r=await sb.rpc("push_prefs_get");if(r.error)throw r.error;NF.pf=r.data||null}catch(e){NF.pf=NF.pf||null}}
+async function nfSave(s){const j=s.toJSON(),k=j.keys||{};const r=await sb.rpc("push_save",{p_endpoint:j.endpoint,p_p256dh:k.p256dh,p_auth:k.auth,p_lang:L});if(r.error)throw r.error;if(r.data!=="ok")throw new Error(r.data)}
+async function nfOn(){if(NF.busy||!ME||!needSb()||!nfSup())return;NF.busy=true;renderNf();
+ try{let p=Notification.permission;if(p==="default")p=await Notification.requestPermission();
+  if(p!=="granted"){toast(t("nfDen"));return}
+  const r=await nfReg();if(!r)throw new Error("sw");let s=await r.pushManager.getSubscription();
+  if(!s){try{s=await r.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:nfKey()})}
+   catch(e){const o=await r.pushManager.getSubscription();if(o)await o.unsubscribe();s=await r.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:nfKey()})}}
+  await nfSave(s);try{localStorage.setItem("fwnfu",ME.id)}catch(e){}NF.uid=ME.id;NF.sub=s;NF.ok=true;NF.chk=true;NF.pf=null;await nfPrefs();toast(t("nfOnT"))}
+ catch(e){toast(t("nfErr"))}finally{NF.busy=false;renderNf()}}
+async function nfOff(){if(NF.busy)return;NF.busy=true;renderNf();try{await nfDrop()}finally{NF.busy=false;renderNf()}toast(t("nfOffT"))}
+async function nfDrop(){let s=NF.sub;try{if(!s){const r=await nfReg();s=r?await r.pushManager.getSubscription():null}}catch(e){}
+ if(s){try{if(sb&&SESS&&ME)await sb.rpc("push_remove",{p_endpoint:s.endpoint})}catch(e){}try{await s.unsubscribe()}catch(e){}}
+ try{localStorage.removeItem("fwnfu")}catch(e){}NF.sub=null;NF.ok=false;NF.pf=null}
+// déconnexion : ce téléphone ne doit plus recevoir les notifications du compte
+async function nfQuit(){if(!nfSup()||!nfU())return;try{await Promise.race([nfDrop(),wait(3000)])}catch(e){}NF.chk=false}
+// à l'ouverture du menu : on redonne l'adresse du téléphone à Supabase (elle peut changer)
+async function nfSync(){if(!ME||!sb||!SESS||!nfSup()||nfSynced===ME.id||nfU()!==ME.id)return;nfSynced=ME.id;
+ try{const r=await nfReg(),s=r?await r.pushManager.getSubscription():null;if(s&&Notification.permission==="granted")await nfSave(s);
+  else{if(s)try{await sb.rpc("push_remove",{p_endpoint:s.endpoint})}catch(e){}try{localStorage.removeItem("fwnfu")}catch(e){}}}catch(e){}}
+let nfLT=0;function nfLang(){if(!NF.ok||!NF.sub||!ME||!sb||!SESS)return;clearTimeout(nfLT);nfLT=setTimeout(()=>nfSave(NF.sub).catch(()=>{}),800)}
+function renderNf(){const B=$("nfBox");if(!B)return;const H=x=>'<p class="dnote" style="text-align:left">'+x+"</p>";
+ if(!ME){B.innerHTML=H(esc(t("nfGuest")));return}
+ if(!nfSup()){B.innerHTML=H(esc(t(nfIOS()?"nfIOS":"nfNoSup")));return}
+ if(Notification.permission==="denied"){B.innerHTML=H(esc(t("nfBlk")));return}
+ if(!NF.chk||NF.uid!==ME.id){B.innerHTML=H(esc(t("frLoad")));if(!NF.ld){NF.ld=1;nfState().finally(()=>{NF.ld=0;if(vis("setP"))renderNf()})}return}
+ if(!NF.ok){B.innerHTML=H(esc(t("nfOnH")))+'<button class="btn p mb" id="nfOnB" data-net'+(NF.busy?" disabled":"")+">"+esc(t("nfOnB"))+"</button>";$("nfOnB").onclick=nfOn;return}
+ const pf=NF.pf||{};
+ B.innerHTML='<div class="pcard"><div class="pn">'+esc(t("nfOnS"))+"</div></div>"+NFP.map(([k,l])=>'<button class="nfT'+(pf[k]!==false?" on":"")+'" data-nfp="'+k+'"'+(NF.pf?"":" disabled")+"><span>"+esc(t(l))+"<small>"+esc(t(l+"S"))+"</small></span><i></i></button>").join("")+
+  H(esc(t("nfNight")))+'<button class="btn mb" id="nfTst" data-net style="font-size:16px;padding:12px">'+esc(t("nfTest"))+'</button><button class="btn mb dng" id="nfOffB" style="font-size:16px;padding:12px"'+(NF.busy?" disabled":"")+">"+esc(t("nfOff"))+"</button>";
+ if(!NF.pf&&!NF.pl){NF.pl=1;nfPrefs().finally(()=>{NF.pl=0;if(vis("setP"))renderNf()})}
+ all("[data-nfp]").forEach(b=>b.onclick=async()=>{if(!NF.pf||b.disabled)return;const k=b.dataset.nfp,v=NF.pf[k]===false;b.disabled=true;
+  try{const r=await sb.rpc("push_prefs_set",{p:{[k]:v}});if(r.error)throw r.error;NF.pf={...NF.pf,[k]:v}}catch(e){toast(errT(e))}renderNf()});
+ $("nfTst").onclick=async()=>{const b=$("nfTst");if(b.disabled)return;b.disabled=true;try{const s=NF.sub;if(s)await nfSave(s);const r=await sb.rpc("push_test");if(r.error)throw r.error;toast(t(r.data==="ok"?"nfTestOk":"nfErr"))}catch(e){toast(errT(e))}b.disabled=false};
+ $("nfOffB").onclick=()=>modal(t("nfH"),"<p>"+esc(t("nfOffQ"))+"</p>",[{l:t("no"),f:closeModal},{l:t("yes"),c:"p",f:()=>{closeModal();nfOff()}}])}
+// proposition au bon moment (une seule fois), juste après une action qui appelle une réponse
+function nfAskSoon(){setTimeout(nfAsk,1300)}
+function nfAsk(){if(!ME||!nfSup()||Notification.permission!=="default"||!$("modal").classList.contains("hide"))return;
+ try{if(localStorage.getItem("fwnfask"))return;localStorage.setItem("fwnfask","1")}catch(e){return}
+ modal(t("nfAskT"),t("nfAskH"),[{l:t("nfLater"),f:closeModal},{l:t("nfYes"),c:"p",f:()=>{closeModal();nfOn()}}])}
+// ouverture du bon écran depuis une notification
+async function nfGo(o,n){if(!o)return;if(!sb||!SESS||!ME){if((n|0)<12)setTimeout(()=>nfGo(o,(n|0)+1),700);return}
+ if(o.k==="fr")return openFr();if(o.k==="da")return openChMenu();
+ if(o.k==="tb"){await tbLoad();if(o.m&&tbRow(o.m))return openTbM(o.m);return openTb()}}
+const nfBusyG=()=>!over||!!tbx||!!cmx||!!MP||!!daily||!!chl||$("intro")&&!$("intro").classList.contains("hide");
+if("serviceWorker"in navigator)navigator.serviceWorker.addEventListener("message",e=>{const d=e.data||{};
+ if(d.t==="nfin"){if(ME&&sb&&SESS){tbLoad();daLoad();refreshAcc()}const x=d.d||{};if(x.t&&!(!over||tbx||cmx||MP))toast(x.t+(x.b?" · "+x.b:""))}
+ else if(d.t==="nfopen"){let o=null;try{const u=new URL(d.u,location.href).searchParams,k=u.get("nf")||"",m=u.get("m")||"";if(/^(tb|fr|da)$/.test(k))o={k,m:/^[0-9a-f-]{36}$/.test(m)?m:""}}catch(e){}
+  if(!o)return;if(!ME||$("intro")&&!$("intro").classList.contains("hide")){nfIn0=o;return}if(nfBusyG())return toast(t("nfInGame"));closeModal();nfGo(o)}});
 
 applyLang();loadSB();
 </script></body></html>
