@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Des chiffres et des lettres</title>
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="assets/icone-180.png"><link rel="icon" href="assets/icone-192.png"><meta name="theme-color" content="#14233f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Chiffres et lettres"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
 :root{--bg:#14233f;--card:#1e3560;--ac:#ffd24a;--tx:#fff;--mut:#9fb3d9;--ok:#4cd68a;--ko:#ff6b6b}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -286,7 +287,7 @@ button.admR{display:block;width:100%;text-align:left;border:0;color:var(--tx);fo
 <div class="row"><button class="btn p hide" id="next" data-t="next"></button><button class="btn p hide" id="drk" data-t="seeRank" data-net></button><button class="btn p" id="again" data-t="again"></button><button class="btn" id="tomenu" data-t="menu"></button></div></section>
 <section id="admP" class="pg hide"><h2 data-t="admT"></h2>
 <div class="row tabs" id="admTabs"><button class="btn" data-ad="ov" data-t="admOv"></button><button class="btn" data-ad="pl" data-t="admPl"></button><button class="btn" data-ad="fd" data-t="admFd"></button><button class="btn" data-ad="mu" data-t="admMu"></button></div>
-<div id="admC"></div><button class="lnk" id="admRf" data-t="admRf"></button><button class="btn mb" data-back data-t="back"></button></section>
+<div id="admC"></div><button class="btn mb" id="admMl" data-net data-t="admMl" style="font-size:16px;padding:12px;margin-top:14px"></button><button class="lnk" id="admRf" data-t="admRf"></button><button class="btn mb" data-back data-t="back"></button></section>
 <section id="admUP" class="pg hide"><h2 data-t="admT"></h2><div id="admU"></div><button class="btn mb" id="admUBack" data-t="back" style="margin-top:12px"></button></section>
 <section id="profP" class="pg hide"><h2 data-t="prof"></h2>
 <div id="pAcc"><div class="pcard"><div class="pn" id="pName"></div><div class="pm" id="pMail"></div><div class="pm" id="pCode"></div></div><div class="amsg" id="pMsg"></div>
@@ -2272,7 +2273,20 @@ function dfGenT(lg,R=Math.random){const n=DFT[lg].length;
  for(let k=0;k<400;k++){const th=Math.floor(R()*n),ws=DFT[lg][th][1].split(" "),a=ws[Math.floor(R()*ws.length)],c=ws.filter(w=>w!==a&&w.length===10-a.length);if(!c.length)continue;
   const b=c[Math.floor(R()*c.length)];let l,m=0;do l=sh((a+b).split(""),R);while(++m<20&&(l.join("").includes(a)||l.join("").includes(b)));return{g:"t",lg,th,l}}
  return{g:"t",lg,th:0,l:sh("kiwiorange".split(""),R)}}
+// v21.2 : calcul mental plus abordable (départ 11-99, + et − à 2 chiffres, × jusqu'à 500, ÷ juste, tout reste sous 1000)
 function dfGenK(R=Math.random){const ri=(a,b)=>a+Math.floor(R()*(b-a+1));
+ for(let k=0;k<3000;k++){const base=sh(["+","−","×","÷"],R);base.splice(Math.floor(R()*5),0,["+","−","×","÷"][Math.floor(R()*4)]);
+  let v=ri(11,99);const v0=v,ops=[];let ok=true;
+  for(const o of base){let n,r;
+   if(o==="+"){n=ri(11,99);r=v+n;if(r>=1000){ok=false;break}}
+   else if(o==="−"){if(v<22){ok=false;break}n=ri(11,Math.min(99,v-11));r=v-n}
+   else if(o==="×"){const mx=Math.min(9,Math.floor(500/v));if(mx<2){ok=false;break}n=ri(2,mx);r=v*n}
+   else{const dv=[2,3,4,5,6,7,8,9].filter(x=>v%x===0&&v/x>=5);if(!dv.length){ok=false;break}n=dv[Math.floor(R()*dv.length)];r=v/n}
+   ops.push([o,n,r]);v=r}
+  if(ok&&v>=10&&v<1000)return{g:"k",v0,ops,res:v}}
+ return{g:"k",v0:36,ops:[["×",4,144],["−",59,85],["+",27,112],["÷",8,14],["×",6,84]],res:84}}
+// ancienne version (très difficile), gardée seulement pour la saison 1 de La Saison, déjà commencée
+function dfGenK0(R=Math.random){const ri=(a,b)=>a+Math.floor(R()*(b-a+1));
  for(let k=0;k<2000;k++){const base=sh(["+","−","×","÷"],R);base.splice(Math.floor(R()*5),0,["+","−","×","÷"][Math.floor(R()*4)]);
   let v=ri(101,999);const v0=v,ops=[];let ok=true;
   for(const o of base){let n,r;
@@ -6462,7 +6476,7 @@ function cmLeftS(n){const p=pParts(new Date()),sec=cmDays(pToday(),cmLast(n))*86
  const d=Math.floor(sec/86400),h=Math.floor(sec%86400/3600),mn=Math.max(1,Math.floor(sec%3600/60));return d?t("cmDH",d,h):t("cmHM",h,mn)}
 function cmCand(i,lg,s,avoid){const k=CMST[i];if(k==="c")return gpGen("c");
  if(k==="a"){const S=lg==="en"?W:F,a=S[CML[i]],w=a[Math.floor(Math.random()*a.length)];return{g:"a",w,l:scr(w)}}
- const df=cmDf(s,lg);let g=i===4?df[0]:df[1];if(avoid&&g===avoid){const L=cmDL(s);g=L.find(x=>x!==avoid&&x!==df[0])||L.find(x=>x!==avoid)}return dfGen(g,lg)}
+ const df=cmDf(s,lg);let g=i===4?df[0]:df[1];if(avoid&&g===avoid){const L=cmDL(s);g=L.find(x=>x!==avoid&&x!==df[0])||L.find(x=>x!==avoid)}return g==="k"&&+s===1?dfGenK0():dfGen(g,lg)}
 // ----- état -----
 let CM={lg:null,s:0,st:null,err:0,tok:0},cmx=null,cmR={s:0,lg:"fr",sc:"top",tok:0};
 function cmLg(){if(!CM.lg){try{CM.lg=localStorage.getItem("fwcmlg")}catch(e){}if(CM.lg!=="fr"&&CM.lg!=="en")CM.lg=L}return CM.lg}
@@ -6653,7 +6667,7 @@ all("[data-setl]").forEach(b=>b.onclick=()=>{const v=b.dataset.setl;if(v!==L){L=
 const VAPID="BKpXlUkaaqXwMR3SVnQ_t6SfYgTfbzjRigGSTubqkjxmDHcsrsEtICnv_lrA99lJ_me8j2CYLMb2OfzcSmHQWCU";
 Object.assign(T.fr,{nfH:"🔔 Notifications",nfGuest:"Les notifications sont réservées aux joueurs connectés avec un compte.",
  nfIOS:"Sur iPhone, les notifications ne marchent que si le jeu est sur l'écran d'accueil : touche ⬆️ Partager, puis « Sur l'écran d'accueil », et ouvre le jeu depuis cette icône.",
- nfNoSup:"Ce navigateur ne permet pas les notifications. Sur Android, utilise Chrome ou Samsung Internet.",
+ nfNoSup:"Ce navigateur ne permet pas les notifications. Sur Android, utilise Chrome ou Samsung Internet.",nfIOSold:"Ton iPhone doit être en iOS 16.4 ou plus récent pour recevoir les notifications (Réglages › Général › Mise à jour logicielle).",
  nfBlk:"Les notifications sont bloquées pour ce jeu. Pour les autoriser : touche le cadenas 🔒 (ou ⓘ) à gauche de l'adresse du site, puis Autorisations › Notifications, et reviens ici.",
  nfOnB:"🔔 Activer les notifications",nfOnH:"Sois prévenu quand un ami t'ajoute, quand on te lance un défi et quand c'est ton tour au tour par tour. Le réglage vaut pour ce téléphone seulement.",
  nfOnS:"✅ Activées sur ce téléphone",nfAmis:"👥 Amis",nfAmisS:"demandes d'ami reçues ou acceptées",nfDefis:"⚔️ Défis",nfDefisS:"duels reçus et invitations à un match",
@@ -6666,7 +6680,7 @@ Object.assign(T.fr,{nfH:"🔔 Notifications",nfGuest:"Les notifications sont ré
  nfLater:"Plus tard",nfYes:"Activer",nfInGame:"Notification reçue : tu la retrouveras dans le menu après ta partie."});
 Object.assign(T.en,{nfH:"🔔 Notifications",nfGuest:"Notifications are for players logged in with an account.",
  nfIOS:"On iPhone, notifications only work when the game is on the home screen: tap ⬆️ Share, then “Add to Home Screen”, and open the game from that icon.",
- nfNoSup:"This browser doesn't support notifications. On Android, use Chrome or Samsung Internet.",
+ nfNoSup:"This browser doesn't support notifications. On Android, use Chrome or Samsung Internet.",nfIOSold:"Your iPhone needs iOS 16.4 or later to receive notifications (Settings › General › Software Update).",
  nfBlk:"Notifications are blocked for this game. To allow them: tap the padlock 🔒 (or ⓘ) left of the site address, then Permissions › Notifications, and come back here.",
  nfOnB:"🔔 Turn on notifications",nfOnH:"Get notified when a friend adds you, when someone challenges you and when it's your turn in a turn-based match. This setting is for this phone only.",
  nfOnS:"✅ On for this phone",nfAmis:"👥 Friends",nfAmisS:"friend requests received or accepted",nfDefis:"⚔️ Challenges",nfDefisS:"duels received and match invitations",
@@ -6712,7 +6726,7 @@ async function nfSync(){if(!ME||!sb||!SESS||!nfSup()||nfSynced===ME.id||nfU()!==
 let nfLT=0;function nfLang(){if(!NF.ok||!NF.sub||!ME||!sb||!SESS)return;clearTimeout(nfLT);nfLT=setTimeout(()=>nfSave(NF.sub).catch(()=>{}),800)}
 function renderNf(){const B=$("nfBox");if(!B)return;const H=x=>'<p class="dnote" style="text-align:left">'+x+"</p>";
  if(!ME){B.innerHTML=H(esc(t("nfGuest")));return}
- if(!nfSup()){B.innerHTML=H(esc(t(nfIOS()?"nfIOS":"nfNoSup")));return}
+ if(!nfSup()){const sa=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;B.innerHTML=H(esc(t(nfIOS()?(sa?"nfIOSold":"nfIOS"):"nfNoSup")));return}
  if(Notification.permission==="denied"){B.innerHTML=H(esc(t("nfBlk")));return}
  if(!NF.chk||NF.uid!==ME.id){B.innerHTML=H(esc(t("frLoad")));if(!NF.ld){NF.ld=1;nfState().finally(()=>{NF.ld=0;if(vis("setP"))renderNf()})}return}
  if(!NF.ok){B.innerHTML=H(esc(t("nfOnH")))+'<button class="btn p mb" id="nfOnB" data-net'+(NF.busy?" disabled":"")+">"+esc(t("nfOnB"))+"</button>";$("nfOnB").onclick=nfOn;return}
@@ -6738,6 +6752,15 @@ if("serviceWorker"in navigator)navigator.serviceWorker.addEventListener("message
  if(d.t==="nfin"){if(ME&&sb&&SESS){tbLoad();daLoad();refreshAcc()}const x=d.d||{};if(x.t&&!(!over||tbx||cmx||MP))toast(x.t+(x.b?" · "+x.b:""))}
  else if(d.t==="nfopen"){let o=null;try{const u=new URL(d.u,location.href).searchParams,k=u.get("nf")||"",m=u.get("m")||"";if(/^(tb|fr|da)$/.test(k))o={k,m:/^[0-9a-f-]{36}$/.test(m)?m:""}}catch(e){}
   if(!o)return;if(!ME||$("intro")&&!$("intro").classList.contains("hide")){nfIn0=o;return}if(nfBusyG())return toast(t("nfInGame"));closeModal();nfGo(o)}});
+
+// ===== v21.2 : copier les e-mails des joueurs (écran Admin) =====
+Object.assign(T.fr,{admMl:"📋 Copier les e-mails des joueurs",admMlOk:"{n} adresses copiées : colle-les en Cci dans ton e-mail.",admMlErr:"Impossible de récupérer les adresses (as-tu lancé supabase-admin-emails.sql ?)"});
+Object.assign(T.en,{admMl:"📋 Copy players' e-mails",admMlOk:"{n} addresses copied: paste them in Bcc in your e-mail.",admMlErr:"Can't get the addresses (did you run supabase-admin-emails.sql?)"});
+$("admMl").onclick=async()=>{const b=$("admMl");if(b.disabled||!needSb())return;b.disabled=true;
+ try{const r=await sb.rpc("admin_emails");if(r.error)throw r.error;const a=(r.data||[]).map(x=>x.email).filter(Boolean),txt=a.join(", ");let ok=false;
+  try{await navigator.clipboard.writeText(txt);ok=true}catch(e){}
+  if(ok)toast(t("admMlOk",a.length));else modal(t("admMl"),'<textarea readonly style="width:100%;height:170px;font:inherit">'+esc(txt)+"</textarea>",[{l:t("close"),c:"p",f:closeModal}])}
+ catch(e){toast(t("admMlErr"))}finally{b.disabled=false}};
 
 applyLang();loadSB();
 </script></body></html>
